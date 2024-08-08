@@ -1,6 +1,6 @@
 # DSL-Rep-Tracker
 <p align ="center">
-     <img src="images/logo.png" width=500  />
+     <img src="images/logo.png" width=300  />
 </p><br>
 
 ## Problem Background
@@ -29,14 +29,14 @@ To address these challenges, Douglas and Sons proposes the development of an And
 ## Tech stack
 ### React Native
 <p align ="center">
-     <img src="images/reactnative.png" width=500  />
+     <img src="images/reactnative.png" width=300  />
 </p><br>
 
 React Native is an open-source framework used in this project to develop a mobile app for tracking sales representatives' locations. We chose React Native because it allows us to create a cross-platform solution with one codebase, running on both Android and iOS devices. This saves time and resources. The app integrates with Firebase for real-time data updates, user authentication, and push notifications, providing a smooth experience for both sales representatives and administrators.
 
 ### Firebase
 <p align ="center">
-     <img src="images/firebase.png" width=500  />
+     <img src="images/firebase.png" width=300  />
 </p><br>
 
 Firebase, provided by Google, is used in this project because it's easy to integrate and has powerful features. It offers real-time database updates, secure user login, and push notifications. Firebase also allows us to run backend functions without managing servers, making it perfect for our app that tracks sales representatives' locations across Android and iOS.
