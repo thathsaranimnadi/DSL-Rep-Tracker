@@ -1,9 +1,9 @@
-import { View, Text } from 'react-native'
+import { View, Text, Pressable } from 'react-native'
 import React from 'react'
 import {LinearGradient} from "expo-linear-gradient";
 import COLORS from '../constants/colors';
 
-const welcome=() => {
+const welcome=(navigation) => {
     return(
         <LinearGradient
             style={{
@@ -96,11 +96,37 @@ const welcome=() => {
                     fontWeight800,
                     color:COLORS.white
                 }}>Started</Text>
-                
-
             </View>
 
-           
+           <Button
+                title="Join Now"
+                onPress={()=>navigation.navigate("Signup")}
+                style={{
+                    margintop:22,
+                    width:"100%"
+                }}
+           />
+           <View style={{
+                flexDirection:"row",
+                marginTop:12,
+                justifyContent:'center'
+           }}>
+                <Text style={{
+                    fontSize:16,
+                    color:COLORS.white
+                }}>Already Have an Account ?</Text>
+                <Pressable
+                    onPress={()=>navigation.navigate("Login")}
+                >
+                    <Text style={{
+                        fontSize:16,
+                        color:COLORS.white,
+                        fontWeight:"bold",
+                        marginLeft:4
+                    }}>Login</Text>
+                </Pressable>
+           </View>
+
         </View>
         </LinearGradient>
     )
