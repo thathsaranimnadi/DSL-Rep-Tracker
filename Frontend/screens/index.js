@@ -1,9 +1,9 @@
 import Login from "./Login";
-import welcome from "./welcome";
+import Welcome from "./Welcome"; // Make sure this matches the file name
 import Signup from "./Signup";
 
 export {
     Login,
-    welcome,
+    Welcome,
     Signup
-}
+};

@@ -2,38 +2,38 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Login,Signup,welcome } from './screens';
+import { Login, Signup, Welcome } from './screens'; // Import Welcome correctly
 
-const stack=createNativeStackNavigator()
+const Stack = createNativeStackNavigator(); // Use capital S for Stack
+
 export default function App() {
   return (
     <NavigationContainer>
-      <stack.Navigator
-          initialRouteName="welcome"
-          >
-            <stack.Screen
-              name="welcome"
-              component={welcome}
-              options={{
-                headerShown:false
-              }}
-            />
-            <stack.Screen
-              name="Login"
-              component={Login}
-              options={{
-                headerShown:false
-              }}
-            />
-            <stack.Screen
-              name="Signup"
-              component={ Signup}
-              options={{
-                headerShown:false
-              }}
-            />
-
-      </stack.Navigator>
+      <Stack.Navigator
+          initialRouteName="Welcome" // Use capital W for Welcome
+      >
+        <Stack.Screen
+          name="Welcome" // Use capital W for Welcome
+          component={Welcome} // Use capital W for Welcome
+          options={{
+            headerShown: false
+          }}
+        />
+        <Stack.Screen
+          name="Login"
+          component={Login}
+          options={{
+            headerShown: false
+          }}
+        />
+        <Stack.Screen
+          name="Signup"
+          component={Signup}
+          options={{
+            headerShown: false
+          }}
+        />
+      </Stack.Navigator>
     </NavigationContainer>
   );
 }
