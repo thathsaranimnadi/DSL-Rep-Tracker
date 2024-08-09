@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "@react-native-firebase/app": "^20.3.0",
+    "expo": "^51.0.24",
+    "metro": "^0.80.9",
+    "react-native": "^0.74.3"
+  }
+}
