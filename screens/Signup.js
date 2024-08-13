@@ -214,7 +214,7 @@ const Signup = ({ navigation }) => {
           title="Sign up"
           filled
           style={{ marginTop: 18, marginBottom: 4 }}
-          onPress={handleSignUp}
+          
         />
 
         <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 20 }}>
