@@ -11,25 +11,15 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "ios": {
-      "supportsTablet": true
-    },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "googleServicesFile": "./android/app/google-services.json",
       "package": "com.example.Tracker"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    },
-    "plugins": [
-      "@react-native-firebase/app",
-      "@react-native-firebase/auth"
-      
-    ]
-
+    }
   }
 }
