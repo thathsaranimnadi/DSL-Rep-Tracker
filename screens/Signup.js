@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { RadioButton } from 'react-native-paper'; // Ensure correct import
+import { RadioButton } from 'react-native-paper'; 
 import COLORS from '../constants/colors';
-import Button from '../components/Button'; // Ensure correct path
+import Button from '../components/Button'; 
+
 
 const Signup = ({ navigation }) => {
   const [role, setRole] = useState('sales_rep'); // Default role
