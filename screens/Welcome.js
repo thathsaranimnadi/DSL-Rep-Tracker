@@ -1,86 +1,42 @@
-import { View, Text, Pressable, ImageBackground, Image } from 'react-native'; // Import Image
+import { View, Text, Pressable, ImageBackground, Image, StyleSheet } from 'react-native';
 import React from 'react';
 import COLORS from '../constants/colors';
 
 const Welcome = ({ navigation }) => {
     return (
-        <View style={{ flex: 1 }}>
+        <View style={styles.container}>
             <ImageBackground
-                source={require("../assets/background.jpg")}
-                style={{ flex: 1 }}
+                source={require("../assets/black.jpg")}
+                style={styles.backgroundImage}
+                imageStyle={styles.backgroundImageStyle}
             >
+                <View style={styles.overlay} />
+
                 <Image
                     source={require("../assets/dsl.jpeg")}
                     resizeMode="contain"
-                    style={{ // Style the image to position it correctly
-                        width: 150,
-                        height: 150,
-                        alignSelf: 'center', // Center the image horizontally
-                        marginTop: 50, // Add some margin at the top
-                    }}
+                    style={styles.logo}
                 />
                 
-                <View style={{
-                    paddingHorizontal: 22,
-                    position: "absolute",
-                    top: 400,
-                    width: "100%"
-                }}>
-                    <Text style={{
-                        fontSize: 50,
-                        fontWeight: '800',
-                        color: COLORS.white
-                    }}>Let's Get</Text>
-                    <Text style={{
-                        fontSize: 46,
-                        fontWeight: '800',
-                        color: COLORS.white
-                    }}>Started</Text>
+                <View style={styles.textContainer}>
+                    <Text style={styles.titleText}>Douglas & Sons (Pvt) Ltd</Text>
+                    <Text style={styles.subtitleText}>Location Tracker</Text>
                 </View>
 
-                <View style={{
-                    marginTop: 22,
-                    paddingHorizontal: 22,
-                }}>
+                <View style={styles.buttonContainer}>
                     <Pressable
-                        style={{
-                            backgroundColor: COLORS.primary,
-                            padding: 12,
-                            borderRadius: 8,
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                        }}
+                        style={styles.joinButton}
                         onPress={() => navigation.navigate("Signup")}
                     >
-                        <Text style={{
-                            color: COLORS.white,
-                            fontSize: 18,
-                            fontWeight: 'bold'
-                        }}>
-                            Join Now
-                        </Text>
+                        <Text style={styles.buttonText}>Join Now</Text>
                     </Pressable>
-                </View>
 
-                <View style={{
-                    flexDirection: "row",
-                    marginTop: 12,
-                    justifyContent: 'center'
-                }}>
-                    <Text style={{
-                        fontSize: 16,
-                        color: COLORS.white
-                    }}>Already Have an Account?</Text>
-                    <Pressable
-                        onPress={() => navigation.navigate("Login")}
-                    >
-                        <Text style={{
-                            fontSize: 16,
-                            color: COLORS.white,
-                            fontWeight: "bold",
-                            marginLeft: 4
-                        }}>Login</Text>
-                    </Pressable>
+                    <View style={styles.loginContainer}>
+                        <Text style={styles.loginText}>Already Have an Account?</Text>
+                        <Pressable onPress={() => navigation.navigate("Login")}>
+                            <Text style={styles.loginButton}>Login</Text>
+                        </Pressable>
+                    </View>
                 </View>
             </ImageBackground>
         </View>
@@ -88,3 +44,87 @@ const Welcome = ({ navigation }) => {
 }
 
 export default Welcome;
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+    },
+    backgroundImage: {
+        flex: 1,
+        justifyContent: 'center',
+    },
+    backgroundImageStyle: {
+        opacity: 0.9,
+    },
+    overlay: {
+        ...StyleSheet.absoluteFillObject,
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
+    logo: {
+        width: 150,
+        height: 150,
+        alignSelf: 'center',
+        marginTop: '30%',
+    },
+    textContainer: {
+        paddingHorizontal: 22,
+        alignItems: 'center',
+        marginTop: 40,
+    },
+    titleText: {
+        fontSize: 30,
+        fontWeight: '800',
+        color: COLORS.white,
+        textAlign: 'center',
+        textShadowColor: 'rgba(0, 0, 0, 0.75)',
+        textShadowOffset: { width: -1, height: 1 },
+        textShadowRadius: 10,
+    },
+    subtitleText: {
+        fontSize: 28,
+        fontWeight: '800',
+        color: COLORS.white,
+        textAlign: 'center',
+        marginTop: 20,
+        textShadowColor: 'rgba(0, 0, 0, 0.75)',
+        textShadowOffset: { width: -1, height: 1 },
+        textShadowRadius: 10,
+    },
+    buttonContainer: {
+        marginTop: 'auto',
+        paddingHorizontal: 22,
+        paddingBottom: 40,
+    },
+    joinButton: {
+        backgroundColor: COLORS.primary,
+        padding: 15,
+        borderRadius: 8,
+        alignItems: 'center',
+        justifyContent: 'center',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.8,
+        shadowRadius: 4,
+        elevation: 5,
+    },
+    buttonText: {
+        color: COLORS.white,
+        fontSize: 18,
+        fontWeight: 'bold',
+    },
+    loginContainer: {
+        flexDirection: "row",
+        marginTop: 20,
+        justifyContent: 'center',
+    },
+    loginText: {
+        fontSize: 16,
+        color: COLORS.white,
+    },
+    loginButton: {
+        fontSize: 16,
+        color: COLORS.white,
+        fontWeight: "bold",
+        marginLeft: 4,
+    },
+});
