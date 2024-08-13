@@ -3,41 +3,11 @@ import { View, Text, TextInput, TouchableOpacity, Pressable } from 'react-native
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { RadioButton } from 'react-native-paper'; 
 import COLORS from '../constants/colors';
-import Button from '../components/Button'; 
-
+import Button from '../components/Button'; // Ensure correct path
 
 const Signup = ({ navigation }) => {
-  const [role, setRole] = useState('sales_rep'); // Default role
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
-  const [password, setPassword] = useState('');
-  const [employeeId, setEmployeeId] = useState('');
-
-  const handleSignUp = async () => {
-    try {
-      // Replace with your sign-up logic (e.g., save user details to Firebase)
-      // For example:
-      // await firebase.auth().createUserWithEmailAndPassword(email, password);
-      // await firebase.firestore().collection('users').doc(user.uid).set({
-      //   name,
-      //   email,
-      //   phone,
-      //   employeeId,
-      //   role,
-      //   createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-      // });
-
-      // Redirect to the appropriate screen based on role
-      if (role === 'sales_rep') {
-        navigation.navigate('SalesRepView');
-      } else {
-        navigation.navigate('AdminDashboard');
-      }
-    } catch (error) {
-      console.error('Error signing up:', error);
-    }
-  };
+  const [isPasswordShown, setIsPasswordShown] = useState(false);
+  const [isChecked, setIsChecked] = useState(false);
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
@@ -238,7 +208,7 @@ const Signup = ({ navigation }) => {
           </View>
         </View>
 
-        <Button
+        <Button onPress={handleSignup}
           title="Sign up"
           filled
           style={{ marginTop: 18, marginBottom: 4 }}
