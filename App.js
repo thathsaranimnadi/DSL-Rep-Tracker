@@ -2,7 +2,9 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Login, Signup, Welcome } from './screens'; // Import Welcome correctly
+import { Login, Signup, Welcome } from './screens'; 
+import SalesRepView from './screens/SalesRepView'; // Correct path and default import
+
 
 const Stack = createNativeStackNavigator(); // Use capital S for Stack
 
@@ -29,6 +31,13 @@ export default function App() {
         <Stack.Screen
           name="Signup"
           component={Signup}
+          options={{
+            headerShown: false
+          }}
+        />
+        <Stack.Screen
+          name="SalesRepView" // Add SalesRepView here
+          component={SalesRepView}
           options={{
             headerShown: false
           }}
