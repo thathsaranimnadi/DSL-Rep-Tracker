@@ -1,6 +1,9 @@
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import React from 'react';
 import COLORS from '../constants/colors';
+import firebase from '@react-native-firebase/app';
+
+
 
 const Button = (props) => {
     const filledBgColor = props.color || COLORS.primary;
@@ -9,7 +12,7 @@ const Button = (props) => {
     const textColor = props.filled ? COLORS.white : COLORS.primary;
 
     return (
-        <TouchableOpacity
+        <TouchableOpacity 
             style={[
                 styles.button, 
                 { backgroundColor: bgcolor }, 

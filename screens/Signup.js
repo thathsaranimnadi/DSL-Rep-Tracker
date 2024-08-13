@@ -5,11 +5,44 @@ import COLORS from '../constants/colors';
 import { Ionicons } from '@expo/vector-icons';
 import CheckBox from 'expo-checkbox';
 import Button from '../components/Button';
+import auth from '@react-native-firebase/auth';
+import { Alert } from 'react-native';
+import firebase from '@react-native-firebase/app';
+
+
 
 const Signup = ({ navigation }) => {
   const [isPasswordShown, setIsPasswordShown] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
 
+  // Handling the signup event
+  const handleSignup = () => {
+    /*if (!email || !password || !isChecked) {
+      Alert.alert('Please fill in all fields and agree to the terms and conditions.');
+      return;
+    }*/
+
+    auth()
+      .createUserWithEmailAndPassword("thathsaranimnadi2@gmail.com", "123")
+      .then(() => {
+        Alert.alert("User account created & signed in!");
+      })
+      .catch(error => {
+        if (error.code === 'auth/email-already-in-use') {
+          Alert.alert('That email address is already in use!');
+        }
+
+        if (error.code === 'auth/invalid-email') {
+          Alert.alert('That email address is invalid!');
+        }
+
+        console.error(error);
+      });
+  
+  };
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
       <View style={{ flex: 1, marginHorizontal: 22 }}>
@@ -168,7 +201,7 @@ const Signup = ({ navigation }) => {
           <Text>I agree to the terms and Conditions</Text>
         </View>
 
-        <Button
+        <Button onPress={handleSignup}
           title="Sign up"
           filled
           style={{
