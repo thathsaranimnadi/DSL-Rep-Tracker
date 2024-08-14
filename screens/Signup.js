@@ -3,11 +3,18 @@ import { View, Text, TextInput, TouchableOpacity, Pressable } from 'react-native
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { RadioButton } from 'react-native-paper'; 
 import COLORS from '../constants/colors';
-import Button from '../components/Button'; // Ensure correct path
+import Button from '../components/Button'; 
 
 const Signup = ({ navigation }) => {
+  const [name, setName] = useState(''); 
+  const [employeeId, setEmployeeId] = useState('');
+  const [role, setRole] = useState('sales_rep'); 
   const [isPasswordShown, setIsPasswordShown] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
+
+  const handleSignup = () => {
+    // Add your signup logic here
+  };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
@@ -17,9 +24,7 @@ const Signup = ({ navigation }) => {
             Create Account
           </Text>
 
-          <Text style={{ fontSize: 16, color: COLORS.black }}>
-            Connect with your friends today!
-          </Text>
+          
         </View>
 
         <View style={{ marginBottom: 12 }}>
@@ -212,7 +217,6 @@ const Signup = ({ navigation }) => {
           title="Sign up"
           filled
           style={{ marginTop: 18, marginBottom: 4 }}
-          
         />
 
         <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 20 }}>
