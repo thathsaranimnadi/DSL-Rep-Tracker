@@ -4,10 +4,49 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { RadioButton } from 'react-native-paper'; 
 import COLORS from '../constants/colors';
 import Button from '../components/Button'; // Ensure correct path
+import auth from '@react-native-firebase/auth';
+import firebase from 'firebase/app';
+
 
 const Signup = ({ navigation }) => {
+  const [name, setName] = useState('');
   const [isPasswordShown, setIsPasswordShown] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [phone, setPhone] = useState('');
+  const [employeeId, setEmployeeId] = useState('');
+  const [role, setRole] = useState('Sales_Rep');
+
+
+
+
+
+  // Handle email/password sign-up
+  const handleSignup = () => {
+    setLoading(true);
+    if (!email || !password || !isChecked) {
+      alert('Please fill in all fields and agree to the terms and conditions.');
+      return;
+    }
+
+    auth()
+      .createUserWithEmailAndPassword(email, password)
+      .then(() => {
+        console.log('User account created & signed in!');
+      })
+      .catch(error => {
+        if (error.code === 'auth/email-already-in-use') {
+          alert('That email address is already in use!');
+        }
+
+        if (error.code === 'auth/invalid-email') {
+          alert('That email address is invalid!');
+        }
+
+        console.error(error);
+      });
+  };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
