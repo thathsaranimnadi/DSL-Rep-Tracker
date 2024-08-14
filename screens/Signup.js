@@ -57,9 +57,7 @@ const Signup = ({ navigation }) => {
             Create Account
           </Text>
 
-          <Text style={{ fontSize: 16, color: COLORS.black }}>
-            Connect with your friends today!
-          </Text>
+          
         </View>
 
         <View style={{ marginBottom: 12 }}>
@@ -252,7 +250,6 @@ const Signup = ({ navigation }) => {
           title="Sign up"
           filled
           style={{ marginTop: 18, marginBottom: 4 }}
-          
         />
 
         <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 20 }}>
