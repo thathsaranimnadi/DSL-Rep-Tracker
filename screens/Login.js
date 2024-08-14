@@ -4,6 +4,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import COLORS from '../constants/colors';
 import { Ionicons } from '@expo/vector-icons';
 import Button from '../components/Button';
+import firebase from 'firebase/app';
+
 
 const Login = ({ navigation }) => {
   const [isPasswordShown, setIsPasswordShown] = useState(false);

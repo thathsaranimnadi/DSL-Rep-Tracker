@@ -1,6 +1,8 @@
 import { View, Text, Pressable, ImageBackground, Image, StyleSheet } from 'react-native';
 import React from 'react';
 import COLORS from '../constants/colors';
+import firebase from 'firebase/app';
+
 
 const Welcome = ({ navigation }) => {
     return (

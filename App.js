@@ -4,6 +4,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Login, Signup, Welcome } from './screens'; // Import Welcome correctly
 import SalesRepView from './screens/SalesRepView';
+import firebase from 'firebase/app';
+
 
 const Stack = createNativeStackNavigator(); // Use capital S for Stack
 
