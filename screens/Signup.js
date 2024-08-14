@@ -3,7 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, Pressable } from 'react-native
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { RadioButton } from 'react-native-paper'; 
 import COLORS from '../constants/colors';
-import Button from '../components/Button'; // Ensure correct path
+import Button from '../components/Button';
 
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 
