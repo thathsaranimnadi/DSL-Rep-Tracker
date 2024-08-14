@@ -2,22 +2,23 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Login, Signup, Welcome } from './screens'; // Import Welcome correctly
+import { Login, Signup, Welcome } from './screens'; 
 import SalesRepView from './screens/SalesRepView';
 import firebase from 'firebase/app';
+import Splash from './screens/Splash';
 
 
-const Stack = createNativeStackNavigator(); // Use capital S for Stack
+const Stack = createNativeStackNavigator(); 
 
 export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator
-          initialRouteName="Welcome" // Use capital W for Welcome
+          initialRouteName="Welcome" 
       >
         <Stack.Screen
-          name="Welcome" // Use capital W for Welcome
-          component={Welcome} // Use capital W for Welcome
+          name="Welcome" 
+          component={Welcome} 
           options={{
             headerShown: false
           }}
@@ -37,8 +38,15 @@ export default function App() {
           }}
         />
         <Stack.Screen
-          name="SalesRepView" // Add SalesRepView here
+          name="SalesRepView" 
           component={SalesRepView}
+          options={{
+            headerShown: false
+          }}
+        />
+        <Stack.Screen
+          name="Splash"
+          component={Splash}
           options={{
             headerShown: false
           }}
