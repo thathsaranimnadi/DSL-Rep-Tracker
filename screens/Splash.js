@@ -36,6 +36,6 @@ const styles = StyleSheet.create({
   logo: {
     width: 150, 
     height: 150, 
-    tintColor: black, 
+    tintColor: green, 
   },
 });
