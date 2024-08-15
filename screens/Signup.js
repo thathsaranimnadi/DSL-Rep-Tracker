@@ -36,6 +36,8 @@ const Signup = ({ navigation }) => {
     createUserWithEmailAndPassword(auth, email, password)
       .then(() => {
         console.log('User account created & signed in!');
+        // Navigate to the Login screen after successful signup
+        navigation.navigate("Login");
       })
       .catch(error => {
         if (error.code === 'auth/email-already-in-use') {
