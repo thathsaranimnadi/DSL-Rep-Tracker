@@ -15,7 +15,7 @@ const Welcome = ({ navigation }) => {
                 <View style={styles.overlay} />
 
                 <Image
-                    source={require("../assets/dsl.jpeg")}
+                    source={require("../assets/dsl.png")}
                     resizeMode="contain"
                     style={styles.logo}
                 />
