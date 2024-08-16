@@ -12,7 +12,6 @@ const Welcome = ({ navigation }) => {
                 <LottieView style={{flex: 1}} source={require('../assets/image05.json')} autoPlay loop />
             </View>
             <View style={styles.textContainer}>
-                <Text style={styles.titleText}>Douglas & Sons (Pvt) Ltd</Text>
                 <Text style={styles.subtitleText}>Sales Pulse</Text>
             </View>
 
@@ -47,10 +46,7 @@ const styles = StyleSheet.create({
         height: 400, 
         aspectRatio: 1, 
         marginRight:40,
-        
-        
-        
-      },
+    },
     textContainer: {
         paddingHorizontal: 22,
         alignItems: 'center',
