@@ -4,11 +4,35 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import COLORS from '../constants/colors';
 import { Ionicons } from '@expo/vector-icons';
 import Button from '../components/Button';
-import firebase from 'firebase/app';
+import app from '../firebaseConfig';
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
 
 const Login = ({ navigation }) => {
   const [isPasswordShown, setIsPasswordShown] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const loginWithEmailAndPassword = () => {
+
+    const auth = getAuth(app); // Initialize Firebase Auth
+
+
+    signInWithEmailAndPassword(auth, email, password)
+      .then((res) => {
+        console.log(res)
+        alert('Logged In');
+        // Navigate to the Login screen after successful signup
+        //navigation.navigate("Login");
+      })
+      .catch(error => {
+        if (error.code === 'auth/invalid-credential') {
+          alert('Invalid Username or Password');
+        }
+
+        console.error(error);
+      });
+  };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
@@ -53,7 +77,9 @@ const Login = ({ navigation }) => {
               paddingLeft: 22,
             }}
           >
-            <TextInput
+            <TextInput 
+              value={email}
+              onChangeText={text => setEmail(text)}
               placeholder="Enter Your Email Address"
               placeholderTextColor={COLORS.black}
               keyboardType="email-address"
@@ -88,7 +114,9 @@ const Login = ({ navigation }) => {
               paddingLeft: 22,
             }}
           >
-            <TextInput
+            <TextInput 
+              value={password}
+              onChangeText={text => setPassword(text)}
               placeholder="Enter your password"
               placeholderTextColor={COLORS.black}
               secureTextEntry={!isPasswordShown}
@@ -112,7 +140,7 @@ const Login = ({ navigation }) => {
           </View>
         </View>
 
-        <Button
+        <Button onPress={loginWithEmailAndPassword}
           title="Login"
           filled
           style={{

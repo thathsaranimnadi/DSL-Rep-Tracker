@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { RadioButton } from 'react-native-paper'; 
 import COLORS from '../constants/colors';
 import Button from '../components/Button';
+import app from '../firebaseConfig';
 
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 
@@ -29,12 +30,15 @@ const Signup = ({ navigation }) => {
       return;
     }
     */
-    const auth = getAuth(); // Initialize Firebase Auth
+    const auth = getAuth(app); // Initialize Firebase Auth
 
     
     createUserWithEmailAndPassword(auth, email, password)
       .then(() => {
         console.log('User account created & signed in!');
+        // Navigate to the Login screen after successful signup
+        // this should be change into if the signup person is an admin; then navigate to loginAdmin.js and if the signup person is a salesrep; then navigate to loginRep.js
+        navigation.navigate("Login");
       })
       .catch(error => {
         if (error.code === 'auth/email-already-in-use') {
