@@ -37,6 +37,7 @@ const Signup = ({ navigation }) => {
       .then(() => {
         console.log('User account created & signed in!');
         // Navigate to the Login screen after successful signup
+        // this should be change into if the signup person is an admin; then navigate to loginAdmin.js and if the signup person is a salesrep; then navigate to loginRep.js
         navigation.navigate("Login");
       })
       .catch(error => {
