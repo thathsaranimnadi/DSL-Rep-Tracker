@@ -10,26 +10,20 @@ import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 
 const Signup = ({ navigation }) => {
   const [name, setName] = useState('');
-  const [isPasswordShown, setIsPasswordShown] = useState(false);
-  const [isChecked, setIsChecked] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [phone, setPhone] = useState('');
   const [employeeId, setEmployeeId] = useState('');
   const [role, setRole] = useState('Sales_Rep');
 
-
-
-
-
   // Handle email/password sign-up
   const handleSignup = () => {
-    /*
-    if (!email || !password || !isChecked) {
+  
+    if (!email || !password || !name || !employeeId || !role) {
       alert('Please fill in all fields and agree to the terms and conditions.');
       return;
     }
-    */
+  
     const auth = getAuth(app); // Initialize Firebase Auth
 
     
