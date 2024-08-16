@@ -18,9 +18,10 @@ const Welcome = ({ navigation }) => {
             <View style={styles.buttonContainer}>
                 <Pressable
                     style={styles.joinButton}
-                    onPress={() => navigation.navigate("Signup")}
-                >
+                    onPress={() => navigation.navigate("Signup")}>
+                        <Animated.View style={[styles.joinButton,{transform:[{scale:scaleValue}]}]}>
                     <Text style={styles.buttonText}>Join Now</Text>
+                    </Animated.View>
                 </Pressable>
 
                 <View style={styles.loginContainer}>

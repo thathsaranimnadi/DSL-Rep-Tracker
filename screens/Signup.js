@@ -18,11 +18,7 @@ const Signup = ({ navigation }) => {
   const [employeeId, setEmployeeId] = useState('');
   const [role, setRole] = useState('Sales_Rep');
 
-
-
-
-
-  // Handle email/password sign-up
+   // Handle email/password sign-up
   const handleSignup = () => {
     /*
     if (!email || !password || !isChecked) {
