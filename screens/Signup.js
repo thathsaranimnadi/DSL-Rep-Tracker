@@ -171,7 +171,7 @@ const Signup = ({ navigation }) => {
           <View
             style={{
               width: '100%',
-              height: 48,
+              height: 50,
               borderColor: COLORS.black,
               borderWidth: 1,
               borderRadius: 8,
@@ -249,7 +249,7 @@ const Signup = ({ navigation }) => {
         <Button onPress={handleSignup}
           title="Sign up"
           filled
-          style={{ marginTop: 18, marginBottom: 4 }}
+          style={{ marginTop: 18, marginBottom: 4 ,backgroundColor:'#daa520',borderColor:'#000000'}}
         />
 
         <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 20 }}>
@@ -257,7 +257,7 @@ const Signup = ({ navigation }) => {
             style={{
               flex: 1,
               height: 1,
-              backgroundColor: COLORS.grey,
+              backgroundColor: '#daa520',
               marginHorizontal: 10,
             }}
           />
