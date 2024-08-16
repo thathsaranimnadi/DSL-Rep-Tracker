@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, View, Image } from 'react-native'
 import React, { useEffect } from 'react'
 import * as Animatable from 'react-native-animatable'
 
@@ -9,28 +9,36 @@ const Splash = ({ navigation }) => {
    useEffect(()=> {
         setTimeout(()=>{
             navigation.navigate("Welcome");
-        },2000);
+        }, 2000);
    }, []);
 
   return (
-    <View style={{
-        backgroundColor:"white",
-        flex:1,
-        justifyContent:"center",
-        alignItems:"center"
-        }}>
-
-      <Animatable.Text style={{
-        color:black,
-        fontSize:36,
-        fontWeight:"800"
-        }} duration={2000} animation="fadeInDownBig">
-        DSL
-      </Animatable.Text>
+    <View style={styles.container}>
+      <Animatable.Image
+        source={require('../assets/OIP.jpg')} 
+        style={styles.logo}
+        duration={2000}
+        animation="zoomIn"
+      />
     </View>
   )
 };
 
 export default Splash
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: "#daa520",
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  logo: {
+    width: 150, 
+    height: 150, 
+    borderRadius: 150, 
+    borderColor: '#ffffff', 
+    borderWidth: 1, 
+    borderRadius: 75, 
+  }
+});
