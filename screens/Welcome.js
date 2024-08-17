@@ -24,12 +24,28 @@ const Welcome = ({ navigation }) => {
                     <Text style={styles.buttonText}>Join Now</Text>
                 </Pressable>
 
+                {/* Row 1 */}
                 <View style={styles.loginContainer}>
                     <Text style={styles.loginText}>Already Have an Account?</Text>
-                    <Pressable onPress={() => navigation.navigate("Login")}>
-                        <Text style={styles.loginButton}>Login</Text>
+                </View>
+                    
+                {/* Row 2 */}
+                <View style={styles.loginButton}>
+                    <Pressable onPress={() => navigation.navigate("LoginAdmin")}>
+                        <Text style={styles.loginButton}>Login as an Admin</Text>
                     </Pressable>
                 </View>
+
+
+                {/* Row 3 */}
+                <View style={styles.loginButton}>
+                    <Pressable onPress={() => navigation.navigate("LoginRep")}>
+                        <Text style={styles.loginButton}>Login as a Sales Representative</Text>
+                    </Pressable>
+                </View>
+
+
+        
             </View>
         </View>
     );
@@ -99,11 +115,14 @@ const styles = StyleSheet.create({
     loginText: {
         fontSize: 16,
         color: COLORS.black, 
+        marginBottom: 10
     },
     loginButton: {
         fontSize: 16,
-        color: COLORS.black, 
+        color: '#daa520', 
         fontWeight: "bold",
         marginLeft: 4,
+        marginVertical: 1,
+        alignItems: 'center'
     },
 });

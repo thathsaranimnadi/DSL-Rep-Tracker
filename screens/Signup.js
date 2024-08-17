@@ -14,7 +14,7 @@ const Signup = ({ navigation }) => {
   const [password, setPassword] = useState('');
   const [phone, setPhone] = useState('');
   const [employeeId, setEmployeeId] = useState('');
-  const [role, setRole] = useState('Sales_Rep');
+  const [role, setRole] = useState('');
 
   // Handle email/password sign-up
   const handleSignup = () => {
@@ -32,7 +32,12 @@ const Signup = ({ navigation }) => {
         console.log('User account created & signed in!');
         // Navigate to the Login screen after successful signup
         // this should be change into if the signup person is an admin; then navigate to loginAdmin.js and if the signup person is a salesrep; then navigate to loginRep.js
-        navigation.navigate("Login");
+        if (role === 'sales_rep'){
+            navigation.navigate("LoginRep");
+        }else{
+            navigation.navigate("LoginAdmin");
+        } 
+        //navigation.navigate("Login");
       })
       .catch(error => {
         if (error.code === 'auth/email-already-in-use') {
