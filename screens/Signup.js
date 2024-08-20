@@ -5,10 +5,8 @@ import { RadioButton } from 'react-native-paper';
 import COLORS from '../constants/colors';
 import Button from '../components/Button';
 import app from '../firebaseConfig';
-
-
-
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getFirestore} from "firebase/firestore";
 
 const Signup = ({ navigation }) => {
   const [name, setName] = useState('');
