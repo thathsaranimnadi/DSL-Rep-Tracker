@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 
 // Header Component
 const Header = () => {
@@ -9,7 +10,6 @@ const Header = () => {
         <View>
             <View style={styles.headerContainer}>
                 <Image
-                    // Uncomment and replace with the correct path to your image
                     source={require('../assets/hi.gif')}
                     style={styles.image}
                 />
@@ -35,13 +35,25 @@ const HomeScreen = () => {
         <View>
             <View style={styles.homeContainer}>
                 <Header />
+                {/* Render the MapView component */}
+                <CustomMapView />
             </View>
         </View>
     );
 };
 
-//Map view Component
-const Map
+// Map view Component (renamed to CustomMapView)
+const CustomMapView = () => {
+    return (
+        <View>
+            <MapView 
+                style={styles.map}
+                provider={PROVIDER_GOOGLE}
+                showsUserLocation={true}
+            />
+        </View>
+    )
+}
 
 // Styles
 const styles = StyleSheet.create({
@@ -55,14 +67,14 @@ const styles = StyleSheet.create({
         width: 50,
         height: 50,
         borderRadius: 150, 
-        marginTop:60,
-        marginBottom:10
+        marginTop: 60,
+        marginBottom: 10
     },
     welcomeText: {
         color: '#000000',
-        marginTop:75,
-        fontSize:30,
-        marginBottom:5
+        marginTop: 75,
+        fontSize: 30,
+        marginBottom: 5
     },
     searchContainer: {
         backgroundColor: '#ffffff',
@@ -73,7 +85,6 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
-      
     },
     searchInput: {
         fontFamily: 'outfit',
@@ -83,6 +94,11 @@ const styles = StyleSheet.create({
         backgroundColor: '#ffd700',
         height: 250,
         padding: 20
+    },
+    map: {
+        width: '100%',
+        height: 500,
+        marginTop:40
     }
 });
 

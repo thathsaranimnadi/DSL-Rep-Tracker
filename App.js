@@ -9,6 +9,7 @@ import Welcome from './screens/Welcome';
 import SalesRepView from './screens/SalesRepView';
 import Splash from './screens/Splash';
 import { HomeScreen } from './screens';
+import Signup0 from './screens/Signup0';
 
 
 const Stack = createNativeStackNavigator();
@@ -39,6 +40,11 @@ export default function App() {
           options={{ headerShown: false }}
         />
         <Stack.Screen
+          name="Signup0"
+          component={Signup0}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
           name="Signup"
           component={Signup}
           options={{ headerShown: false }}
@@ -53,7 +59,7 @@ export default function App() {
           component={HomeScreen}
           options={{headerShown:false}}
         />
-        
+
       </Stack.Navigator>
     </NavigationContainer>
   );

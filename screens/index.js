@@ -5,6 +5,7 @@ import Signup from "./Signup";
 import SalesRepView from "./SalesRepView";
 import Splash from "./Splash";
 import HomeScreen from "./HomeScreen";
+import Signup0 from "./Signup0";
 
 
 export {
@@ -14,6 +15,7 @@ export {
     Signup,
     SalesRepView,
     Splash,
-    HomeScreen
+    HomeScreen,
+    Signup0
   
 };
