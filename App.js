@@ -8,7 +8,8 @@ import Signup from './screens/Signup';
 import Welcome from './screens/Welcome';
 import SalesRepView from './screens/SalesRepView';
 import Splash from './screens/Splash';
-//import { LoginAdmin } from './screens';
+import { HomeScreen } from './screens';
+
 
 const Stack = createNativeStackNavigator();
 
@@ -31,6 +32,7 @@ export default function App() {
           component={LoginAdmin}
           options={{ headerShown: false }}
         />
+        
         <Stack.Screen
           name="LoginRep"
           component={LoginRep}
@@ -46,6 +48,12 @@ export default function App() {
           component={SalesRepView}
           options={{ headerShown: false }}
         />
+        <Stack.Screen
+          name='HomeScreen'
+          component={HomeScreen}
+          options={{headerShown:false}}
+        />
+        
       </Stack.Navigator>
     </NavigationContainer>
   );

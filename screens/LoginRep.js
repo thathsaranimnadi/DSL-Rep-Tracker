@@ -43,7 +43,7 @@ const LoginRep = ({ navigation }) => {
               fontSize: 22,
               fontWeight: 'bold',
               marginVertical: 12,
-              color: COLORS.black,
+              color: '#daa520',
             }}
           >
             Hey, Welcome Back
@@ -146,6 +146,9 @@ const LoginRep = ({ navigation }) => {
           style={{
             marginTop: 18,
             marginBottom: 4,
+            backgroundColor:'#daa520',
+            borderColor:'black',
+           
           }}
         />
 
@@ -163,7 +166,7 @@ const LoginRep = ({ navigation }) => {
             <Text
               style={{
                 fontSize: 16,
-                color: COLORS.primary,
+                color: '#daa520',
                 fontWeight: 'bold',
                 marginLeft: 6,
               }}
