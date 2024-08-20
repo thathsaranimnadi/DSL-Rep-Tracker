@@ -8,7 +8,7 @@ import app from '../firebaseConfig';
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
 
-const Login = ({ navigation }) => {
+const LoginAdmin = ({ navigation }) => {
   const [isPasswordShown, setIsPasswordShown] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -22,8 +22,8 @@ const Login = ({ navigation }) => {
       .then((res) => {
         console.log(res)
         alert('Logged In');
-        // Navigate to the Login screen after successful signup
-        //navigation.navigate("Login");
+        // Navigate to the admin screen after successful login
+        //navigation.navigate("Home");
       })
       .catch(error => {
         if (error.code === 'auth/invalid-credential') {
@@ -50,7 +50,7 @@ const Login = ({ navigation }) => {
           </Text>
 
           <Text style={{ fontSize: 16, color: COLORS.black }}>
-            Connect with your friends today!
+            Login as an admin
           </Text>
         </View>
 
@@ -177,4 +177,4 @@ const Login = ({ navigation }) => {
   );
 };
 
-export default Login;
+export default LoginAdmin;

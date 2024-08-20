@@ -1,4 +1,5 @@
-import Login from "./Login";
+import LoginAdmin from "./LoginAdmin";
+import LoginRep from "./LoginRep";
 import Welcome from "./Welcome"; 
 import Signup from "./Signup";
 import SalesRepView from "./SalesRepView";
@@ -8,7 +9,8 @@ import HomeScreen from "./AdminView/HomeScreen";
 
 
 export {
-    Login,
+    LoginAdmin,
+    LoginRep,
     Welcome,
     Signup,
     SalesRepView,
