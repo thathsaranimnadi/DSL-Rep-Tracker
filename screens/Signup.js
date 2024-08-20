@@ -6,6 +6,8 @@ import COLORS from '../constants/colors';
 import Button from '../components/Button';
 import app from '../firebaseConfig';
 
+
+
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 
 const Signup = ({ navigation }) => {

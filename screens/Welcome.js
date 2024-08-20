@@ -1,15 +1,17 @@
-import { View, Text, Pressable, Image, StyleSheet } from 'react-native';
+import { View, Text, Pressable, StyleSheet } from 'react-native';
 import React, { useRef } from 'react';
 import COLORS from '../constants/colors';
 import LottieView from 'lottie-react-native';
+import { Animated } from 'react-native';
 
 const Welcome = ({ navigation }) => {
     const animation = useRef(null);
+    const scaleValue = useRef(new Animated.Value(1)).current;
 
     return (
         <View style={styles.container}>
             <View style={styles.welcome}>
-                <LottieView style={{flex: 1}} source={require('../assets/image05.json')} autoPlay loop />
+                <LottieView style={{ flex: 1 }} source={require('../assets/image05.json')} autoPlay loop />
             </View>
             <View style={styles.textContainer}>
                 <Text style={styles.subtitleText}>Sales Pulse</Text>
@@ -19,8 +21,8 @@ const Welcome = ({ navigation }) => {
                 <Pressable
                     style={styles.joinButton}
                     onPress={() => navigation.navigate("Signup")}>
-                        <Animated.View style={[styles.joinButton,{transform:[{scale:scaleValue}]}]}>
-                    <Text style={styles.buttonText}>Join Now</Text>
+                    <Animated.View style={[styles.joinButton, { transform: [{ scale: scaleValue }] }]}>
+                        <Text style={styles.buttonText}>Join Now</Text>
                     </Animated.View>
                 </Pressable>
 
@@ -40,31 +42,28 @@ export default Welcome;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fffaf0', 
+        backgroundColor: '#ffffd8',
         justifyContent: 'center',
     },
     welcome: {
-        height: 400, 
-        aspectRatio: 1, 
-        marginRight:40,
+        height: 400,
+        aspectRatio: 1,
+        marginRight: 40,
     },
     textContainer: {
         paddingHorizontal: 22,
         alignItems: 'center',
         marginTop: 40,
     },
-    titleText: {
-        fontSize: 30,
-        fontWeight: '800',
-        color: COLORS.black, 
-        textAlign: 'center',
-    },
     subtitleText: {
-        fontSize: 28,
+        fontSize: 55,
         fontWeight: '800',
-        color: COLORS.black, 
+        color: '#daa520',
         textAlign: 'center',
         marginTop: 10,
+        textShadowColor: 'black', // Outline color
+        textShadowOffset: { width: 3, height: 6 },
+        textShadowRadius: 6,
     },
     buttonContainer: {
         marginTop: 'auto',
@@ -73,19 +72,19 @@ const styles = StyleSheet.create({
     },
     joinButton: {
         backgroundColor: '#daa520',
-        padding: 15,
-        borderRadius: 8,
+        padding: 6,
+        borderRadius: 150,
         alignItems: 'center',
         justifyContent: 'center',
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.8,
         shadowRadius: 4,
-        elevation: 5,
+        //elevation: 5,
     },
     buttonText: {
         color: COLORS.white,
-        fontSize: 18,
+        fontSize: 24,
         fontWeight: 'bold',
     },
     loginContainer: {
@@ -95,11 +94,11 @@ const styles = StyleSheet.create({
     },
     loginText: {
         fontSize: 16,
-        color: COLORS.black, 
+        color: COLORS.black,
     },
     loginButton: {
         fontSize: 16,
-        color: COLORS.black, 
+        color: COLORS.black,
         fontWeight: "bold",
         marginLeft: 4,
     },

@@ -2,6 +2,8 @@ import { StyleSheet, View, Image } from 'react-native'
 import React, { useEffect } from 'react'
 import * as Animatable from 'react-native-animatable'
 
+
+
 const black = "#000000";
 
 const Splash = ({ navigation }) => {

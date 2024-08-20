@@ -2,6 +2,8 @@ import React, { useEffect } from 'react';
 import { View, Text, AppState } from 'react-native';
 import * as Location from 'expo-location';
 
+
+
 const SalesRepView = () => {
   useEffect(() => {
     const startTracking = async () => {
