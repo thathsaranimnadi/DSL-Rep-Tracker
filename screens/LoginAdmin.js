@@ -6,6 +6,7 @@ import { Ionicons } from '@expo/vector-icons';
 import Button from '../components/Button';
 import app from '../firebaseConfig';
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import HomeScreen from './HomeScreen';
 
 
 const LoginAdmin = ({ navigation }) => {
@@ -23,7 +24,7 @@ const LoginAdmin = ({ navigation }) => {
         console.log(res)
         alert('Logged In');
         // Navigate to the admin screen after successful login
-        //navigation.navigate("Home");
+        navigation.navigate("HomeScreen");
       })
       .catch(error => {
         if (error.code === 'auth/invalid-credential') {
@@ -43,7 +44,7 @@ const LoginAdmin = ({ navigation }) => {
               fontSize: 22,
               fontWeight: 'bold',
               marginVertical: 12,
-              color: COLORS.black,
+              color: '#daa520',
             }}
           >
             Hey, Welcome Back
@@ -146,6 +147,9 @@ const LoginAdmin = ({ navigation }) => {
           style={{
             marginTop: 18,
             marginBottom: 4,
+            backgroundColor:'#daa520',
+            borderColor:'black',
+         
           }}
         />
 
@@ -163,7 +167,7 @@ const LoginAdmin = ({ navigation }) => {
             <Text
               style={{
                 fontSize: 16,
-                color: COLORS.primary,
+                color: '#daa520',
                 fontWeight: 'bold',
                 marginLeft: 6,
               }}

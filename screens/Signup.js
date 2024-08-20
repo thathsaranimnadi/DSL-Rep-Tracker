@@ -6,6 +6,8 @@ import COLORS from '../constants/colors';
 import Button from '../components/Button';
 import app from '../firebaseConfig';
 
+
+
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 
 const Signup = ({ navigation }) => {
@@ -16,7 +18,7 @@ const Signup = ({ navigation }) => {
   const [employeeId, setEmployeeId] = useState('');
   const [role, setRole] = useState('');
 
-  // Handle email/password sign-up
+   // Handle email/password sign-up
   const handleSignup = () => {
   
     if (!email || !password || !name || !employeeId || !role) {

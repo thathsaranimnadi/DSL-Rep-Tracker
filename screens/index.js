@@ -4,8 +4,7 @@ import Welcome from "./Welcome";
 import Signup from "./Signup";
 import SalesRepView from "./SalesRepView";
 import Splash from "./Splash";
-import HomeScreen from "./AdminView/HomeScreen";
-
+import HomeScreen from "./HomeScreen";
 
 
 export {
@@ -16,4 +15,5 @@ export {
     SalesRepView,
     Splash,
     HomeScreen
+  
 };
