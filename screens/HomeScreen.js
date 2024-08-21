@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, Image, StyleSheet, FlatList } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
-import axios from 'axios';
+import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+import app from '../firebaseConfig';
+import { getFirestore, collection, getDocs } from 'firebase/firestore';
 
 const Header = ({ onSearch }) => {
     return (
@@ -31,6 +32,26 @@ const Header = ({ onSearch }) => {
 };
 
 const HomeScreen = () => {
+
+    // Fetch data from Firestore
+    const getData = async () => {
+        try {
+            const db = getFirestore(app);
+            const repCollection = collection(db, 'Sales Rep name');
+            const snapshot = await getDocs(repCollection);
+            snapshot.docs.forEach((doc) => {
+                console.log(doc.data());
+            });
+        } catch (error) {
+            console.error('Error fetching data: ', error);
+        }
+    };
+
+    // Use useEffect to trigger data fetch
+    useEffect(() => {
+        getData();
+    }, []);
+
     const [salesReps, setSalesReps] = useState([]);
     const [filteredSalesReps, setFilteredSalesReps] = useState([]);
     const [selectedRep, setSelectedRep] = useState(null);
@@ -56,11 +77,12 @@ const HomeScreen = () => {
     };
 
     return (
-        <View style={styles.homeContainer}>
-            <Header onSearch={handleSearch} />
-            <CustomMapView salesReps={filteredSalesReps} />
-            <SalesRepsList salesReps={filteredSalesReps} onSelect={setSelectedRep} />
-            {selectedRep && <SalesRepDetails rep={selectedRep} />}
+        <View>
+            <View style={styles.homeContainer}>
+                <Header />
+                {/* Removed <getData /> and replaced with the correct structure */}
+                <CustomMapView />
+            </View>
         </View>
     );
 };
