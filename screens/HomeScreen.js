@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
@@ -33,7 +33,8 @@ const Header = () => {
 
 // HomeScreen Component
 const HomeScreen = () => {
-
+    
+    const [rep , getRep] = useState({});
     // Fetch data from Firestore
     const getData = async () => {
         try {
@@ -42,6 +43,9 @@ const HomeScreen = () => {
             const snapshot = await getDocs(repCollection);
             snapshot.docs.forEach((doc) => {
                 console.log(doc.data());
+                getRep(doc.data());
+
+
             });
         } catch (error) {
             console.error('Error fetching data: ', error);
@@ -57,9 +61,31 @@ const HomeScreen = () => {
         <View>
             <View style={styles.homeContainer}>
                 <Header />
-                {/* Removed <getData /> and replaced with the correct structure */}
-                <CustomMapView />
             </View>
+            
+                <View style={styles.infoContainer}>
+                    <View style={styles.row}>
+                        <Text style={styles.label}>Name:</Text>
+                        <Text style={styles.value}>{rep.name || 'Name not available'}</Text>
+                    </View>
+                    <View style={styles.row}>
+                        <Text style={styles.label}>Employee ID:</Text>
+                        <Text style={styles.value}>{rep.employee_id || 'Employee ID not available'}</Text>
+                    </View>
+                    <View style={styles.row}>
+                        <Text style={styles.label}>Role:</Text>
+                        <Text style={styles.value}>{rep.role || 'Role not available'}</Text>
+                    </View>
+                    <View style={styles.row}>
+                        <Text style={styles.label}>Department:</Text>
+                        <Text style={styles.value}>{rep.department || 'Department not available'}</Text>
+                    </View>
+                    <View style={styles.row}>
+                        <Text style={styles.label}>Mobile No:</Text>
+                        <Text style={styles.value}>{rep.mobile_no || 'Mobile No not available'}</Text>
+                    </View>
+                </View>  
+                <CustomMapView />
         </View>
     );
 };
@@ -121,7 +147,28 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 500,
         marginTop: 40
-    }
+    },
+    infoContainer: {
+        marginBottom: 0,
+        paddingTop: 10,
+        paddingLeft: 15
+    },
+    label: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: '#000'
+    },
+    value: {
+        fontSize: 16,
+        color: '#333',
+        marginBottom: 10
+    },
+    row: {
+        flexDirection: 'row',
+        //justifyContent: 'space-between', // Adjust space between label and value
+        marginBottom: 10, // Optional margin between rows
+    },
+
 });
 
 export default HomeScreen;
