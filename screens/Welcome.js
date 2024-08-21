@@ -53,72 +53,72 @@ const Welcome = ({ navigation }) => {
     );
 }
 
-export default Welcome;
+    export default Welcome;
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#ffffd8',
-        justifyContent: 'center',
-    },
-    welcome: {
-        height: 400,
-        aspectRatio: 1,
-        marginRight: 40,
-    },
-    textContainer: {
-        paddingHorizontal: 22,
-        alignItems: 'center',
-        marginTop: 40,
-    },
-    subtitleText: {
-        fontSize: 55,
-        fontWeight: '800',
-        color: '#daa520',
-        textAlign: 'center',
-        marginTop: 10,
-        textShadowColor: 'black', // Outline color
-        textShadowOffset: { width: 3, height: 6 },
-        textShadowRadius: 6,
-    },
-    buttonContainer: {
-        marginTop: 'auto',
-        paddingHorizontal: 22,
-        paddingBottom: 50,
-    },
-    joinButton: {
-        backgroundColor: '#daa520',
-        padding: 6,
-        borderRadius: 150,
-        alignItems: 'center',
-        justifyContent: 'center',
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.8,
-        shadowRadius: 4,
-        //elevation: 5,
-    },
-    buttonText: {
-        color: COLORS.white,
-        fontSize: 24,
-        fontWeight: 'bold',
-    },
-    loginContainer: {
-        flexDirection: "row",
-        marginTop: 20,
-        justifyContent: 'center',
-    },
-    loginText: {
-        fontSize: 16,
-        color: COLORS.black, 
-        marginBottom: 10
-    },
-    loginButton: {
-        fontSize: 16,
-        color: '#daa520', 
-        fontWeight: "bold",
-        marginLeft: 4,
-        marginVertical: 1,
-        alignItems: 'center'
-    },
-});
+    const styles = StyleSheet.create({
+        container: {
+            flex: 1,
+            backgroundColor: '#ffffd8',
+            justifyContent: 'center',
+        },
+        welcome: {
+            height: 400,
+            aspectRatio: 1,
+            marginRight: 40,
+        },
+        textContainer: {
+            paddingHorizontal: 22,
+            alignItems: 'center',
+            marginTop: 40,
+        },
+        subtitleText: {
+            fontSize: 55,
+            fontWeight: '800',
+            color: '#daa520',
+            textAlign: 'center',
+            marginTop: 10,
+            textShadowColor: 'black', // Outline color
+            textShadowOffset: { width: 3, height: 6 },
+            textShadowRadius: 6,
+        },
+        buttonContainer: {
+            marginTop: 'auto',
+            paddingHorizontal: 22,
+            paddingBottom: 50,
+        },
+        joinButton: {
+            backgroundColor: '#daa520',
+            padding: 6,
+            borderRadius: 150,
+            alignItems: 'center',
+            justifyContent: 'center',
+            shadowColor: '#000',
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.8,
+            shadowRadius: 4,
+            //elevation: 5,
+        },
+        buttonText: {
+            color: COLORS.white,
+            fontSize: 24,
+            fontWeight: 'bold',
+        },
+        loginContainer: {
+            flexDirection: "row",
+            marginTop: 20,
+            justifyContent: 'center',
+        },
+        loginText: {
+            fontSize: 16,
+            color: COLORS.black, 
+            marginBottom: 10
+        },
+        loginButton: {
+            fontSize: 16,
+            color: '#daa520', 
+            fontWeight: "bold",
+            marginLeft: 4,
+            marginVertical: 1,
+            alignItems: 'center'
+        },
+    });

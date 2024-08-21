@@ -1,11 +1,11 @@
-import React from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, Image, StyleSheet, FlatList } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
+import axios from 'axios';
 
-// Header Component
-const Header = () => {
+const Header = ({ onSearch }) => {
     return (
         <View>
             <View style={styles.headerContainer}>
@@ -22,6 +22,7 @@ const Header = () => {
                 <TextInput
                     placeholder='Search Users'
                     style={styles.searchInput}
+                    onChangeText={onSearch}
                 />
                 <MaterialIcons name="person-search" size={50} color="black" />
             </View>
@@ -29,52 +30,103 @@ const Header = () => {
     );
 };
 
-// HomeScreen Component
 const HomeScreen = () => {
+    const [salesReps, setSalesReps] = useState([]);
+    const [filteredSalesReps, setFilteredSalesReps] = useState([]);
+    const [selectedRep, setSelectedRep] = useState(null);
+
+    useEffect(() => {
+        // Fetch sales reps' locations from backend
+        const fetchSalesReps = async () => {
+            try {
+                const response = await axios.get('YOUR_API_ENDPOINT');
+                setSalesReps(response.data);
+                setFilteredSalesReps(response.data);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        fetchSalesReps();
+    }, []);
+
+    const handleSearch = (query) => {
+        const filtered = salesReps.filter(rep => rep.name.toLowerCase().includes(query.toLowerCase()));
+        setFilteredSalesReps(filtered);
+    };
+
     return (
-        <View>
-            <View style={styles.homeContainer}>
-                <Header />
-                {/* Render the MapView component */}
-                <CustomMapView />
-            </View>
+        <View style={styles.homeContainer}>
+            <Header onSearch={handleSearch} />
+            <CustomMapView salesReps={filteredSalesReps} />
+            <SalesRepsList salesReps={filteredSalesReps} onSelect={setSelectedRep} />
+            {selectedRep && <SalesRepDetails rep={selectedRep} />}
         </View>
     );
 };
 
-// Map view Component (renamed to CustomMapView)
-const CustomMapView = () => {
+const CustomMapView = ({ salesReps }) => {
     return (
         <View>
-            <MapView 
+            <MapView
                 style={styles.map}
                 provider={PROVIDER_GOOGLE}
                 showsUserLocation={true}
-            />
+            >
+                {salesReps.map(rep => (
+                    <Marker
+                        key={rep.id}
+                        coordinate={{ latitude: rep.latitude, longitude: rep.longitude }}
+                        title={rep.name}
+                    />
+                ))}
+            </MapView>
         </View>
-    )
-}
+    );
+};
 
-// Styles
+const SalesRepsList = ({ salesReps, onSelect }) => {
+    return (
+        <FlatList
+            data={salesReps}
+            keyExtractor={item => item.id.toString()}
+            renderItem={({ item }) => (
+                <View style={styles.repItem} onTouchEnd={() => onSelect(item)}>
+                    <Text>{item.name}</Text>
+                    <Text>{item.location}</Text>
+                </View>
+            )}
+        />
+    );
+};
+
+const SalesRepDetails = ({ rep }) => {
+    return (
+        <View style={styles.repDetails}>
+            <Text>Name: {rep.name}</Text>
+            <Text>Location: {rep.location}</Text>
+            {/* Add more details as needed */}
+        </View>
+    );
+};
+
 const styles = StyleSheet.create({
     headerContainer: {
-        display: 'flex',
         flexDirection: 'row',
-        gap: 10,
-        alignItems: 'center'
+        alignItems: 'center',
     },
     image: {
         width: 50,
         height: 50,
-        borderRadius: 150, 
+        borderRadius: 150,
         marginTop: 60,
-        marginBottom: 10
+        marginBottom: 10,
     },
     welcomeText: {
         color: '#000000',
         marginTop: 75,
         fontSize: 30,
-        marginBottom: 5
+        marginBottom: 5,
     },
     searchContainer: {
         backgroundColor: '#ffffff',
@@ -82,24 +134,33 @@ const styles = StyleSheet.create({
         paddingRight: 5,
         borderRadius: 99,
         marginTop: 25,
-        display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
     },
     searchInput: {
-        fontFamily: 'outfit',
-        fontSize: 18
+        fontSize: 18,
     },
     homeContainer: {
         backgroundColor: '#ffd700',
-        height: 250,
-        padding: 20
+        height: '100%',
+        padding: 20,
     },
     map: {
         width: '100%',
         height: 500,
-        marginTop:40
-    }
+        marginTop: 40,
+    },
+    repItem: {
+        padding: 10,
+        borderBottomWidth: 1,
+        borderBottomColor: '#ccc',
+    },
+    repDetails: {
+        padding: 10,
+        backgroundColor: '#fff',
+        borderRadius: 5,
+        marginTop: 10,
+    },
 });
 
 export default HomeScreen;
