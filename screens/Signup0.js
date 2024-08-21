@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Pressable } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Pressable, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Picker } from '@react-native-picker/picker';
 import COLORS from '../constants/colors';
@@ -8,17 +8,15 @@ import app from '../firebaseConfig';
 import { getFirestore} from "firebase/firestore";
 
 
-
-
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 
 const Signup = ({ navigation }) => {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [employeeId, setEmployeeId] = useState('');
-  const [department, setDepartment] = useState(''); 
+  const [department, setDepartment] = useState('');
 
-return (
+  return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
       <View style={{ flex: 1, marginHorizontal: 22 }}>
         <View style={{ marginVertical: 22 }}>
@@ -31,25 +29,11 @@ return (
           <Text style={{ fontSize: 16, fontWeight: '400', marginVertical: 8 }}>
             Name
           </Text>
-
-          <View
-            style={{
-              width: '100%',
-              height: 48,
-              borderColor: COLORS.black,
-              borderWidth: 1,
-              borderRadius: 8,
-              alignItems: 'center',
-              justifyContent: 'center',
-              paddingLeft: 22,
-            }}
-          >
+          <View style={styles.inputContainer}>
             <TextInput
               placeholder="Enter your name"
               placeholderTextColor={COLORS.black}
-              style={{
-                width: '100%',
-              }}
+              style={styles.input}
               value={name}
               onChangeText={setName}
             />
@@ -60,25 +44,11 @@ return (
           <Text style={{ fontSize: 16, fontWeight: '400', marginVertical: 8 }}>
             Employee ID
           </Text>
-
-          <View
-            style={{
-              width: '100%',
-              height: 48,
-              borderColor: COLORS.black,
-              borderWidth: 1,
-              borderRadius: 8,
-              alignItems: 'center',
-              justifyContent: 'center',
-              paddingLeft: 22,
-            }}
-          >
+          <View style={styles.inputContainer}>
             <TextInput
               placeholder="Enter your Employee ID"
               placeholderTextColor={COLORS.black}
-              style={{
-                width: '100%',
-              }}
+              style={styles.input}
               value={employeeId}
               onChangeText={setEmployeeId}
             />
@@ -89,16 +59,7 @@ return (
           <Text style={{ fontSize: 16, fontWeight: '400', marginVertical: 8 }}>
             Department
           </Text>
-          <View
-            style={{
-              width: '100%',
-              height: 48,
-              borderColor: COLORS.black,
-              borderWidth: 1,
-              borderRadius: 8,
-              justifyContent: 'center',
-            }}
-          >
+          <View style={styles.pickerContainer}>
             <Picker
               selectedValue={department}
               onValueChange={(itemValue) => setDepartment(itemValue)}
@@ -112,35 +73,16 @@ return (
           </View>
         </View>
 
-
         <View style={{ marginBottom: 12 }}>
           <Text style={{ fontSize: 16, fontWeight: '400', marginVertical: 8 }}>
             Mobile Number
           </Text>
-
-          <View
-            style={{
-              width: '100%',
-              height: 48,
-              borderColor: COLORS.black,
-              borderWidth: 1,
-              borderRadius: 8,
-              alignItems: 'center',
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              paddingLeft: 22,
-            }}
-          >
+          <View style={styles.phoneContainer}>
             <TextInput
               placeholder="+94"
               placeholderTextColor={COLORS.black}
               keyboardType="numeric"
-              style={{
-                width: '12%',
-                borderRightWidth: 1,
-                borderRightColor: COLORS.grey,
-                height: '100%',
-              }}
+              style={styles.phoneCode}
               value={phone.slice(0, 4)}
               onChangeText={(text) => setPhone(`${text}${phone.slice(4)}`)}
             />
@@ -148,48 +90,28 @@ return (
               placeholder="Enter your Mobile number"
               placeholderTextColor={COLORS.black}
               keyboardType="numeric"
-              style={{
-                width: '80%',
-              }}
+              style={styles.phoneInput}
               value={phone.slice(4)}
               onChangeText={(text) => setPhone(`${phone.slice(0, 4)}${text}`)}
             />
           </View>
         </View>
 
-       
-         
-          
-            
-            
-            
-          
-        
-
-        
-        
-
-         
-
-        <Button onPress={() => navigation.navigate("Signup")}
+        <Button
+          onPress={() => navigation.navigate("Signup")}
           title="Next"
           filled
-          style={{ marginTop: 18, marginBottom: 4 ,backgroundColor:'#daa520',borderColor:'#000000'}}
+          style={{ marginTop: 18, marginBottom: 4, backgroundColor: '#daa520', borderColor: '#000000' }}
         />
 
-        <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 20 }}>
-          <View
-            style={{
-              flex: 1,
-              height: 1,
-              backgroundColor: '#daa520',
-              marginHorizontal: 10,
-            }}
-          />
-         
-
-        
-             
+        <View style={styles.loginOptionsContainer}>
+          <Text style={styles.loginText}>Already Have an Account?</Text>
+          <Pressable onPress={() => navigation.navigate("LoginAdmin")} style={styles.loginButtonContainer}>
+            <Text style={styles.loginButton}>Login as an Admin</Text>
+          </Pressable>
+          <Pressable onPress={() => navigation.navigate("LoginRep")} style={styles.loginButtonContainer}>
+            <Text style={styles.loginButton}>Login as a Sales Representative</Text>
+          </Pressable>
         </View>
       </View>
     </SafeAreaView>
@@ -197,3 +119,64 @@ return (
 };
 
 export default Signup;
+
+const styles = StyleSheet.create({
+  inputContainer: {
+    width: '100%',
+    height: 48,
+    borderColor: COLORS.black,
+    borderWidth: 1,
+    borderRadius: 8,
+    justifyContent: 'center',
+    paddingLeft: 22,
+  },
+  input: {
+    width: '100%',
+  },
+  pickerContainer: {
+    width: '100%',
+    height: 48,
+    borderColor: COLORS.black,
+    borderWidth: 1,
+    borderRadius: 8,
+    justifyContent: 'center',
+  },
+  phoneContainer: {
+    width: '100%',
+    height: 48,
+    borderColor: COLORS.black,
+    borderWidth: 1,
+    borderRadius: 8,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingLeft: 22,
+  },
+  phoneCode: {
+    width: '12%',
+    borderRightWidth: 1,
+    borderRightColor: COLORS.grey,
+    height: '100%',
+  },
+  phoneInput: {
+    width: '80%',
+  },
+  loginOptionsContainer: {
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  loginText: {
+    fontSize: 16,
+    color: COLORS.black,
+    marginBottom: 12,
+  },
+  loginButtonContainer: {
+    marginVertical: 4,
+  },
+  loginButton: {
+    fontSize: 16,
+    color: '#daa520',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+});

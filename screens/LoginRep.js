@@ -1,4 +1,4 @@
-import { View, Text, TextInput, TouchableOpacity, Pressable } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Pressable,StyleSheet } from 'react-native';
 import React, { useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import COLORS from '../constants/colors';
@@ -23,7 +23,7 @@ const LoginRep = ({ navigation }) => {
         console.log(res)
         alert('Logged In');
         // Navigate to the sale's rep screen after successful login
-        //navigation.navigate("Dashboard");
+        navigation.navigate("SalesRepView");
       })
       .catch(error => {
         if (error.code === 'auth/invalid-credential') {
