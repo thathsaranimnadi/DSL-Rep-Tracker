@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, Image, StyleSheet, FlatList } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import app from '../firebaseConfig';
 import { getFirestore, collection, getDocs } from 'firebase/firestore';
+import axios from 'axios'; 
 
 const Header = ({ onSearch }) => {
     return (
@@ -32,6 +33,9 @@ const Header = ({ onSearch }) => {
 };
 
 const HomeScreen = () => {
+    const [salesReps, setSalesReps] = useState([]);
+    const [filteredSalesReps, setFilteredSalesReps] = useState([]);
+    const [selectedRep, setSelectedRep] = useState(null);
 
     // Fetch data from Firestore
     const getData = async () => {
@@ -39,9 +43,9 @@ const HomeScreen = () => {
             const db = getFirestore(app);
             const repCollection = collection(db, 'Sales Rep name');
             const snapshot = await getDocs(repCollection);
-            snapshot.docs.forEach((doc) => {
-                console.log(doc.data());
-            });
+            const reps = snapshot.docs.map(doc => doc.data());
+            setSalesReps(reps);
+            setFilteredSalesReps(reps);
         } catch (error) {
             console.error('Error fetching data: ', error);
         }
@@ -52,22 +56,19 @@ const HomeScreen = () => {
         getData();
     }, []);
 
-    const [salesReps, setSalesReps] = useState([]);
-    const [filteredSalesReps, setFilteredSalesReps] = useState([]);
-    const [selectedRep, setSelectedRep] = useState(null);
+    // Fetch sales reps' locations from backend
+    const fetchSalesReps = async () => {
+        try {
+            const response = await axios.get('YOUR_API_ENDPOINT');
+            console.log('Fetched sales reps:', response.data); // Log the data for debugging
+            setSalesReps(response.data);
+            setFilteredSalesReps(response.data);
+        } catch (error) {
+            console.error('Error fetching sales reps:', error);
+        }
+    };
 
     useEffect(() => {
-        // Fetch sales reps' locations from backend
-        const fetchSalesReps = async () => {
-            try {
-                const response = await axios.get('YOUR_API_ENDPOINT');
-                setSalesReps(response.data);
-                setFilteredSalesReps(response.data);
-            } catch (error) {
-                console.error(error);
-            }
-        };
-
         fetchSalesReps();
     }, []);
 
@@ -79,15 +80,14 @@ const HomeScreen = () => {
     return (
         <View>
             <View style={styles.homeContainer}>
-                <Header />
-                {/* Removed <getData /> and replaced with the correct structure */}
-                <CustomMapView />
+                <Header onSearch={handleSearch} />
+                <CustomMapView salesReps={filteredSalesReps} />
             </View>
         </View>
     );
 };
 
-const CustomMapView = ({ salesReps }) => {
+const CustomMapView = ({ salesReps = [] }) => {
     return (
         <View>
             <MapView
@@ -127,7 +127,7 @@ const SalesRepDetails = ({ rep }) => {
         <View style={styles.repDetails}>
             <Text>Name: {rep.name}</Text>
             <Text>Location: {rep.location}</Text>
-            {/* Add more details as needed */}
+         
         </View>
     );
 };
