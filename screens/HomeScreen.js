@@ -5,10 +5,9 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import app from '../firebaseConfig';
 import { getFirestore, collection, getDocs } from 'firebase/firestore';
-import { Marker } from 'react-native-maps';
+import axios from 'axios';
 
-import axios from 'axios'; 
-
+// Header Component
 const Header = ({ onSearch }) => {
     return (
         <View>
@@ -17,14 +16,11 @@ const Header = ({ onSearch }) => {
                     source={require('../assets/hi.gif')}
                     style={styles.image}
                 />
-                <View>
-                    <Text style={styles.welcomeText}>Welcome,</Text>
-                </View>
+                <Text style={styles.welcomeText}>Welcome,</Text>
             </View>
-
             <View style={styles.searchContainer}>
                 <TextInput
-                    placeholder='Search Users'
+                    placeholder="Search Users"
                     style={styles.searchInput}
                     onChangeText={onSearch}
                 />
@@ -34,95 +30,74 @@ const Header = ({ onSearch }) => {
     );
 };
 
+// HomeScreen Component
 const HomeScreen = () => {
     const [salesReps, setSalesReps] = useState([]);
     const [filteredSalesReps, setFilteredSalesReps] = useState([]);
     const [selectedRep, setSelectedRep] = useState(null);
-    
-    const [rep , setRep] = useState({});
+    const [rep, setRep] = useState({});
+
     // Fetch data from Firestore
     const setData = async () => {
         try {
             const db = getFirestore(app);
             const repCollection = collection(db, 'Sales Rep name');
             const snapshot = await getDocs(repCollection);
-            snapshot.docs.forEach((doc) => {
+            snapshot.docs.forEach(doc =>{
                 console.log(doc.data());
                 setRep(doc.data());
 
-
-            setSalesReps(reps);
-            setFilteredSalesReps(reps);
+            });
         } catch (error) {
             console.error('Error fetching data: ', error);
         }
     };
 
-    // Use useEffect to trigger data fetch
     useEffect(() => {
         setData();
     }, []);
 
-    /*const [salesReps, setSalesReps] = useState([]);
-    const [filteredSalesReps, setFilteredSalesReps] = useState([]);
-    const [selectedRep, setSelectedRep] = useState(null);
-
-    useEffect(() => {
-        // Fetch sales reps' locations from backend
-        const fetchSalesReps = async () => {
-            try {
-                const response = await axios.get('YOUR_API_ENDPOINT');
-                setSalesReps(response.data);
-                setFilteredSalesReps(response.data);
-            } catch (error) {
-                console.error(error);
-            }
-        };
-
-    useEffect(() => {
-        fetchSalesReps();
-    }, []);
-*/
     const handleSearch = (query) => {
         const filtered = salesReps.filter(rep => rep.name.toLowerCase().includes(query.toLowerCase()));
         setFilteredSalesReps(filtered);
     };
-    
 
     return (
         <View>
             <View style={styles.homeContainer}>
                 <Header onSearch={handleSearch} />
             </View>
-            
-                <View style={styles.infoContainer}>
-                    <View style={styles.row}>
-                        <Text style={styles.label}>Name:</Text>
-                        <Text style={styles.value}>{rep.name || 'Name not available'}</Text>
-                    </View>
-                    <View style={styles.row}>
-                        <Text style={styles.label}>Employee ID:</Text>
-                        <Text style={styles.value}>{rep.employee_id || 'Employee ID not available'}</Text>
-                    </View>
-                    <View style={styles.row}>
-                        <Text style={styles.label}>Role:</Text>
-                        <Text style={styles.value}>{rep.role || 'Role not available'}</Text>
-                    </View>
-                    <View style={styles.row}>
-                        <Text style={styles.label}>Department:</Text>
-                        <Text style={styles.value}>{rep.department || 'Department not available'}</Text>
-                    </View>
-                    <View style={styles.row}>
-                        <Text style={styles.label}>Mobile No:</Text>
-                        <Text style={styles.value}>{rep.mobile_no || 'Mobile No not available'}</Text>
-                    </View>
-                </View>  
-                <CustomMapView />
+
+            <View style={styles.infoContainer}>              
+                        <View style={styles.row}>
+                            <Text style={styles.label}>Name:</Text>
+                            <Text style={styles.value}>{rep.name || 'Name not available'}</Text>
+                        </View>
+                        <View style={styles.row}>
+                            <Text style={styles.label}>Employee ID:</Text>
+                            <Text style={styles.value}>{rep.employee_id || 'Employee ID not available'}</Text>
+                        </View>
+                        <View style={styles.row}>
+                            <Text style={styles.label}>Role:</Text>
+                            <Text style={styles.value}>{rep.role || 'Role not available'}</Text>
+                        </View>
+                        <View style={styles.row}>
+                            <Text style={styles.label}>Department:</Text>
+                            <Text style={styles.value}>{rep.department || 'Department not available'}</Text>
+                        </View>
+                        <View style={styles.row}>
+                            <Text style={styles.label}>Mobile No:</Text>
+                            <Text style={styles.value}>{rep.mobile_no || 'Mobile No not available'}</Text>
+                        </View>           
+            </View>
+
+        
         </View>
     );
 };
 
-const CustomMapView = ({ salesReps = [] }) => { // Added default empty array
+// CustomMapView Component
+const CustomMapView = ({ salesReps }) => {
     return (
         <View>
             <MapView
@@ -145,6 +120,7 @@ const CustomMapView = ({ salesReps = [] }) => { // Added default empty array
     );
 };
 
+// SalesRepsList Component
 const SalesRepsList = ({ salesReps, onSelect }) => {
     return (
         <FlatList
@@ -160,23 +136,12 @@ const SalesRepsList = ({ salesReps, onSelect }) => {
     );
 };
 
-const SalesRepDetails = ({ rep }) => {
-    return (
-        <View style={styles.repDetails}>
-            <Text>Name: {rep.name}</Text>
-            <Text>Location: {rep.location}</Text>
-            
-        </View>
-    );
-};
-
-
+// Styles
 const styles = StyleSheet.create({
     headerContainer: {
         flexDirection: 'row',
         alignItems: 'center',
         marginBottom: 10,
-        
     },
     image: {
         width: 50,
@@ -207,34 +172,41 @@ const styles = StyleSheet.create({
         backgroundColor: '#ffd700',
         height: 250,
         padding: 20,
-
     },
     map: {
         width: '100%',
         height: 500,
-        marginTop: 40
+        marginTop: 40,
     },
     infoContainer: {
         marginBottom: 0,
         paddingTop: 10,
-        paddingLeft: 15
+        paddingLeft: 15,
     },
     label: {
         fontSize: 16,
         fontWeight: 'bold',
-        color: '#000'
+        color: '#000',
     },
     value: {
         fontSize: 16,
         color: '#333',
-        marginBottom: 10
+        marginBottom: 10,
     },
     row: {
         flexDirection: 'row',
-        //justifyContent: 'space-between', // Adjust space between label and value
-        marginBottom: 10, // Optional margin between rows
+        marginBottom: 10,
     },
-
+    repItem: {
+        padding: 10,
+        borderBottomWidth: 1,
+        borderBottomColor: '#ccc',
+    },
+    noRepSelected: {
+        textAlign: 'center',
+        fontSize: 18,
+        color: '#666',
+    },
 });
 
 export default HomeScreen;
