@@ -84,7 +84,8 @@ const HomeScreen = () => {
     return (
         <View>
             <View style={styles.homeContainer}>
-                <Header />
+                <Header onSearch={handleSearch} />
+                
             </View>
             
                 <View style={styles.infoContainer}>
@@ -217,7 +218,18 @@ const styles = StyleSheet.create({
     row: {
         flexDirection: 'row',
         //justifyContent: 'space-between', // Adjust space between label and value
-        marginBottom: 10, // Optional margin between rows
+        marginBottom: 10 // Optional margin between rows
+    },
+    repItem: {
+        padding:10,
+        borderBottomWidth:1,
+        borderBottomColor:'#ccc'
+    },
+    repDetails:{
+        padding:10,
+        backgroundColor:'#fff',
+        borderRadius:5,
+        marginTop:10
     },
 
 });
