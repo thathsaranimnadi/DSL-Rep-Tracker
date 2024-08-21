@@ -5,6 +5,8 @@ import { Picker } from '@react-native-picker/picker';
 import COLORS from '../constants/colors';
 import Button from '../components/Button';
 import app from '../firebaseConfig';
+import { getFirestore} from "firebase/firestore";
+
 
 
 

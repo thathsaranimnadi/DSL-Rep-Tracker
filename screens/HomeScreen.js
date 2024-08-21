@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+import app from '../firebaseConfig';
+import { getFirestore, collection, getDocs } from 'firebase/firestore';
 
 // Header Component
 const Header = () => {
@@ -31,11 +33,31 @@ const Header = () => {
 
 // HomeScreen Component
 const HomeScreen = () => {
+
+    // Fetch data from Firestore
+    const getData = async () => {
+        try {
+            const db = getFirestore(app);
+            const repCollection = collection(db, 'Sales Rep name');
+            const snapshot = await getDocs(repCollection);
+            snapshot.docs.forEach((doc) => {
+                console.log(doc.data());
+            });
+        } catch (error) {
+            console.error('Error fetching data: ', error);
+        }
+    };
+
+    // Use useEffect to trigger data fetch
+    useEffect(() => {
+        getData();
+    }, []);
+
     return (
         <View>
             <View style={styles.homeContainer}>
                 <Header />
-                {/* Render the MapView component */}
+                {/* Removed <getData /> and replaced with the correct structure */}
                 <CustomMapView />
             </View>
         </View>
@@ -52,8 +74,8 @@ const CustomMapView = () => {
                 showsUserLocation={true}
             />
         </View>
-    )
-}
+    );
+};
 
 // Styles
 const styles = StyleSheet.create({
@@ -98,7 +120,7 @@ const styles = StyleSheet.create({
     map: {
         width: '100%',
         height: 500,
-        marginTop:40
+        marginTop: 40
     }
 });
 
