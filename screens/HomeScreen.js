@@ -5,6 +5,8 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import app from '../firebaseConfig';
 import { getFirestore, collection, getDocs } from 'firebase/firestore';
+import { Marker } from 'react-native-maps';
+
 
 const Header = ({ onSearch }) => {
     return (
@@ -33,16 +35,16 @@ const Header = ({ onSearch }) => {
 
 const HomeScreen = () => {
     
-    const [rep , getRep] = useState({});
+    const [rep , setRep] = useState({});
     // Fetch data from Firestore
-    const getData = async () => {
+    const setData = async () => {
         try {
             const db = getFirestore(app);
             const repCollection = collection(db, 'Sales Rep name');
             const snapshot = await getDocs(repCollection);
             snapshot.docs.forEach((doc) => {
                 console.log(doc.data());
-                getRep(doc.data());
+                setRep(doc.data());
 
 
             });
@@ -53,10 +55,10 @@ const HomeScreen = () => {
 
     // Use useEffect to trigger data fetch
     useEffect(() => {
-        getData();
+        setData();
     }, []);
 
-    const [salesReps, setSalesReps] = useState([]);
+    /*const [salesReps, setSalesReps] = useState([]);
     const [filteredSalesReps, setFilteredSalesReps] = useState([]);
     const [selectedRep, setSelectedRep] = useState(null);
 
@@ -74,16 +76,17 @@ const HomeScreen = () => {
 
         fetchSalesReps();
     }, []);
-
+*/
     const handleSearch = (query) => {
         const filtered = salesReps.filter(rep => rep.name.toLowerCase().includes(query.toLowerCase()));
         setFilteredSalesReps(filtered);
     };
+    
 
     return (
         <View>
             <View style={styles.homeContainer}>
-                <Header />
+                <Header onSearch={handleSearch} />
             </View>
             
                 <View style={styles.infoContainer}>
@@ -113,7 +116,7 @@ const HomeScreen = () => {
     );
 };
 
-const CustomMapView = ({ salesReps }) => {
+const CustomMapView = ({ salesReps = [] }) => { // Added default empty array
     return (
         <View>
             <MapView
@@ -121,11 +124,14 @@ const CustomMapView = ({ salesReps }) => {
                 provider={PROVIDER_GOOGLE}
                 showsUserLocation={true}
             >
-                {salesReps.map(rep => (
+                {salesReps.map((rep, index) => (
                     <Marker
-                        key={rep.id}
-                        coordinate={{ latitude: rep.latitude, longitude: rep.longitude }}
-                        title={rep.name}
+                        key={index}
+                        coordinate={{
+                            latitude: rep.latitude || 0, // Default to 0 if latitude is missing
+                            longitude: rep.longitude || 0 // Default to 0 if longitude is missing
+                        }}
+                        title={rep.name || 'Unknown Location'}
                     />
                 ))}
             </MapView>
@@ -153,15 +159,18 @@ const SalesRepDetails = ({ rep }) => {
         <View style={styles.repDetails}>
             <Text>Name: {rep.name}</Text>
             <Text>Location: {rep.location}</Text>
-            {/* Add more details as needed */}
+            
         </View>
     );
 };
+
 
 const styles = StyleSheet.create({
     headerContainer: {
         flexDirection: 'row',
         alignItems: 'center',
+        marginBottom: 10,
+        
     },
     image: {
         width: 50,
@@ -190,8 +199,9 @@ const styles = StyleSheet.create({
     },
     homeContainer: {
         backgroundColor: '#ffd700',
-        height: '100%',
+        height: 250,
         padding: 20,
+
     },
     map: {
         width: '100%',
