@@ -108,7 +108,7 @@ const CustomMapView = ({ salesReps = [], currentLocation }) => {
             <MapView
                 style={styles.map}
                 provider={PROVIDER_GOOGLE}
-                showsUserLocation={true}
+                showsUserLocation={false}
                 initialRegion={{
                     latitude: currentLocation?.latitude || 6.9271,
                     longitude: currentLocation?.longitude || 79.9612,
