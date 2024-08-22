@@ -110,10 +110,10 @@ const CustomMapView = ({ salesReps = [], currentLocation }) => {
                 provider={PROVIDER_GOOGLE}
                 showsUserLocation={true}
                 initialRegion={{
-                    latitude: currentLocation?.latitude || 37.78825,
-                    longitude: currentLocation?.longitude || -122.4324,
-                    latitudeDelta: 0.0922,
-                    longitudeDelta: 0.0421,
+                    latitude: currentLocation?.latitude || 6.9271,
+                    longitude: currentLocation?.longitude || 79.9612,
+                    latitudeDelta: 0.922,
+                    longitudeDelta: 0.421,
                 }}
             >
                 {salesReps.map((rep, index) => (

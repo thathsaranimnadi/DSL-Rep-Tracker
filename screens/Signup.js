@@ -6,28 +6,53 @@ import COLORS from '../constants/colors';
 import Button from '../components/Button';
 import app from '../firebaseConfig';
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import { getFirestore} from "firebase/firestore";
+import { getFirestore, collection, addDoc } from 'firebase/firestore';
+import { useRoute } from '@react-navigation/native';
 
 const Signup = ({ navigation }) => {
-  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [phone, setPhone] = useState('');
-  const [employeeId, setEmployeeId] = useState('');
   const [role, setRole] = useState('');
+
+
+  const auth = getAuth(app); // Initialize Firebase Auth
+  const firestore = getFirestore(app); // Initialize Firestore
+  const route = useRoute(); // Use the useRoute hook to access route params
+  const { params } = route; // Access params here
+  const { name, employeeId, department, phone } = route.params || {};
+
+
+  //Add data to the database
+  const addRepData = async () => {
+    try {
+      await addDoc(collection(firestore, "Sales Rep"), {
+        Role: role,     // Use the value from the input field
+        Email: email,
+        Password: password,
+        Name: name,     // Use the value from the input field
+        Phone_No: phone,
+        Employee_ID: employeeId,
+        Department: department
+        
+      });
+      console.log("Document successfully written!");
+    } catch (error) {
+      console.error("Error adding document: ", error);
+    }
+  };
 
   // Handle email/password sign-up
   const handleSignup = () => {
-    if (!email || !password || !name || !employeeId || !role) {
+    if (!email || !password || !role) {
       alert('Please fill in all fields and agree to the terms and conditions.');
       return;
     }
   
-    const auth = getAuth(app); // Initialize Firebase Auth
     
     createUserWithEmailAndPassword(auth, email, password)
       .then(() => {
-        console.log('User account created & signed in!');
+        console.log('User account created!');
+        addRepData();
         if (role === 'sales_rep'){
             navigation.navigate("LoginRep");
         } else {
@@ -108,12 +133,16 @@ const Signup = ({ navigation }) => {
           </View>
         </View>
         
-        <Button 
-          onPress={handleSignup}
+        <Button
+          onPress={() => {
+            handleSignup();
+      
+          }}
           title="Sign up"
           filled
           style={styles.signupButton}
         />
+
 
         <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 20 }}>
           <View style={styles.divider} />
