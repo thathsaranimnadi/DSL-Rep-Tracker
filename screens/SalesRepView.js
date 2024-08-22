@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, AppState, StyleSheet, BackHandler } from 'react-native';
+import { View, Text, AppState, StyleSheet, BackHandler, ToastAndroid } from 'react-native';
 import * as Location from 'expo-location';
 import NetInfo from '@react-native-community/netinfo';
-import LottieView from 'lottie-react-native'; 
+import LottieView from 'lottie-react-native';
 
 const SalesRepView = () => {
   const [locationGranted, setLocationGranted] = useState(false);
+  const [appState, setAppState] = useState(AppState.currentState);
 
   useEffect(() => {
     const requestLocationPermission = async () => {
@@ -16,7 +17,6 @@ const SalesRepView = () => {
       }
       setLocationGranted(true);
 
-      // Setup background location tracking
       await Location.startLocationUpdatesAsync('background-location-task', {
         accuracy: Location.Accuracy.BestForNavigation,
         distanceInterval: 10,
@@ -26,17 +26,23 @@ const SalesRepView = () => {
     requestLocationPermission();
 
     return () => {
-      // Clean up location tracking
       Location.stopLocationUpdatesAsync('background-location-task');
     };
   }, []);
 
   useEffect(() => {
     const handleAppStateChange = (nextAppState) => {
-      if (nextAppState === 'background') {
+      if (nextAppState === 'background' || nextAppState === 'inactive') {
         console.log('App is in the background');
-        // Send an alert to the admin
+        ToastAndroid.show('Please return to the app!', ToastAndroid.LONG);
+
+        // Optionally: use a timer to bring the app to the foreground
+        // This approach is aggressive and may frustrate users
+        setTimeout(() => {
+          AppState.currentState === 'background' && AppState.addEventListener('focus', () => {});
+        }, 1000);
       }
+      setAppState(nextAppState);
     };
 
     AppState.addEventListener('change', handleAppStateChange);
@@ -71,7 +77,7 @@ const SalesRepView = () => {
   return (
     <View style={styles.container}>
       <LottieView
-        source={require('../assets/welcome.json')} 
+        source={require('../assets/welcome.json')}
         autoPlay
         loop
         style={styles.animation}
@@ -106,7 +112,7 @@ const styles = StyleSheet.create({
   animation: {
     width: 100,
     height: 100,
-    marginBottom: 20, 
-    marginTop:10,
+    marginBottom: 20,
+    marginTop: 10,
   },
 });
