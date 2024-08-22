@@ -8,13 +8,13 @@ import app from '../firebaseConfig';
 import { getFirestore} from "firebase/firestore";
 
 
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-
 const Signup = ({ navigation }) => {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [employeeId, setEmployeeId] = useState('');
   const [department, setDepartment] = useState('');
+  const firestore = getFirestore(app); // Initialize Firestore
+  
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
@@ -98,11 +98,24 @@ const Signup = ({ navigation }) => {
         </View>
 
         <Button
-          onPress={() => navigation.navigate("Signup")}
+          onPress={() => {
+            if (!name || !employeeId || !department) {
+              alert('Please fill in all fields and agree to the terms and conditions.');
+            } else {
+              navigation.navigate('Signup', { 
+                name: name,
+                employeeId: employeeId,
+                department: department,
+                phone: phone,
+               });
+            }
+          }}
           title="Next"
           filled
           style={{ marginTop: 18, marginBottom: 4, backgroundColor: '#daa520', borderColor: '#000000' }}
         />
+
+        
 
         <View style={styles.loginOptionsContainer}>
           <Text style={styles.loginText}>Already Have an Account?</Text>
