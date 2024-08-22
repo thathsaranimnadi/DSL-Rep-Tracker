@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, AppState, StyleSheet, BackHandler } from 'react-native';
 import * as Location from 'expo-location';
 import NetInfo from '@react-native-community/netinfo';
-import LottieView from 'lottie-react-native'; // Import LottieView
+import LottieView from 'lottie-react-native'; 
 
 const SalesRepView = () => {
   const [locationGranted, setLocationGranted] = useState(false);

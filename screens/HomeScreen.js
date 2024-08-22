@@ -5,7 +5,6 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import app from '../firebaseConfig';
 import { getFirestore, collection, getDocs } from 'firebase/firestore';
-import axios from 'axios';
 
 // Header Component
 const Header = ({ onSearch }) => {
@@ -36,6 +35,12 @@ const HomeScreen = () => {
     const [filteredSalesReps, setFilteredSalesReps] = useState([]);
     const [selectedRep, setSelectedRep] = useState(null);
     const [rep, setRep] = useState({});
+
+    const departmentColors = {
+        'Battery': 'red',
+        'Tyre': 'blue',
+        'Spare Parts': 'yellow',
+    };
 
     // Fetch data from Firestore
     const setData = async () => {
@@ -90,30 +95,47 @@ const HomeScreen = () => {
                             <Text style={styles.value}>{rep.mobile_no || 'Mobile No not available'}</Text>
                         </View>           
             </View>
-
+        <CustomMapView/>
         
         </View>
     );
 };
 
 // CustomMapView Component
-const CustomMapView = ({ salesReps }) => {
+const CustomMapView = ({ salesReps = [], currentLocation }) => {
     return (
         <View>
             <MapView
                 style={styles.map}
                 provider={PROVIDER_GOOGLE}
                 showsUserLocation={true}
+                initialRegion={{
+                    latitude: currentLocation?.latitude || 37.78825,
+                    longitude: currentLocation?.longitude || -122.4324,
+                    latitudeDelta: 0.0922,
+                    longitudeDelta: 0.0421,
+                }}
             >
                 {salesReps.map((rep, index) => (
                     <Marker
                         key={index}
                         coordinate={{
-                            latitude: rep.latitude || 0, // Default to 0 if latitude is missing
-                            longitude: rep.longitude || 0 // Default to 0 if longitude is missing
+                            latitude: rep.latitude || 0,
+                            longitude: rep.longitude || 0
                         }}
-                        title={rep.name || 'Unknown Location'}
-                    />
+                        
+                        title={rep.name || 'Unknown Location'} >
+                        pinColor={departmentColors[rep.department] || 'gray'}
+                        
+                        <View>
+                            <Image 
+                                source={require('../assets/marker.png')} 
+                                style={{ width: 60, height: 60 }} 
+                            />
+                        </View>
+                        
+                        
+                    </Marker>
                 ))}
             </MapView>
         </View>
@@ -175,11 +197,10 @@ const styles = StyleSheet.create({
     },
     map: {
         width: '100%',
-        height: 500,
-        marginTop: 40,
+        height: 400,
+        marginTop: 10,
     },
     infoContainer: {
-        marginBottom: 0,
         paddingTop: 10,
         paddingLeft: 15,
     },
