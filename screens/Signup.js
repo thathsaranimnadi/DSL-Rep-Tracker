@@ -52,8 +52,8 @@ const Signup = ({ navigation }) => {
     createUserWithEmailAndPassword(auth, email, password)
       .then(() => {
         console.log('User account created!');
-        addRepData();
         if (role === 'sales_rep'){
+            addRepData();
             navigation.navigate("LoginRep");
         } else {
             navigation.navigate("LoginAdmin");
