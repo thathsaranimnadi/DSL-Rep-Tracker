@@ -8,7 +8,7 @@ import NetInfo from '@react-native-community/netinfo';
 import { BackHandler } from 'react-native';
 import { auth } from '../firebaseConfig';
 import { db } from '../firebaseConfig'; // Firebase configuration
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, updateDoc } from 'firebase/firestore';
 import * as TaskManager from 'expo-task-manager';
 
 
@@ -48,7 +48,7 @@ export default function SalesRepView() {
       }
       //Store in firestore
       try {
-        await setDoc(doc(db, 'salesReps', uid), {
+        await updateDoc(doc(db, 'Sales Rep', uid), {
           Latitude: currentLocation.coords.latitude,
           Longitude: currentLocation.coords.longitude,
           /*Address: {
