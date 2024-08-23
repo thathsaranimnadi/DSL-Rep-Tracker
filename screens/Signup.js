@@ -6,7 +6,7 @@ import COLORS from '../constants/colors';
 import Button from '../components/Button';
 import app from '../firebaseConfig';
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import { getFirestore, collection, addDoc } from 'firebase/firestore';
+import { getFirestore, doc, setDoc } from 'firebase/firestore';
 import { useRoute } from '@react-navigation/native';
 
 const Signup = ({ navigation }) => {
@@ -23,9 +23,9 @@ const Signup = ({ navigation }) => {
 
 
   //Add details of salesrep to the database
-  const addRepData = async () => {
+  const addRepData = async (uid) => {
     try {
-      await addDoc(collection(firestore, "Sales Rep"), {
+      await setDoc(doc(firestore, "Sales Rep",uid), {
         Role: role,     // Use the value from the input field
         Email: email,
         Password: password,
@@ -42,10 +42,9 @@ const Signup = ({ navigation }) => {
   };
 
   //Add details of salesrep to the database
-  const addAdminData = async () => {
+  const addAdminData = async (uid) => {
     try {
-      await addDoc(collection(firestore, "Admin"), {
-  
+      await setDoc(doc(firestore, "Admin",uid), {       
         Email: email,
         Password: password,
         Name: name,     // Use the value from the input field
@@ -68,13 +67,14 @@ const Signup = ({ navigation }) => {
   
     
     createUserWithEmailAndPassword(auth, email, password)
-      .then(() => {
+      .then((userCredential) => {
+        const { uid } = userCredential.user; // Get the UID of the created user
         console.log('User account created!');
         if (role === 'sales_rep'){
-          addRepData();
+          addRepData(uid);
           navigation.navigate("LoginRep");
         } else {
-          addAdminData();
+          addAdminData(uid);
           navigation.navigate("LoginAdmin");
         }
       })
