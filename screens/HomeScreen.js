@@ -33,8 +33,6 @@ const Header = ({ onSearch }) => {
 const HomeScreen = () => {
     const [salesReps, setSalesReps] = useState([]);
     const [filteredSalesReps, setFilteredSalesReps] = useState([]);
-    const [selectedRep, setSelectedRep] = useState(null);
-    const [rep, setRep] = useState({});
 
     const departmentColors = {
         'Battery': 'red',
@@ -48,11 +46,12 @@ const HomeScreen = () => {
             const db = getFirestore(app);
             const repCollection = collection(db, 'Sales Rep');
             const snapshot = await getDocs(repCollection);
-            snapshot.docs.forEach(doc =>{
-                console.log(doc.data());
-                setRep(doc.data());
-
-            });
+            const repsData = snapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data(),
+            }));
+            setSalesReps(repsData);
+            setFilteredSalesReps(repsData); // Initialize filtered sales reps with all data
         } catch (error) {
             console.error('Error fetching data: ', error);
         }
@@ -63,8 +62,14 @@ const HomeScreen = () => {
     }, []);
 
     const handleSearch = (query) => {
-        const filtered = salesReps.filter(rep => rep.name.toLowerCase().includes(query.toLowerCase()));
-        setFilteredSalesReps(filtered);
+        if (query) {
+            const filtered = salesReps.filter(rep => 
+                rep.Name.toLowerCase().includes(query.toLowerCase()) || 
+                rep.Employee_ID.toLowerCase().includes(query.toLowerCase()));
+            setFilteredSalesReps(filtered);
+        } else {
+            setFilteredSalesReps(salesReps); // Show all reps if search query is empty
+        }
     };
 
     return (
@@ -73,36 +78,50 @@ const HomeScreen = () => {
                 <Header onSearch={handleSearch} />
             </View>
 
-            <View style={styles.infoContainer}>              
-                        <View style={styles.row}>
-                            <Text style={styles.label}>Name:</Text>
-                            <Text style={styles.value}>{rep.Name || 'Name not available'}</Text>
+            <View style={styles.infoContainer}>
+                <FlatList
+                    data={filteredSalesReps}
+                    keyExtractor={item => item.id}
+                    renderItem={({ item }) => (
+                        <View style={styles.infoContainer}>
+                            <View style={styles.row}>
+                                <Text style={styles.label}>Name:</Text>
+                                <Text style={styles.value}>{item.Name || 'Name not available'}</Text>
+                            </View>
+                            <View style={styles.row}>
+                                <Text style={styles.label}>Employee ID:</Text>
+                                <Text style={styles.value}>{item.Employee_ID || 'Employee ID not available'}</Text>
+                            </View>
+                            <View style={styles.row}>
+                                <Text style={styles.label}>Role:</Text>
+                                <Text style={styles.value}>{item.Role || 'Role not available'}</Text>
+                            </View>
+                            <View style={styles.row}>
+                                <Text style={styles.label}>Department:</Text>
+                                <Text style={styles.value}>{item.Department || 'Department not available'}</Text>
+                            </View>
+                            <View style={styles.row}>
+                                <Text style={styles.label}>Mobile No:</Text>
+                                <Text style={styles.value}>{item.Phone_No || 'Mobile No not available'}</Text>
+                            </View>
                         </View>
-                        <View style={styles.row}>
-                            <Text style={styles.label}>Employee ID:</Text>
-                            <Text style={styles.value}>{rep.Employee_ID || 'Employee ID not available'}</Text>
-                        </View>
-                        <View style={styles.row}>
-                            <Text style={styles.label}>Role:</Text>
-                            <Text style={styles.value}>{rep.Role || 'Role not available'}</Text>
-                        </View>
-                        <View style={styles.row}>
-                            <Text style={styles.label}>Department:</Text>
-                            <Text style={styles.value}>{rep.Department || 'Department not available'}</Text>
-                        </View>
-                        <View style={styles.row}>
-                            <Text style={styles.label}>Mobile No:</Text>
-                            <Text style={styles.value}>{rep.Phone_No || 'Mobile No not available'}</Text>
-                        </View>           
+
+                    )}
+                />
             </View>
-        <CustomMapView/>
-        
+            <CustomMapView salesReps={filteredSalesReps} />
         </View>
     );
 };
 
 // CustomMapView Component
 const CustomMapView = ({ salesReps = [], currentLocation }) => {
+    const departmentColors = {
+        'Battery': 'red',
+        'Tyre': 'blue',
+        'Spare Parts': 'yellow',
+    };
+
     return (
         <View>
             <MapView
@@ -123,38 +142,19 @@ const CustomMapView = ({ salesReps = [], currentLocation }) => {
                             latitude: rep.latitude || 0,
                             longitude: rep.longitude || 0
                         }}
-                        
-                        title={rep.name || 'Unknown Location'} >
-                        pinColor={departmentColors[rep.department] || 'gray'}
-                        
+                        title={rep.Name || 'Unknown Location'}
+                        pinColor={departmentColors[rep.Department] || 'gray'}
+                    >
                         <View>
-                            <Image 
-                                source={require('../assets/marker.png')} 
-                                style={{ width: 60, height: 60 }} 
+                            <Image
+                                source={require('../assets/marker.png')}
+                                style={{ width: 60, height: 60 }}
                             />
                         </View>
-                        
-                        
                     </Marker>
                 ))}
             </MapView>
         </View>
-    );
-};
-
-// SalesRepsList Component
-const SalesRepsList = ({ salesReps, onSelect }) => {
-    return (
-        <FlatList
-            data={salesReps}
-            keyExtractor={item => item.id.toString()}
-            renderItem={({ item }) => (
-                <View style={styles.repItem} onTouchEnd={() => onSelect(item)}>
-                    <Text>{item.name}</Text>
-                    <Text>{item.location}</Text>
-                </View>
-            )}
-        />
     );
 };
 
@@ -217,16 +217,6 @@ const styles = StyleSheet.create({
     row: {
         flexDirection: 'row',
         marginBottom: 10,
-    },
-    repItem: {
-        padding: 10,
-        borderBottomWidth: 1,
-        borderBottomColor: '#ccc',
-    },
-    noRepSelected: {
-        textAlign: 'center',
-        fontSize: 18,
-        color: '#666',
     },
 });
 
