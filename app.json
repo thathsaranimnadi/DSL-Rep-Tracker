@@ -17,7 +17,16 @@
         "backgroundColor": "#ffffff"
       },
       "package": "com.example.Tracker",
-      "googleServicesFile":"./android/app/google-services.json"
+      "googleServicesFile":"./android/app/google-services.json",
+      
+      "permissions": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION",
+        "FOREGROUND_SERVICE"
+      ],
+      "backgroundColor": "#ffffff",
+      "backgroundLocation": true
+    
     },
     "web": {
       "favicon": "./assets/favicon.png"
