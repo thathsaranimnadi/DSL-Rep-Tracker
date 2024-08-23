@@ -6,11 +6,16 @@ import LottieView from 'lottie-react-native';
 import BackgroundJob from 'react-native-background-actions';
 import NetInfo from '@react-native-community/netinfo';
 import { BackHandler } from 'react-native';
+import { auth } from '../firebaseConfig';
+import { db } from '../firebaseConfig'; // Firebase configuration
+import { doc, setDoc } from 'firebase/firestore';
+
 
 
 export default function SalesRepView() {
   const [location, setLocation] = useState(null);
   const [address, setAddress] = useState('');
+  const uid = auth.currentUser.uid; // Get the current user's UID
 
   //Get location permisson
   useEffect(() => {
@@ -23,16 +28,34 @@ export default function SalesRepView() {
 
       let currentLocation = await Location.getCurrentPositionAsync({});
       setLocation(currentLocation);
-      console.log("Location:");
-      console.log(currentLocation);
+      console.log("Location:", currentLocation);
 
       if (currentLocation) {
         let reverseGeocode = await Location.reverseGeocodeAsync({
           latitude: currentLocation.coords.latitude,
           longitude: currentLocation.coords.longitude
         });
-        setAddress(reverseGeocode[0]);
-        console.log("Address:", reverseGeocode[0]);
+        const formattedAddress = reverseGeocode[0];
+        setAddress(formattedAddress);
+        console.log("Address:", formattedAddress);
+      }
+      //Store in firestore
+      try {
+        await setDoc(doc(db, 'salesReps', uid), {
+          Latitude: currentLocation.coords.latitude,
+          Longitude: currentLocation.coords.longitude,
+          /*Address: {
+            street: formattedAddress.street || '',
+            city: formattedAddress.city || '',
+            region: formattedAddress.region || '',
+            postalCode: formattedAddress.postalCode || '',
+            country: formattedAddress.country || ''
+          }, // Format the address object*/
+          Timestamp: new Date() // Store the current timestamp
+        });
+        console.log("Location and address stored in Firestore.");
+      } catch (error) {
+        console.error("Error storing data in Firestore:", error);
       }
     };
 
