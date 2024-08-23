@@ -9,6 +9,7 @@ import { BackHandler } from 'react-native';
 import { auth } from '../firebaseConfig';
 import { db } from '../firebaseConfig'; // Firebase configuration
 import { doc, setDoc } from 'firebase/firestore';
+import * as TaskManager from 'expo-task-manager';
 
 
 
@@ -25,6 +26,12 @@ export default function SalesRepView() {
         console.log("Please grant location permissions");
         return;
       }
+      await Location.startLocationUpdatesAsync('background-location-task', {
+        accuracy: Location.Accuracy.High,
+        timeInterval: 900000, // 15 minutes in milliseconds
+        distanceInterval: 0, // Receive updates as the user moves
+    });
+
 
       let currentLocation = await Location.getCurrentPositionAsync({});
       setLocation(currentLocation);
@@ -61,7 +68,18 @@ export default function SalesRepView() {
 
     getPermissionsAndLocation();
   }, []);
-  
+  TaskManager.defineTask('background-location-task', async ({ data, error }) => {
+    if (error) {
+        console.error(error);
+        return;
+    }
+    if (data) {
+        const { locations } = data;
+        console.log('Received new locations', locations);
+        // Handle the new locations here, e.g., send them to your server
+    }
+});
+
   //Network disconnected 
   useEffect(() => {
     const unsubscribeNetInfo = NetInfo.addEventListener(state => {
