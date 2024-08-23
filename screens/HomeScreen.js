@@ -46,7 +46,7 @@ const HomeScreen = () => {
     const setData = async () => {
         try {
             const db = getFirestore(app);
-            const repCollection = collection(db, 'Sales Rep name');
+            const repCollection = collection(db, 'Sales Rep');
             const snapshot = await getDocs(repCollection);
             snapshot.docs.forEach(doc =>{
                 console.log(doc.data());
@@ -76,23 +76,23 @@ const HomeScreen = () => {
             <View style={styles.infoContainer}>              
                         <View style={styles.row}>
                             <Text style={styles.label}>Name:</Text>
-                            <Text style={styles.value}>{rep.name || 'Name not available'}</Text>
+                            <Text style={styles.value}>{rep.Name || 'Name not available'}</Text>
                         </View>
                         <View style={styles.row}>
                             <Text style={styles.label}>Employee ID:</Text>
-                            <Text style={styles.value}>{rep.employee_id || 'Employee ID not available'}</Text>
+                            <Text style={styles.value}>{rep.Employee_ID || 'Employee ID not available'}</Text>
                         </View>
                         <View style={styles.row}>
                             <Text style={styles.label}>Role:</Text>
-                            <Text style={styles.value}>{rep.role || 'Role not available'}</Text>
+                            <Text style={styles.value}>{rep.Role || 'Role not available'}</Text>
                         </View>
                         <View style={styles.row}>
                             <Text style={styles.label}>Department:</Text>
-                            <Text style={styles.value}>{rep.department || 'Department not available'}</Text>
+                            <Text style={styles.value}>{rep.Department || 'Department not available'}</Text>
                         </View>
                         <View style={styles.row}>
                             <Text style={styles.label}>Mobile No:</Text>
-                            <Text style={styles.value}>{rep.mobile_no || 'Mobile No not available'}</Text>
+                            <Text style={styles.value}>{rep.Phone_No || 'Mobile No not available'}</Text>
                         </View>           
             </View>
         <CustomMapView/>

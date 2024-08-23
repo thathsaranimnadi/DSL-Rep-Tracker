@@ -22,7 +22,7 @@ const Signup = ({ navigation }) => {
   const { name, employeeId, department, phone } = route.params || {};
 
 
-  //Add data to the database
+  //Add details of salesrep to the database
   const addRepData = async () => {
     try {
       await addDoc(collection(firestore, "Sales Rep"), {
@@ -31,6 +31,24 @@ const Signup = ({ navigation }) => {
         Password: password,
         Name: name,     // Use the value from the input field
         Phone_No: phone,
+        Employee_ID: employeeId,
+        Department: department
+        
+      });
+      console.log("Document successfully written!");
+    } catch (error) {
+      console.error("Error adding document: ", error);
+    }
+  };
+
+  //Add details of salesrep to the database
+  const addAdminData = async () => {
+    try {
+      await addDoc(collection(firestore, "Admin"), {
+  
+        Email: email,
+        Password: password,
+        Name: name,     // Use the value from the input field
         Employee_ID: employeeId,
         Department: department
         
@@ -53,10 +71,11 @@ const Signup = ({ navigation }) => {
       .then(() => {
         console.log('User account created!');
         if (role === 'sales_rep'){
-            addRepData();
-            navigation.navigate("LoginRep");
+          addRepData();
+          navigation.navigate("LoginRep");
         } else {
-            navigation.navigate("LoginAdmin");
+          addAdminData();
+          navigation.navigate("LoginAdmin");
         }
       })
       .catch(error => {
