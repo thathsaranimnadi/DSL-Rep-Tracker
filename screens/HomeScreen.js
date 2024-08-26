@@ -37,11 +37,7 @@ const HomeScreen = () => {
     const [salesReps, setSalesReps] = useState([]);
     const [filteredSalesReps, setFilteredSalesReps] = useState([]);
 
-    const departmentColors = {
-        'Battery': 'red',
-        'Tyre': 'blue',
-        'Spare Parts': 'yellow',
-    };
+    
 
     // Fetch data from Firestore
     const setData = async () => {
@@ -107,6 +103,16 @@ const HomeScreen = () => {
                                 <Text style={styles.label}>Mobile No:</Text>
                                 <Text style={styles.value}>{item.Phone_No || 'Mobile No not available'}</Text>
                             </View>
+                            <View style={styles.row}>
+                                <Text style={styles.label}>Current Address:</Text>
+                                <Text style={styles.value}>{item.Address || 'Address not available'}</Text>
+                            </View>
+                            <View style={styles.row}>
+                                <Text style={styles.label}>Timestamp:</Text>
+                                <Text style={styles.value}>
+                                {item.Timestamp ? item.Timestamp.toDate().toLocaleString() : 'Time not available'}
+                                </Text>
+                            </View>
                         </View>
 
                     )}
@@ -120,9 +126,9 @@ const HomeScreen = () => {
 // CustomMapView Component
 const CustomMapView = ({ salesReps = [], currentLocation }) => {
     const departmentColors = {
-        'Battery': 'red',
-        'Tyre': 'blue',
-        'Spare Parts': 'yellow',
+        'battery': 'red',
+        'tyre': 'blue',
+        'spare_parts': 'yellow',
     };
 
     return (
@@ -142,18 +148,12 @@ const CustomMapView = ({ salesReps = [], currentLocation }) => {
                     <Marker
                         key={index}
                         coordinate={{
-                            latitude: rep.latitude || 0,
-                            longitude: rep.longitude || 0
+                            latitude: rep.Latitude || 0,
+                            longitude: rep.Longitude || 0
                         }}
                         title={rep.Name || 'Unknown Location'}
                         pinColor={departmentColors[rep.Department] || 'gray'}
                     >
-                        <View>
-                            <Image
-                                source={require('../assets/marker.png')}
-                                style={{ width: 60, height: 60 }}
-                            />
-                        </View>
                     </Marker>
                 ))}
             </MapView>
