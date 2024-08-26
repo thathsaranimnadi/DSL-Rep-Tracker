@@ -5,16 +5,19 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import app from '../firebaseConfig';
 import { getFirestore, collection, getDocs } from 'firebase/firestore';
+import LottieView from 'lottie-react-native';
 
 // Header Component
 const Header = ({ onSearch }) => {
     return (
         <View>
             <View style={styles.headerContainer}>
-                <Image
-                    source={require('../assets/hi.gif')}
-                    style={styles.image}
-                />
+            <LottieView
+                source={require('../assets/hi.json')}
+                autoPlay
+                loop
+                style={styles.animation}
+            />
                 <Text style={styles.welcomeText}>Welcome,</Text>
             </View>
             <View style={styles.searchContainer}>
@@ -165,7 +168,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginBottom: 10,
     },
-    image: {
+    animation: {
         width: 50,
         height: 50,
         borderRadius: 150,
