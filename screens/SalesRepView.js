@@ -39,7 +39,7 @@ export default function SalesRepView() {
           longitude: currentLocation.coords.longitude
         });
 
-        const formattedAddress = reverseGeocode[0]?.formattedAddress || "290/25, Colombo 01000, Sri Lanka";
+        const formattedAddress = reverseGeocode[0]?.formattedAddress || " ";
         setAddress(formattedAddress);
         console.log("Address:", formattedAddress);
 
