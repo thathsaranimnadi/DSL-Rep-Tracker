@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import * as Location from 'expo-location';
@@ -11,14 +10,12 @@ import { db } from '../firebaseConfig'; // Firebase configuration
 import { doc, updateDoc } from 'firebase/firestore';
 import * as TaskManager from 'expo-task-manager';
 
-
-
 export default function SalesRepView() {
   const [location, setLocation] = useState(null);
   const [address, setAddress] = useState('');
   const uid = auth.currentUser.uid; // Get the current user's UID
 
-  //Get location permisson
+  // Get location permission
   useEffect(() => {
     const getPermissionsAndLocation = async () => {
       let { status } = await Location.requestBackgroundPermissionsAsync();
@@ -30,8 +27,7 @@ export default function SalesRepView() {
         accuracy: Location.Accuracy.High,
         timeInterval: 900000, // 15 minutes in milliseconds
         distanceInterval: 0, // Receive updates as the user moves
-    });
-
+      });
 
       let currentLocation = await Location.getCurrentPositionAsync({});
       setLocation(currentLocation);
@@ -42,32 +38,29 @@ export default function SalesRepView() {
           latitude: currentLocation.coords.latitude,
           longitude: currentLocation.coords.longitude
         });
-        const formattedAddress = reverseGeocode[0];
+
+        const formattedAddress = reverseGeocode[0]?.formattedAddress || "290/25, Colombo 01000, Sri Lanka";
         setAddress(formattedAddress);
         console.log("Address:", formattedAddress);
-      }
-      //Store in firestore
-      try {
-        await updateDoc(doc(db, 'Sales Rep', uid), {
-          Latitude: currentLocation.coords.latitude,
-          Longitude: currentLocation.coords.longitude,
-          /*Address: {
-            street: formattedAddress.street || '',
-            city: formattedAddress.city || '',
-            region: formattedAddress.region || '',
-            postalCode: formattedAddress.postalCode || '',
-            country: formattedAddress.country || ''
-          }, // Format the address object*/
-          Timestamp: new Date() // Store the current timestamp
-        });
-        console.log("Location and address stored in Firestore.");
-      } catch (error) {
-        console.error("Error storing data in Firestore:", error);
+
+        // Store in Firestore
+        try {
+          await updateDoc(doc(db, 'Sales Rep', uid), {
+            Latitude: currentLocation.coords.latitude,
+            Longitude: currentLocation.coords.longitude,
+            Address: formattedAddress, // Use formattedAddress here
+            Timestamp: new Date() // Store the current timestamp
+          });
+          console.log("Location and address stored in Firestore.");
+        } catch (error) {
+          console.error("Error storing data in Firestore:", error);
+        }
       }
     };
 
     getPermissionsAndLocation();
   }, []);
+
   TaskManager.defineTask('background-location-task', async ({ data, error }) => {
     if (error) {
         console.error(error);
@@ -78,9 +71,9 @@ export default function SalesRepView() {
         console.log('Received new locations', locations);
         // Handle the new locations here, e.g., send them to your server
     }
-});
+  });
 
-  //Network disconnected 
+  // Network disconnected
   useEffect(() => {
     const unsubscribeNetInfo = NetInfo.addEventListener(state => {
       if (!state.isConnected) {
@@ -92,7 +85,7 @@ export default function SalesRepView() {
     return () => unsubscribeNetInfo();
   }, []);
 
-  //Disable back
+  // Disable back
   useEffect(() => {
     const backAction = () => {
       console.log("Back button pressed");
@@ -114,7 +107,6 @@ export default function SalesRepView() {
       />
       <Text style={styles.title}>Welcome to Douglas & Sons</Text>
       <Text style={styles.subtitle}>Thank you for joining with us!</Text>
-      
     </View>
   );
 }
@@ -145,5 +137,3 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
 });
-
-
