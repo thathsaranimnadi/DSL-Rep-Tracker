@@ -9,6 +9,8 @@ import { auth } from '../firebaseConfig';
 import { db } from '../firebaseConfig'; // Firebase configuration
 import { doc, updateDoc } from 'firebase/firestore';
 import * as TaskManager from 'expo-task-manager';
+//import { AppState } from 'react-native';
+//import * as Notifications from 'expo-notifications';
 
 export default function SalesRepView() {
   const [location, setLocation] = useState(null);
@@ -85,6 +87,21 @@ export default function SalesRepView() {
     return () => unsubscribeNetInfo();
   }, []);
 
+  useEffect(() => {
+    const handleAppStateChange = (nextAppState) => {
+      if (nextAppState === 'background' || nextAppState === 'inactive') {
+        console.log('App has gone to the background or is inactive');
+        // Send notification to admin
+        sendNotificationToAdmin(uid, 'App has gone to the background');
+      }
+    };
+  
+    AppState.addEventListener('change', handleAppStateChange);
+  
+    return () => {
+      AppState.removeEventListener('change', handleAppStateChange);
+    };
+  }, []);
   // Disable back
   useEffect(() => {
     const backAction = () => {
