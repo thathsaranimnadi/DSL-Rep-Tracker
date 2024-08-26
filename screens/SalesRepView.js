@@ -2,22 +2,20 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import * as Location from 'expo-location';
 import LottieView from 'lottie-react-native';
-import BackgroundJob from 'react-native-background-actions';
-import NetInfo from '@react-native-community/netinfo';
-import { BackHandler } from 'react-native';
 import { auth } from '../firebaseConfig';
 import { db } from '../firebaseConfig'; // Firebase configuration
 import { doc, updateDoc } from 'firebase/firestore';
 import * as TaskManager from 'expo-task-manager';
-//import { AppState } from 'react-native';
-//import * as Notifications from 'expo-notifications';
+import NetInfo from '@react-native-community/netinfo';
+import { BackHandler } from 'react-native';
+import { Timestamp } from 'firebase/firestore';
 
 export default function SalesRepView() {
   const [location, setLocation] = useState(null);
   const [address, setAddress] = useState('');
   const uid = auth.currentUser.uid; // Get the current user's UID
 
-  // Get location permission
+  // Get location permission and start background tracking
   useEffect(() => {
     const getPermissionsAndLocation = async () => {
       let { status } = await Location.requestBackgroundPermissionsAsync();
@@ -25,15 +23,17 @@ export default function SalesRepView() {
         console.log("Please grant location permissions");
         return;
       }
+      
+      // Start tracking the location in the background every 15 minutes
       await Location.startLocationUpdatesAsync('background-location-task', {
         accuracy: Location.Accuracy.High,
-        timeInterval: 900000, // 15 minutes in milliseconds
+        timeInterval: 60000, // 15 minutes in milliseconds
         distanceInterval: 0, // Receive updates as the user moves
       });
 
       let currentLocation = await Location.getCurrentPositionAsync({});
       setLocation(currentLocation);
-      console.log("Location:", currentLocation);
+      console.log("Initial Location:", currentLocation);
 
       if (currentLocation) {
         let reverseGeocode = await Location.reverseGeocodeAsync({
@@ -45,17 +45,17 @@ export default function SalesRepView() {
         setAddress(formattedAddress);
         console.log("Address:", formattedAddress);
 
-        // Store in Firestore
+        // Store initial location in Firestore
         try {
           await updateDoc(doc(db, 'Sales Rep', uid), {
             Latitude: currentLocation.coords.latitude,
             Longitude: currentLocation.coords.longitude,
-            Address: formattedAddress, // Use formattedAddress here
-            Timestamp: new Date() // Store the current timestamp
+            Address: formattedAddress,
+            Timestamp: Timestamp.now()
           });
-          console.log("Location and address stored in Firestore.");
+          console.log("Initial location stored in Firestore.");
         } catch (error) {
-          console.error("Error storing data in Firestore:", error);
+          console.error("Error storing initial data in Firestore:", error);
         }
       }
     };
@@ -63,46 +63,56 @@ export default function SalesRepView() {
     getPermissionsAndLocation();
   }, []);
 
+  // Background task for updating location every 15 minutes
   TaskManager.defineTask('background-location-task', async ({ data, error }) => {
     if (error) {
-        console.error(error);
-        return;
+      console.error("Error in background task:", error);
+      return;
     }
+
     if (data) {
-        const { locations } = data;
-        console.log('Received new locations', locations);
-        // Handle the new locations here, e.g., send them to your server
+      const { locations } = data;
+      if (locations && locations.length > 0) {
+        const currentLocation = locations[0];
+
+        // Optional: reverse geocode to get the address
+        const reverseGeocode = await Location.reverseGeocodeAsync({
+          latitude: currentLocation.coords.latitude,
+          longitude: currentLocation.coords.longitude,
+        });
+
+        const formattedAddress = reverseGeocode[0]?.formattedAddress || " ";
+        const uid = auth.currentUser.uid;
+
+        // Store the updated location in Firestore
+        try {
+          await updateDoc(doc(db, 'Sales Rep', uid), {
+            Latitude: currentLocation.coords.latitude,
+            Longitude: currentLocation.coords.longitude,
+            Address: formattedAddress,
+            Timestamp: new Date() // Store the current timestamp
+          });
+          console.log("Location updated in Firestore.");
+        } catch (error) {
+          console.error("Error updating Firestore:", error);
+        }
+      }
     }
   });
 
-  // Network disconnected
+  // Network disconnected monitoring
   useEffect(() => {
     const unsubscribeNetInfo = NetInfo.addEventListener(state => {
       if (!state.isConnected) {
         console.log('Network is disconnected');
-        // Notify the admin
+        // Optionally notify the admin
       }
     });
 
     return () => unsubscribeNetInfo();
   }, []);
 
-  useEffect(() => {
-    const handleAppStateChange = (nextAppState) => {
-      if (nextAppState === 'background' || nextAppState === 'inactive') {
-        console.log('App has gone to the background or is inactive');
-        // Send notification to admin
-        sendNotificationToAdmin(uid, 'App has gone to the background');
-      }
-    };
-  
-    AppState.addEventListener('change', handleAppStateChange);
-  
-    return () => {
-      AppState.removeEventListener('change', handleAppStateChange);
-    };
-  }, []);
-  // Disable back
+  // Handle back button press
   useEffect(() => {
     const backAction = () => {
       console.log("Back button pressed");
