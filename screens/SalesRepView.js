@@ -10,6 +10,55 @@ import NetInfo from '@react-native-community/netinfo';
 import { BackHandler } from 'react-native';
 import { Timestamp } from 'firebase/firestore';
 
+// Define the background task at the top-level scope
+TaskManager.defineTask('background-location-task', async ({ data, error }) => {
+  if (error) {
+    console.error("Error in background task:", error);
+    return;
+  }
+
+  if (data) {
+    const { locations } = data;
+    if (locations && locations.length > 0) {
+      const currentLocation = locations[0];
+      console.log("Background Task - New Location:", currentLocation);
+
+      // Reverse geocode to get the address
+      const reverseGeocode = await Location.reverseGeocodeAsync({
+        latitude: currentLocation.coords.latitude,
+        longitude: currentLocation.coords.longitude,
+      });
+
+      const formattedAddress = reverseGeocode[0]?.formattedAddress || " ";
+      const uid = auth.currentUser.uid;
+
+      // Store the updated location in Firestore and add to Location History subcollection
+      try {
+        // Update main document
+        await updateDoc(doc(db, 'Sales Rep', uid), {
+          Latitude: currentLocation.coords.latitude,
+          Longitude: currentLocation.coords.longitude,
+          Address: formattedAddress,
+          Timestamp: Timestamp.now(), // Store the current timestamp
+        });
+
+        // Add to Location History subcollection
+        const locationHistoryRef = collection(db, 'Sales Rep', uid, 'Location History');
+        await addDoc(locationHistoryRef, {
+          Latitude: currentLocation.coords.latitude,
+          Longitude: currentLocation.coords.longitude,
+          Address: formattedAddress,
+          Timestamp: Timestamp.now(),
+        });
+
+        console.log("Location updated in Firestore and Location History subcollection.");
+      } catch (error) {
+        console.error("Error updating Firestore:", error);
+      }
+    }
+  }
+});
+
 export default function SalesRepView() {
   const [location, setLocation] = useState(null);
   const [address, setAddress] = useState('');
@@ -23,12 +72,18 @@ export default function SalesRepView() {
         console.log("Please grant location permissions");
         return;
       }
-      
+
       // Start tracking the location in the background every 15 minutes
       await Location.startLocationUpdatesAsync('background-location-task', {
         accuracy: Location.Accuracy.High,
         timeInterval: 60000, // 15 minutes in milliseconds
         distanceInterval: 0, // Receive updates as the user moves
+        showsBackgroundLocationIndicator: true,
+        foregroundService: {
+          notificationTitle: 'Location Tracking',
+          notificationBody: 'Your location is being tracked in the background.',
+        },
+        pausesUpdatesAutomatically: false,
       });
 
       let currentLocation = await Location.getCurrentPositionAsync({});
@@ -38,7 +93,7 @@ export default function SalesRepView() {
       if (currentLocation) {
         let reverseGeocode = await Location.reverseGeocodeAsync({
           latitude: currentLocation.coords.latitude,
-          longitude: currentLocation.coords.longitude
+          longitude: currentLocation.coords.longitude,
         });
 
         const formattedAddress = reverseGeocode[0]?.formattedAddress || " ";
@@ -51,7 +106,7 @@ export default function SalesRepView() {
             Latitude: currentLocation.coords.latitude,
             Longitude: currentLocation.coords.longitude,
             Address: formattedAddress,
-            Timestamp: Timestamp.now()
+            Timestamp: Timestamp.now(),
           });
 
           // Add initial location to Location History subcollection
@@ -60,7 +115,7 @@ export default function SalesRepView() {
             Latitude: currentLocation.coords.latitude,
             Longitude: currentLocation.coords.longitude,
             Address: formattedAddress,
-            Timestamp: Timestamp.now()
+            Timestamp: Timestamp.now(),
           });
 
           console.log("Initial location stored in Firestore and Location History subcollection.");
@@ -72,55 +127,6 @@ export default function SalesRepView() {
 
     getPermissionsAndLocation();
   }, []);
-
-  // Background task for updating location every 15 minutes
-  TaskManager.defineTask('background-location-task', async ({ data, error }) => {
-    if (error) {
-      console.error("Error in background task:", error);
-      return;
-    }
-
-    if (data) {
-      const { locations } = data;
-      if (locations && locations.length > 0) {
-        const currentLocation = locations[0];
-        console.log("Background Task - New Location:", currentLocation);
-
-        // Optional: reverse geocode to get the address
-        const reverseGeocode = await Location.reverseGeocodeAsync({
-          latitude: currentLocation.coords.latitude,
-          longitude: currentLocation.coords.longitude,
-        });
-
-        const formattedAddress = reverseGeocode[0]?.formattedAddress || " ";
-        const uid = auth.currentUser.uid;
-
-        // Store the updated location in Firestore and add to Location History subcollection
-        try {
-          // Update main document
-          await updateDoc(doc(db, 'Sales Rep', uid), {
-            Latitude: currentLocation.coords.latitude,
-            Longitude: currentLocation.coords.longitude,
-            Address: formattedAddress,
-            Timestamp: Timestamp.now() // Store the current timestamp
-          });
-
-          // Add to Location History subcollection
-          const locationHistoryRef = collection(db, 'Sales Rep', uid, 'Location History');
-          await addDoc(locationHistoryRef, {
-            Latitude: currentLocation.coords.latitude,
-            Longitude: currentLocation.coords.longitude,
-            Address: formattedAddress,
-            Timestamp: Timestamp.now()
-          });
-
-          console.log("Location updated in Firestore and Location History subcollection.");
-        } catch (error) {
-          console.error("Error updating Firestore:", error);
-        }
-      }
-    }
-  });
 
   // Network disconnected monitoring
   useEffect(() => {
