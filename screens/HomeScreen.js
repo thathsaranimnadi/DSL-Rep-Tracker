@@ -6,6 +6,7 @@ import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import app from '../firebaseConfig';
 import { getFirestore, collection, getDocs } from 'firebase/firestore';
 import LottieView from 'lottie-react-native';
+import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
 
 // Header Component
 const Header = ({ onSearch }) => {
@@ -134,6 +135,30 @@ const HomeScreen = () => {
         </View>
     );
 };
+
+
+function CustomDrawerContent(props) {
+    return (
+        <DrawerContentScrollView {...props}>
+            {/* Add any custom components here */}
+            <DrawerItemList {...props} />
+        </DrawerContentScrollView>
+    );
+}
+
+function HomeDrawer() {
+    return (
+        <Drawer.Navigator
+            initialRouteName="HomeScreen"
+            drawerContent={props => <CustomDrawerContent {...props} />}
+        >
+            {/* Drawer screens */}
+            <Drawer.Screen name="Home" component={HomeScreen} />
+            
+            {/* Add more drawer items */}
+        </Drawer.Navigator>
+    );
+}
 
 // CustomMapView Component
 const CustomMapView = ({ salesReps = [], currentLocation, onMarkerPress }) => {
