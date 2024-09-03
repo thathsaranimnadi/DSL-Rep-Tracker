@@ -3,10 +3,15 @@ import React, { useRef } from 'react';
 import COLORS from '../constants/colors';
 import LottieView from 'lottie-react-native';
 import { Animated } from 'react-native';
+import Button from '../components/Button';
 
 const Welcome = ({ navigation }) => {
     const animation = useRef(null);
     const scaleValue = useRef(new Animated.Value(1)).current;
+
+    const handlePress = () => {
+        navigation.navigate('Delete'); 
+    };
 
     return (
         <View style={styles.container}>
@@ -15,6 +20,14 @@ const Welcome = ({ navigation }) => {
             </View>
             <View style={styles.textContainer}>
                 <Text style={styles.subtitleText}>Sales Pulse</Text>
+            </View>
+
+            <View>
+                <Button 
+                    title="Go to Delete Page" 
+                    filled={true} 
+                    onPress={handlePress} 
+                />
             </View>
 
             <View style={styles.buttonContainer}>

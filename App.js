@@ -10,6 +10,8 @@ import SalesRepView from './screens/SalesRepView';
 import Splash from './screens/Splash';
 import { HomeScreen } from './screens';
 import Signup0 from './screens/Signup0';
+import Delete from './screens/Delete';
+
 
 
 const Stack = createNativeStackNavigator();
@@ -59,6 +61,12 @@ export default function App() {
           component={HomeScreen}
           options={{headerShown:false}}
         />
+        <Stack.Screen
+          name='Delete'
+          component={Delete}
+          options={{headerShown:false}}
+        />
+        
 
       </Stack.Navigator>
     </NavigationContainer>

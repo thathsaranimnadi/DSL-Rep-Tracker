@@ -6,6 +6,9 @@ import SalesRepView from "./SalesRepView";
 import Splash from "./Splash";
 import HomeScreen from "./HomeScreen";
 import Signup0 from "./Signup0";
+import Delete from "./Delete";
+
+
 
 
 export {
@@ -16,6 +19,8 @@ export {
     SalesRepView,
     Splash,
     HomeScreen,
-    Signup0
+    Signup0,
+    Delete,
+    
   
 };
