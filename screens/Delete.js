@@ -92,15 +92,16 @@ export default function Delete() {
             <View style={styles.searchbar}>
                 <SearchBar onSearch={handleSearch} />
             </View>
-            <View style={styles.scrollView}>
+            
             <FlatList
                 data={filteredSalesReps}
                 keyExtractor={(item) => item.id}
                 renderItem={renderItem}
                 ListEmptyComponent={<Text style={styles.noResultsText}>No such account found.</Text>}
                 alwaysBounceVertical={false}
+                showsVerticalScrollIndicator={true}
             />
-            </View>
+        
         </View>
     );
 }
@@ -122,7 +123,7 @@ const styles = StyleSheet.create({
         
     },
     repDetailText: {
-        fontSize: 18,
+        fontSize: 17,
     },
     noResultsText: {
         fontSize: 18,
@@ -135,14 +136,15 @@ const styles = StyleSheet.create({
         borderColor: 'black',	
 
     },
-    scrollView:{
-
-    },
+    
 
     deleteb:{
         backgroundColor: "red",
         width: 100,
         alignSelf: 'flex-end',
+        borderBottomColor: '#101010',
+        elevation: 10,
+        borderColor: 'red',
     },
     buttonp:{
 
