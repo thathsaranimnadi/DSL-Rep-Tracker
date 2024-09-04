@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 20,
-        backgroundColor: '#ffd700',
+        backgroundColor: '#daa520',
         justifyContent: 'center',
     },
     animation: {

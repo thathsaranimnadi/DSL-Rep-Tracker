@@ -5,9 +5,6 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import app from '../firebaseConfig';
 import { getFirestore, collection, getDocs } from 'firebase/firestore';
-import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
-import Welcome from './Welcome';
-
 
 // Header Component
 const Header = ({ onSearch }) => {
@@ -133,35 +130,7 @@ const HomeScreen = () => {
 };
 
 
-function CustomDrawerContent(props) {
-    return (
-        <DrawerContentScrollView {...props}>
-             <View style={styles.drawerHeader}>
-                <Image
-                    source={require('../assets/dsl.png')} // Replace with your photo path
-                    style={styles.profileImage}
-                />
-            </View>
-            {/* Add any custom components here */}
-            <DrawerItemList {...props} />
-        </DrawerContentScrollView>
-    );
-}
 
-function HomeDrawer() {
-    return (
-        <Drawer.Navigator
-            initialRouteName="HomeScreen"
-            drawerContent={props => <CustomDrawerContent {...props} />}
-        >
-            {/* Drawer screens */}
-            <Drawer.Screen name="Home" component={HomeScreen} />
-            
-            
-            {/* Add more drawer items */}
-        </Drawer.Navigator>
-    );
-}
 
 // CustomMapView Component
 const CustomMapView = ({ salesReps = [], currentLocation, onMarkerPress }) => {
@@ -237,7 +206,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
     },
     homeContainer: {
-        backgroundColor: '#ffd700',
+        backgroundColor: '#daa520',
         height: 111,
         padding: 20,
     },
@@ -275,15 +244,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         marginBottom: 10,
     },
-    drawerHeader: {
-        alignItems: 'center',
-        marginVertical: 20,
-    },
-    profileImage: {
-        width: 100,
-        height: 100,
-        borderRadius: 50,
-    },
+    
 });
 
 export default HomeScreen;
