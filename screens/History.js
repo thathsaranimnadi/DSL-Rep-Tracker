@@ -34,7 +34,7 @@ const History = () => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.title}>View Sales Rep History</Text>
+        <Text style={styles.title}>Sales Rep History</Text>
       </View>
 
       <View style={styles.inputContainer}>
@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#daa520',
+    backgroundColor: 'white',
   },
   header: {
     marginBottom: 20,
@@ -149,20 +149,24 @@ const styles = StyleSheet.create({
   },
   dateTimeContainer: {
     marginBottom: 16,
+    fontSiz:2,
+    height:60,
   },
   dateTimeButton: {
     padding: 12,
     backgroundColor: '#daa520',
     borderRadius: 5,
     elevation: 1,
+    height:60,
+    
   },
   searchButton: {
     marginTop: 10,
-    backgroundColor: '#daa520',
+    backgroundColor: 'black',
   },
   viewButton: {
     marginTop: 10,
-    borderColor: '#6200ee',
+    borderColor: 'black',
   },
   historyList: {
     marginTop: 20,

@@ -144,7 +144,7 @@ const Signup = ({ navigation }) => {
             <TextInput
               placeholder="Enter your password"
               placeholderTextColor={COLORS.black}
-              secureTextEntry
+              secureTextEntry={!isPasswordShown}
               style={styles.input}
               value={password}
               onChangeText={setPassword}

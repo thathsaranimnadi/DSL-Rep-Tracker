@@ -15,6 +15,11 @@ export default function HomeDrawer() {
         <Drawer.Navigator
             initialRouteName="HomeScreen"
             drawerContent={props => <CustomDrawerContent {...props} />}
+            screenOptions={{
+                drawerStyle: {
+                    backgroundColor: '#f0f0f0', 
+                },
+            }}
         >
             <Drawer.Screen name="Home" component={HomeScreen} />
             <Drawer.Screen name="History" component={History} />
