@@ -3,7 +3,6 @@ import { StyleSheet, Text, View, FlatList, Alert } from 'react-native';
 import SearchBar from '../components/SearchBar';
 import app from '../firebaseConfig';
 import { getFirestore, collection, getDocs, doc, deleteDoc } from 'firebase/firestore';
-//import { Button } from 'react-native-paper';
 import Button from '../components/Button';
 
 export default function Delete() {
