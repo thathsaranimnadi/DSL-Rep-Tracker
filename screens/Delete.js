@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, FlatList } from 'react-native';
+import { StyleSheet, Text, View, FlatList, Alert } from 'react-native';
 import SearchBar from '../components/SearchBar';
 import app from '../firebaseConfig';
-import { getFirestore, collection, getDocs } from 'firebase/firestore';
+import { getFirestore, collection, getDocs, doc, deleteDoc } from 'firebase/firestore';
 //import { Button } from 'react-native-paper';
 import Button from '../components/Button';
 
@@ -47,22 +47,44 @@ export default function Delete() {
             <Text style={styles.repDetailText}>{item.Name}</Text>
             <Text style={styles.repDetailText}>User ID: {item.Employee_ID}</Text>
             <View style={styles.buttonp}>
-            <Button
-                onPress={() => {
-                deleteRep();
-          
-                }}
-                title="Delete"
-                filled
-                style={styles.deleteb}
-            />
+                <Button
+                    onPress={() => {
+                        Alert.alert(
+                            "Delete Confirmation",
+                            "Are you sure you want to delete this account?",
+                            [
+                                {
+                                    text: "Cancel",
+                                    onPress: () => console.log("Cancel Pressed"),
+                                    style: "cancel"
+                                },
+                                { text: "OK", onPress: () => deleteRep(item.id) }
+                            ],
+                            { cancelable: false }
+                        );
+                
+            
+                    }}
+                    title="Delete"
+                    filled
+                    style={styles.deleteb}
+                />
             </View>
 
         </View>
     );
 
-    const deleteRep = async () => {
+    const deleteRep = async (id) => {
+        const db = getFirestore(app);
 
+        try {
+            await deleteDoc(doc(db, "Sales Rep", id));
+            Alert.alert("User account deleted!");
+            setData(); // Refresh the list after deletion
+        } catch (error) {
+            console.error("Error deleting document: ", error);
+            Alert.alert("Error occurred while deleting the account!");
+        }
     }
 
 
