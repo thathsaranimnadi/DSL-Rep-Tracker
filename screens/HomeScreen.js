@@ -5,20 +5,16 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import app from '../firebaseConfig';
 import { getFirestore, collection, getDocs } from 'firebase/firestore';
-import LottieView from 'lottie-react-native';
 import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
+import Welcome from './Welcome';
+
 
 // Header Component
 const Header = ({ onSearch }) => {
     return (
         <View>
             <View style={styles.headerContainer}>
-                <LottieView
-                    source={require('../assets/hi.json')}
-                    autoPlay
-                    loop
-                    style={styles.animation}
-                />
+                
                 <Text style={styles.welcomeText}>Welcome,</Text>
             </View>
             <View style={styles.searchContainer}>
@@ -140,6 +136,12 @@ const HomeScreen = () => {
 function CustomDrawerContent(props) {
     return (
         <DrawerContentScrollView {...props}>
+             <View style={styles.drawerHeader}>
+                <Image
+                    source={require('../assets/dsl.png')} // Replace with your photo path
+                    style={styles.profileImage}
+                />
+            </View>
             {/* Add any custom components here */}
             <DrawerItemList {...props} />
         </DrawerContentScrollView>
@@ -154,6 +156,7 @@ function HomeDrawer() {
         >
             {/* Drawer screens */}
             <Drawer.Screen name="Home" component={HomeScreen} />
+            
             
             {/* Add more drawer items */}
         </Drawer.Navigator>
@@ -200,12 +203,13 @@ const CustomMapView = ({ salesReps = [], currentLocation, onMarkerPress }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        
     },
     headerContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginBottom: 10,
-        height: 50,
+        marginBottom: 5,
+        height: 5,
     },
     animation: {
         width: 50,
@@ -225,7 +229,7 @@ const styles = StyleSheet.create({
         paddingLeft: 20,
         paddingRight: 5,
         borderRadius: 99,
-        marginTop: 25,
+        marginTop: 5,
         flexDirection: 'row',
         justifyContent: 'space-between',
     },
@@ -234,7 +238,7 @@ const styles = StyleSheet.create({
     },
     homeContainer: {
         backgroundColor: '#ffd700',
-        height: 185,
+        height: 111,
         padding: 20,
     },
     mapContainer: {
@@ -249,6 +253,7 @@ const styles = StyleSheet.create({
     map: {
         width: '100%',
         height: '100%',
+        marginTop:30,
     },
     infoContainer: {
         paddingTop: 10,
@@ -269,6 +274,15 @@ const styles = StyleSheet.create({
     row: {
         flexDirection: 'row',
         marginBottom: 10,
+    },
+    drawerHeader: {
+        alignItems: 'center',
+        marginVertical: 20,
+    },
+    profileImage: {
+        width: 100,
+        height: 100,
+        borderRadius: 50,
     },
 });
 
