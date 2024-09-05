@@ -8,9 +8,6 @@ const Welcome = ({ navigation }) => {
     const animation = useRef(null);
     const scaleValue = useRef(new Animated.Value(1)).current;
 
-    const handlePress = () => {
-        navigation.navigate('Delete'); 
-    };
 
     return (
         <View style={styles.container}>
@@ -21,13 +18,7 @@ const Welcome = ({ navigation }) => {
                 <Text style={styles.subtitleText}>Sales Pulse</Text>
             </View>
 
-            <View>
-                <Button 
-                    title="Go to Delete Page" 
-                    filled={true} 
-                    onPress={handlePress} 
-                />
-            </View>
+            
 
             <View style={styles.buttonContainer}>
                 <Pressable

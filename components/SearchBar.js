@@ -36,7 +36,6 @@ const styles = StyleSheet.create({
         paddingLeft: 20,
         paddingRight: 5,
         borderRadius: 99,
-        marginTop: 25,
         flexDirection: 'row',
         justifyContent: 'space-between',
         borderColor: '#C0C0C0',
@@ -66,7 +65,8 @@ const styles = StyleSheet.create({
     asembler: {
         flexDirection: 'row',
         justifyContent: 'center',
-        marginTop: 50,
+        marginTop: 20,
+        marginBottom: 40,
     },
     icon: {
         marginRight: 10,
