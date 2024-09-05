@@ -2,7 +2,6 @@ import React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import HomeScreen from '../screens/HomeScreen';
 import History from '../screens/History';
-import Update from '../screens/Update';
 import Delete from '../screens/Delete';
 import ChangePassword from '../screens/ChangePassword';
 import Welcome from '../screens/Welcome';
@@ -23,7 +22,6 @@ export default function HomeDrawer() {
         >
             <Drawer.Screen name="Home" component={HomeScreen} />
             <Drawer.Screen name="History" component={History} />
-            <Drawer.Screen name="Update User" component={Update} />
             <Drawer.Screen name="Delete User" component={Delete} />
             <Drawer.Screen name="Change Password" component={ChangePassword} />
             <Drawer.Screen name="Log Out" component={Welcome} options={{ headerShown: false }} />
