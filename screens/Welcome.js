@@ -1,8 +1,7 @@
-import { View, Text, Pressable, StyleSheet } from 'react-native';
+import { View, Text, Pressable, StyleSheet, Animated } from 'react-native';
 import React, { useRef } from 'react';
 import COLORS from '../constants/colors';
 import LottieView from 'lottie-react-native';
-import { Animated } from 'react-native';
 import Button from '../components/Button';
 
 const Welcome = ({ navigation }) => {
