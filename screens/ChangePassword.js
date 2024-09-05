@@ -19,15 +19,7 @@ const ChangePassword = () => {
             />
             <Text style={styles.title}>Change Password</Text>
             
-            <TextInput
-                label="Current Password"
-                value={currentPassword}
-                onChangeText={setCurrentPassword}
-                secureTextEntry
-                style={styles.input}
-                left={<TextInput.Icon icon="lock" />}
-            />
-
+            
             <TextInput
                 label="New Password"
                 value={newPassword}
@@ -62,7 +54,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 20,
-        backgroundColor: '#daa520',
+        backgroundColor: '#f0e68c',
         justifyContent: 'center',
     },
     animation: {

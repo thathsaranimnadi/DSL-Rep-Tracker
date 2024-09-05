@@ -15,7 +15,6 @@ export default function CustomDrawerContent(props) {
         </DrawerContentScrollView>
     );
 }
-
 const styles = StyleSheet.create({
     drawerHeader: {
         alignItems: 'center',
@@ -27,4 +26,5 @@ const styles = StyleSheet.create({
         height: 100,
         borderRadius: 50,
     },
+    
 });

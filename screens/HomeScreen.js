@@ -128,10 +128,6 @@ const HomeScreen = () => {
         </View>
     );
 };
-
-
-
-
 // CustomMapView Component
 const CustomMapView = ({ salesReps = [], currentLocation, onMarkerPress }) => {
     const departmentColors = {
@@ -214,10 +210,10 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        // Full screen when infoContainer is not shown
+       
     },
     mapContainerWithInfo: {
-        flex: 0.6, // Adjust this value based on how much space you want the map to occupy when infoContainer is shown
+        flex: 0.6, 
     },
     map: {
         width: '100%',
