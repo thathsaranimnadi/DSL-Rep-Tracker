@@ -10,6 +10,7 @@ import Splash from './screens/Splash';
 import Signup0 from './screens/Signup0';
 import HomeDrawer from './components/HomeDrawer'; 
 import Delete from './screens/Delete';
+import  ChangePassword  from './screens/ChangePassword';
 
 const Stack = createNativeStackNavigator();
 
@@ -21,6 +22,7 @@ export default function App() {
                 <Stack.Screen name="Welcome" component={Welcome} options={{ headerShown: false }} />
                 <Stack.Screen name="LoginAdmin" component={LoginAdmin} options={{ headerShown: false }} />
                 <Stack.Screen name="LoginRep" component={LoginRep} options={{ headerShown: false }} />
+                <Stack.Screen name="ChangePassword" component={ChangePassword} options={{headerShown:false}}/>
                 <Stack.Screen name="Signup0" component={Signup0} options={{ headerShown: false }} />
                 <Stack.Screen name="Signup" component={Signup} options={{ headerShown: false }} />
                 <Stack.Screen name="SalesRepView" component={SalesRepView} options={{ headerShown: false }} />

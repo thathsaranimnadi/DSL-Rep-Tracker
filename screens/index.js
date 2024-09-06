@@ -6,6 +6,8 @@ import SalesRepView from "./SalesRepView";
 import Splash from "./Splash";
 import HomeScreen from "./HomeScreen";
 import Signup0 from "./Signup0";
+import ChangePassword from "./ChangePassword";
+
 
 export {
     LoginAdmin,
@@ -16,4 +18,5 @@ export {
     Splash,
     HomeScreen,
     Signup0,
+    ChangePassword,
 };

@@ -9,6 +9,7 @@ import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import HomeScreen from './HomeScreen';
 
 
+
 const LoginAdmin = ({ navigation }) => {
   const [isPasswordShown, setIsPasswordShown] = useState(false);
   const [email, setEmail] = useState('');
@@ -152,12 +153,32 @@ const LoginAdmin = ({ navigation }) => {
          
           }}
         />
-
         <View
           style={{
             flexDirection: 'row',
             justifyContent: 'center',
             marginVertical: 22,
+            color:'black',
+          }}
+        >
+         
+          <Pressable onPress={() => navigation.navigate('ChangePassword')}>
+            <Text
+              style={{
+                fontSize: 16,
+                color: 'black',
+                marginLeft: 6,
+              }}
+            >
+              Forgot Your Password ?
+            </Text>
+          </Pressable>
+        </View>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'center',
+            
           }}
         >
           <Text style={{ fontSize: 16, color: COLORS.black }}>
@@ -176,6 +197,7 @@ const LoginAdmin = ({ navigation }) => {
             </Text>
           </Pressable>
         </View>
+        
       </View>
     </SafeAreaView>
   );

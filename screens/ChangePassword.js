@@ -1,87 +1,63 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Text, Image } from 'react-native';
-import { TextInput, Button } from 'react-native-paper';
+import { View, TextInput, Button, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
 
-const ChangePassword = () => {
-    const [currentPassword, setCurrentPassword] = useState('');
-    const [newPassword, setNewPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
+const ChangePassword = ({ navigation }) => {
+  const [email, setEmail] = useState('');
 
-    const handleChangePassword = () => {
-        // Handle password change logic here
-    };
+  const handleSend = () => {
+    // Handle send password reset email logic here
+    console.log('Password reset link sent to:', email);
+  };
 
-    return (
-        <View style={styles.container}>
-            <Image
-                source={require('../assets/lock.png')} 
-                style={styles.animation}
-            />
-            <Text style={styles.title}>Change Password</Text>
-            
-            
-            <TextInput
-                label="New Password"
-                value={newPassword}
-                onChangeText={setNewPassword}
-                secureTextEntry
-                style={styles.input}
-                left={<TextInput.Icon icon="lock-outline" />}
-            />
+  return (
+    <View style={styles.container}>
+      
 
-            <TextInput
-                label="Confirm New Password"
-                value={confirmPassword}
-                onChangeText={setConfirmPassword}
-                secureTextEntry
-                style={styles.input}
-                left={<TextInput.Icon icon="lock-outline" />}
-            />
+      <TextInput
+        style={styles.input}
+        placeholder="Enter your email address"
+        value={email}
+        onChangeText={setEmail}
+        keyboardType="email-address"
+        autoCapitalize="none"
+      />
 
-            <Button
-                mode="contained"
-                onPress={handleChangePassword}
-                style={styles.button}
-                contentStyle={styles.buttonContent}
-            >
-                Update Password
-            </Button>
-        </View>
-    );
+      <Button title="Send" onPress={handleSend} />
+
+      <TouchableOpacity onPress={() => navigation.navigate('LoginAdmin')}>
+        <Text style={styles.backToLogin}>Back to Login</Text>
+      </TouchableOpacity>
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: 20,
-        backgroundColor: '#f0e68c',
-        justifyContent: 'center',
-    },
-    animation: {
-        width: 150,
-        height: 160,
-        alignSelf: 'center',
-        marginBottom: 20,
-    },
-    title: {
-        fontSize: 28,
-        fontWeight: 'bold',
-        color: '#333',
-        marginBottom: 40,
-        textAlign: 'center',
-    },
-    input: {
-        marginBottom: 20,
-        backgroundColor: '#fff',
-        fontSize: 16,
-    },
-    button: {
-        marginTop: 10,
-        backgroundColor: 'black', 
-    },
-    buttonContent: {
-        paddingVertical: 10,
-    },
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+    backgroundColor: '#fff',
+  },
+  image: {
+    width: 150,
+    height: 150,
+    marginBottom: 20,
+  },
+  input: {
+    width: '100%',
+    height: 50,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    marginBottom: 20,
+  },
+  backToLogin: {
+    marginTop: 20,
+    color: 'blue',
+    textDecorationLine: 'underline',
+  },
 });
 
 export default ChangePassword;
