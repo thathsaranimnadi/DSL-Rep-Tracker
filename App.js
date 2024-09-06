@@ -9,7 +9,6 @@ import SalesRepView from './screens/SalesRepView';
 import Splash from './screens/Splash';
 import Signup0 from './screens/Signup0';
 import HomeDrawer from './components/HomeDrawer'; 
-import Delete from './screens/Delete';
 import  ChangePassword  from './screens/ChangePassword';
 
 const Stack = createNativeStackNavigator();
@@ -27,7 +26,6 @@ export default function App() {
                 <Stack.Screen name="Signup" component={Signup} options={{ headerShown: false }} />
                 <Stack.Screen name="SalesRepView" component={SalesRepView} options={{ headerShown: false }} />
                 <Stack.Screen name="HomeScreen" component={HomeDrawer} options={{ headerShown: false }} />
-                <Stack.Screen name="Delete" component={Delete} options={{ headerShown: false }} />
             </Stack.Navigator>
         </NavigationContainer>
     );

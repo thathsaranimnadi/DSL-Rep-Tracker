@@ -5,6 +5,8 @@ import History from '../screens/History';
 import Delete from '../screens/Delete';
 import Welcome from '../screens/Welcome';
 import CustomDrawerContent from './CustomDrawerContent';
+import Password from '../screens/Password';
+
 
 const Drawer = createDrawerNavigator();
 
@@ -22,6 +24,7 @@ export default function HomeDrawer() {
             <Drawer.Screen name="Home" component={HomeScreen} />
             <Drawer.Screen name="History" component={History} />
             <Drawer.Screen name="Delete User" component={Delete} />
+            <Drawer.Screen name="Reset Password" component={Password} />
             <Drawer.Screen name="Log Out" component={Welcome} options={{ headerShown: false }} />
         </Drawer.Navigator>
     );

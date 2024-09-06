@@ -221,10 +221,9 @@ const styles = StyleSheet.create({
         marginTop:30,
     },
     infoContainer: {
-        paddingTop: 10,
-        paddingLeft: 15,
-        height: 'auto', 
-        backgroundColor: '#fff',
+        paddingTop: 15,
+        paddingLeft: 10,
+        height: 100, 
     },
     label: {
         fontSize: 16,

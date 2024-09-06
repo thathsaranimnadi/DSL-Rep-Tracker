@@ -3,9 +3,6 @@ import app from '../firebaseConfig';
 import { View, TextInput, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import { getAuth, sendPasswordResetEmail  } from "firebase/auth";
 
-
-
-
 const ChangePassword = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const auth = getAuth(app); // Initialize Firebase Auth

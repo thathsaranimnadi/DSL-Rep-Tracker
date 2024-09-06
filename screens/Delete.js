@@ -105,7 +105,7 @@ export default function Delete() {
 
 const styles = StyleSheet.create({
     BG: {
-        backgroundColor: '#ffffd8',
+        backgroundColor: '#daa520',
         flex: 1,
         paddingTop: 20,
         paddingHorizontal: 16,

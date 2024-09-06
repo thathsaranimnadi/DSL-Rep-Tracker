@@ -77,12 +77,11 @@ const Welcome = ({ navigation }) => {
         subtitleText: {
             fontSize: 55,
             fontWeight: '800',
-            color: '#daa520',
+            color: 'black',
             textAlign: 'center',
             marginTop: 10,
-            textShadowColor: 'black', // Outline color
-            textShadowOffset: { width: 3, height: 6 },
-            textShadowRadius: 6,
+            textShadowOffset: { width: 5, height: 6 },
+            textShadowRadius: 10,
         },
         buttonContainer: {
             marginTop: 'auto',
