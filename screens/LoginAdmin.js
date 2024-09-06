@@ -153,6 +153,33 @@ const LoginAdmin = ({ navigation }) => {
          
           }}
         />
+        
+
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'center',
+            
+          }}
+        >
+          <Text style={{ fontSize: 16, color: COLORS.black , marginTop: 6,}}>
+            Don't have an account?
+          </Text>
+          <Pressable onPress={() => navigation.navigate('Signup')}>
+            <Text
+              style={{
+                fontSize: 16,
+                color: '#daa520',
+                fontWeight: 'bold',
+                marginLeft: 6,
+                marginTop: 6,
+              }}
+            >
+              Sign up
+            </Text>
+          </Pressable>
+        </View>
+
         <View
           style={{
             flexDirection: 'row',
@@ -171,29 +198,6 @@ const LoginAdmin = ({ navigation }) => {
               }}
             >
               Forgot Your Password ?
-            </Text>
-          </Pressable>
-        </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'center',
-            
-          }}
-        >
-          <Text style={{ fontSize: 16, color: COLORS.black }}>
-            Don't have an account?
-          </Text>
-          <Pressable onPress={() => navigation.navigate('Signup')}>
-            <Text
-              style={{
-                fontSize: 16,
-                color: '#daa520',
-                fontWeight: 'bold',
-                marginLeft: 6,
-              }}
-            >
-              Sign up
             </Text>
           </Pressable>
         </View>
