@@ -175,6 +175,27 @@ const LoginRep = ({ navigation }) => {
             </Text>
           </Pressable>
         </View>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'center',
+            marginVertical: 22,
+            color:'black',
+          }}
+        >
+         
+          <Pressable onPress={() => navigation.navigate('ChangePassword')}>
+            <Text
+              style={{
+                fontSize: 16,
+                color: 'black',
+                marginLeft: 6,
+              }}
+            >
+              Forgot Your Password ?
+            </Text>
+          </Pressable>
+        </View>
       </View>
     </SafeAreaView>
   );
