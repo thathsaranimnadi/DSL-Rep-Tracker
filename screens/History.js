@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet, Image } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { Button, Card, IconButton } from 'react-native-paper';
+import { Button, Card } from 'react-native-paper';
 import { MaterialIcons } from '@expo/vector-icons';
 
 const History = () => {
@@ -10,16 +10,17 @@ const History = () => {
   const [toDate, setToDate] = useState(new Date());
   const [showFromPicker, setShowFromPicker] = useState(false);
   const [showToPicker, setShowToPicker] = useState(false);
+  const [showFromTimePicker, setShowFromTimePicker] = useState(false);
+  const [showToTimePicker, setShowToTimePicker] = useState(false);
   const [locationHistory, setLocationHistory] = useState([]);
   const [showResults, setShowResults] = useState(false);
 
   const onSearch = () => {
-    // Fetch location history logic here
-    setShowResults(false); // Hide results while searching
+    setShowResults(false);
   };
 
   const onViewResults = () => {
-    setShowResults(true); // Show results after clicking "View"
+    setShowResults(true);
   };
 
   const renderItem = ({ item }) => (
@@ -37,6 +38,11 @@ const History = () => {
         <Text style={styles.title}>Sales Rep History</Text>
       </View>
 
+      <Image
+        source={require('../assets/map.png')}
+        style={styles.image}
+      />
+
       <View style={styles.inputContainer}>
         <MaterialIcons name="person-search" size={24} color="#555" />
         <TextInput
@@ -47,42 +53,85 @@ const History = () => {
         />
       </View>
 
-      <View style={styles.dateTimeContainer}>
-        <TouchableOpacity onPress={() => setShowFromPicker(true)} style={styles.dateTimeButton}>
-          <Text>{`From: ${fromDate.toLocaleDateString()} ${fromDate.toLocaleTimeString()}`}</Text>
-        </TouchableOpacity>
-        {showFromPicker && (
-          <DateTimePicker
-            value={fromDate}
-            mode="datetime"
-            is24Hour={true}
-            display="default"
-            onChange={(event, selectedDate) => {
-              const currentDate = selectedDate || fromDate;
-              setShowFromPicker(false);
-              setFromDate(currentDate);
-            }}
-          />
-        )}
+      {/* Date and Time Picker for "From" */}
+      <View style={styles.dateTimeRow}>
+        <View style={[styles.dateTimeContainer, { backgroundColor: '#ffebcd' }]}>
+          <TouchableOpacity onPress={() => setShowFromPicker(true)} style={styles.dateTimeButton}>
+            <Text>{`From Date: ${fromDate.toLocaleDateString()}`}</Text>
+          </TouchableOpacity>
+          {showFromPicker && (
+            <DateTimePicker
+              value={fromDate}
+              mode="date"
+              display="default"
+              onChange={(event, selectedDate) => {
+                const currentDate = selectedDate || fromDate;
+                setShowFromPicker(false);
+                setFromDate(currentDate);
+              }}
+            />
+          )}
+        </View>
+
+        <View style={[styles.dateTimeContainer, { backgroundColor: '#ffebcd' }]}>
+          <TouchableOpacity onPress={() => setShowFromTimePicker(true)} style={styles.dateTimeButton}>
+            <Text>{`From Time: ${fromDate.toLocaleTimeString()}`}</Text>
+          </TouchableOpacity>
+          {showFromTimePicker && (
+            <DateTimePicker
+              value={fromDate}
+              mode="time"
+              display="default"
+              onChange={(event, selectedTime) => {
+                const currentTime = selectedTime || fromDate;
+                setShowFromTimePicker(false);
+                setFromDate(currentTime);
+              }}
+            />
+          )}
+        </View>
       </View>
 
-      <View style={styles.dateTimeContainer}>
-        <TouchableOpacity onPress={() => setShowToPicker(true)} style={styles.dateTimeButton}>
-          <Text>{`To: ${toDate.toLocaleDateString()} ${toDate.toLocaleTimeString()}`}</Text>
-        </TouchableOpacity>
-        {showToPicker && (
-          <DateTimePicker
-            value={toDate}
-            mode="datetime"
-            is24Hour={true}
-            display="default"
-            onChange={(event, selectedDate) => {
-              const currentDate = selectedDate || toDate;
-              setShowToPicker(false);
-              setToDate(currentDate);
-            }}
-          />
-        )}
+      {/* Divider */}
+      <View style={styles.divider} />
+
+      {/* Date and Time Picker for "To" */}
+      <View style={styles.dateTimeRow}>
+        <View style={[styles.dateTimeContainer, { backgroundColor: '#f5f5f5' }]}>
+          <TouchableOpacity onPress={() => setShowToPicker(true)} style={styles.dateTimeButton}>
+            <Text>{`To Date: ${toDate.toLocaleDateString()}`}</Text>
+          </TouchableOpacity>
+          {showToPicker && (
+            <DateTimePicker
+              value={toDate}
+              mode="date"
+              display="default"
+              onChange={(event, selectedDate) => {
+                const currentDate = selectedDate || toDate;
+                setShowToPicker(false);
+                setToDate(currentDate);
+              }}
+            />
+          )}
+        </View>
+
+        <View style={[styles.dateTimeContainer, { backgroundColor: '#f5f5f5' }]}>
+          <TouchableOpacity onPress={() => setShowToTimePicker(true)} style={styles.dateTimeButton}>
+            <Text>{`To Time: ${toDate.toLocaleTimeString()}`}</Text>
+          </TouchableOpacity>
+          {showToTimePicker && (
+            <DateTimePicker
+              value={toDate}
+              mode="time"
+              display="default"
+              onChange={(event, selectedTime) => {
+                const currentTime = selectedTime || toDate;
+                setShowToTimePicker(false);
+                setToDate(currentTime);
+              }}
+            />
+          )}
+        </View>
       </View>
 
       <Button
@@ -127,9 +176,15 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
-    fontWeight: 'bold',
     color: '#333',
     textAlign: 'center',
+  },
+  image: {
+    width: '100%',
+    height: 170,
+    resizeMode: 'contain',
+    marginBottom: 30,
+    marginTop: 20,
   },
   inputContainer: {
     flexDirection: 'row',
@@ -140,6 +195,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     marginBottom: 20,
     elevation: 1,
+    borderWidth:1
   },
   input: {
     flex: 1,
@@ -147,22 +203,29 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#333',
   },
+  dateTimeRow: {
+    flexDirection: 'column',
+    marginBottom: 10,
+  },
   dateTimeContainer: {
-    marginBottom: 16,
-    fontSiz:2,
-    height:60,
+    width: '100%',
+    marginBottom: 10,
   },
   dateTimeButton: {
-    padding: 12,
-    backgroundColor: '#daa520',
+    padding: 9,
     borderRadius: 5,
     elevation: 1,
-    height:60,
-    
+  },
+  divider: {
+    height: 2,
+    backgroundColor: 'balck',
+    marginVertical: 10,
+    marginTop: 2,
   },
   searchButton: {
     marginTop: 10,
     backgroundColor: 'black',
+    borderWidth:3
   },
   viewButton: {
     marginTop: 10,

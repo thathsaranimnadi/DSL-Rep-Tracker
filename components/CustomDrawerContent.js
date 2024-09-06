@@ -19,12 +19,14 @@ const styles = StyleSheet.create({
     drawerHeader: {
         alignItems: 'center',
         marginVertical: 20,
-        backgroundColor:'#f0c95a',
+        backgroundColor:'#daa520',
+        height:150,
     },
     profileImage: {
         width: 100,
         height: 100,
         borderRadius: 50,
+        marginTop:22,
     },
     
 });
