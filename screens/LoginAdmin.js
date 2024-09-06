@@ -162,7 +162,7 @@ const LoginAdmin = ({ navigation }) => {
             
           }}
         >
-          <Text style={{ fontSize: 16, color: COLORS.black , marginTop: 6,}}>
+          <Text style={{ fontSize: 16, color: COLORS.black , marginTop: 15,}}>
             Don't have an account?
           </Text>
           <Pressable onPress={() => navigation.navigate('Signup')}>
@@ -172,7 +172,7 @@ const LoginAdmin = ({ navigation }) => {
                 color: '#daa520',
                 fontWeight: 'bold',
                 marginLeft: 6,
-                marginTop: 6,
+                marginTop: 15,
               }}
             >
               Sign up
@@ -184,7 +184,7 @@ const LoginAdmin = ({ navigation }) => {
           style={{
             flexDirection: 'row',
             justifyContent: 'center',
-            marginVertical: 22,
+            marginVertical: 10,
             color:'black',
           }}
         >

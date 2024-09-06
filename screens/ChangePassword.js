@@ -32,7 +32,7 @@ const ChangePassword = ({ navigation }) => {
         </View>
 
         <View style={styles.sentence}>
-            <Text style={styles.sentenceText} >To reset your password, enter your registered email address</Text>
+            <Text style={styles.sentenceText} >To reset your password, enter your registered email address.</Text>
         </View>
 
         <TextInput
@@ -64,7 +64,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
-    backgroundColor: '#fff',
+    backgroundColor: '#fffbf2',
+    
   },
   image: {
     width: 200,
@@ -79,6 +80,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     paddingHorizontal: 10,
     marginBottom: 20,
+    marginTop: 10,
   },
   backToLogin: {
     marginTop: 30,
@@ -96,12 +98,13 @@ const styles = StyleSheet.create({
   sentenceText: {
     fontSize: 16,
     marginBottom: 10,
-    color: '#a9a9a9'
+    color: '#a9a9a9',
+    textAlign: 'center'
   },
   question: {
     marginBottom: 20,
     alignContent: 'center',
-
+    
   },
   questionText: {
     fontSize: 18,

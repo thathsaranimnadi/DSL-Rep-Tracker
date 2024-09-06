@@ -156,10 +156,10 @@ const LoginRep = ({ navigation }) => {
           style={{
             flexDirection: 'row',
             justifyContent: 'center',
-            marginVertical: 22,
+            
           }}
         >
-          <Text style={{ fontSize: 16, color: COLORS.black }}>
+          <Text style={{ fontSize: 16, color: COLORS.black,marginTop: 15, }}>
             Don't have an account?
           </Text>
           <Pressable onPress={() => navigation.navigate('Signup')}>
@@ -169,6 +169,8 @@ const LoginRep = ({ navigation }) => {
                 color: '#daa520',
                 fontWeight: 'bold',
                 marginLeft: 6,
+                marginTop: 15,
+
               }}
             >
               Sign up
@@ -179,7 +181,7 @@ const LoginRep = ({ navigation }) => {
           style={{
             flexDirection: 'row',
             justifyContent: 'center',
-            marginVertical: 22,
+            marginVertical: 10,
             color:'black',
           }}
         >
