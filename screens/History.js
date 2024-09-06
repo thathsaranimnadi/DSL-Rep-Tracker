@@ -57,7 +57,7 @@ const History = () => {
       <View style={styles.dateTimeRow}>
         <View style={[styles.dateTimeContainer, { backgroundColor: '#ffebcd' }]}>
           <TouchableOpacity onPress={() => setShowFromPicker(true)} style={styles.dateTimeButton}>
-            <Text>{`From Date: ${fromDate.toLocaleDateString()}`}</Text>
+            <Text>{'From Date:'}</Text>
           </TouchableOpacity>
           {showFromPicker && (
             <DateTimePicker
@@ -75,7 +75,7 @@ const History = () => {
 
         <View style={[styles.dateTimeContainer, { backgroundColor: '#ffebcd' }]}>
           <TouchableOpacity onPress={() => setShowFromTimePicker(true)} style={styles.dateTimeButton}>
-            <Text>{`From Time: ${fromDate.toLocaleTimeString()}`}</Text>
+            <Text>{'From Time:' }</Text>
           </TouchableOpacity>
           {showFromTimePicker && (
             <DateTimePicker
@@ -99,7 +99,7 @@ const History = () => {
       <View style={styles.dateTimeRow}>
         <View style={[styles.dateTimeContainer, { backgroundColor: '#f5f5f5' }]}>
           <TouchableOpacity onPress={() => setShowToPicker(true)} style={styles.dateTimeButton}>
-            <Text>{`To Date: ${toDate.toLocaleDateString()}`}</Text>
+            <Text>{'To Date :'}</Text>
           </TouchableOpacity>
           {showToPicker && (
             <DateTimePicker
@@ -117,7 +117,7 @@ const History = () => {
 
         <View style={[styles.dateTimeContainer, { backgroundColor: '#f5f5f5' }]}>
           <TouchableOpacity onPress={() => setShowToTimePicker(true)} style={styles.dateTimeButton}>
-            <Text>{`To Time: ${toDate.toLocaleTimeString()}`}</Text>
+            <Text>{'To Time :'}</Text>
           </TouchableOpacity>
           {showToTimePicker && (
             <DateTimePicker
