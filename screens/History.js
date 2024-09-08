@@ -47,17 +47,23 @@ const History = () => {
         <MaterialIcons name="person-search" size={24} color="#555" />
         <TextInput
           style={styles.input}
-          placeholder="Enter Sales Rep Name"
+          placeholder="Enter the name"
           value={salesRepName}
           onChangeText={setSalesRepName}
         />
       </View>
 
-      {/* Date and Time Picker for "From" */}
+      <Text style={styles.textFix}>Date</Text>
+
       <View style={styles.dateTimeRow}>
-        <View style={[styles.dateTimeContainer, { backgroundColor: '#ffebcd' }]}>
+        {/* Date Picker for "From" */}
+        <View style={styles.dateTimeContainer}>
+
+          {/* Display selected "From Date" */}
+          <Text style = {styles.textMark}>{'From:'}</Text>
+
           <TouchableOpacity onPress={() => setShowFromPicker(true)} style={styles.dateTimeButton}>
-            <Text>{'From Date:'}</Text>
+            <Text>{fromDate.toLocaleDateString()}</Text>
           </TouchableOpacity>
           {showFromPicker && (
             <DateTimePicker
@@ -71,35 +77,16 @@ const History = () => {
               }}
             />
           )}
+          
         </View>
 
-        <View style={[styles.dateTimeContainer, { backgroundColor: '#ffebcd' }]}>
-          <TouchableOpacity onPress={() => setShowFromTimePicker(true)} style={styles.dateTimeButton}>
-            <Text>{'From Time:' }</Text>
-          </TouchableOpacity>
-          {showFromTimePicker && (
-            <DateTimePicker
-              value={fromDate}
-              mode="time"
-              display="default"
-              onChange={(event, selectedTime) => {
-                const currentTime = selectedTime || fromDate;
-                setShowFromTimePicker(false);
-                setFromDate(currentTime);
-              }}
-            />
-          )}
-        </View>
-      </View>
-
-      {/* Divider */}
-      <View style={styles.divider} />
-
-      {/* Date and Time Picker for "To" */}
-      <View style={styles.dateTimeRow}>
-        <View style={[styles.dateTimeContainer, { backgroundColor: '#f5f5f5' }]}>
+        {/* Date Picker for "To" */}
+        <View style={styles.dateTimeContainer}>
+          {/* Display selected "To Date" */}
+          <Text style = {styles.textMark}>{'To:'}</Text>
           <TouchableOpacity onPress={() => setShowToPicker(true)} style={styles.dateTimeButton}>
-            <Text>{'To Date :'}</Text>
+            <Text>{toDate.toLocaleDateString()}</Text>
+
           </TouchableOpacity>
           {showToPicker && (
             <DateTimePicker
@@ -113,11 +100,45 @@ const History = () => {
               }}
             />
           )}
+          
+
+        </View>
+      </View>
+
+      {/* Divider */}
+      <View style={styles.divider} />
+
+      <Text style={styles.textFix}>Time</Text>
+      <View style={styles.dateTimeRow}>        
+        {/* Time Picker for "From" */}
+        <View style={styles.dateTimeContainer}>
+          {/* Display selected "From Time" */}
+          <Text style = {styles.textMark}>{'From:'}</Text>
+          <TouchableOpacity onPress={() => setShowFromTimePicker(true)} style={styles.dateTimeButton}>
+            <Text>{fromDate.toLocaleTimeString()}</Text>
+          </TouchableOpacity>
+          {showFromTimePicker && (
+            <DateTimePicker
+              value={fromDate}
+              mode="time"
+              display="default"
+              onChange={(event, selectedTime) => {
+                const currentTime = selectedTime || fromDate;
+                setShowFromTimePicker(false);
+                setFromDate(currentTime);
+              }}
+            />
+          )}
+          
+
         </View>
 
-        <View style={[styles.dateTimeContainer, { backgroundColor: '#f5f5f5' }]}>
+        {/* Time Picker for "To" */}
+        <View style={styles.dateTimeContainer}>
+          {/* Display selected "To Time" */}
+          <Text style = {styles.textMark}>{'To:'}</Text>
           <TouchableOpacity onPress={() => setShowToTimePicker(true)} style={styles.dateTimeButton}>
-            <Text>{'To Time :'}</Text>
+            <Text>{toDate.toLocaleTimeString()}</Text>     
           </TouchableOpacity>
           {showToTimePicker && (
             <DateTimePicker
@@ -131,6 +152,7 @@ const History = () => {
               }}
             />
           )}
+          
         </View>
       </View>
 
@@ -171,6 +193,10 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: 'white',
   },
+  textMark:{
+    //marginLeft: 20
+  },
+  
   header: {
     marginBottom: 20,
   },
@@ -195,7 +221,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     marginBottom: 20,
     elevation: 1,
-    borderWidth:1
+    borderWidth: 1,
   },
   input: {
     flex: 1,
@@ -204,28 +230,31 @@ const styles = StyleSheet.create({
     color: '#333',
   },
   dateTimeRow: {
-    flexDirection: 'column',
+    flexDirection: 'row',
     marginBottom: 10,
+    marginLeft: 30,
   },
   dateTimeContainer: {
-    width: '100%',
+    width: '50%',
     marginBottom: 10,
+    flexDirection: 'row',
+    justifyContent: 'flex-start', 
+    alignItems: 'center'
   },
   dateTimeButton: {
     padding: 9,
-    borderRadius: 5,
+    borderRadius: 1,
     elevation: 1,
   },
   divider: {
     height: 2,
-    backgroundColor: 'balck',
-    marginVertical: 10,
-    marginTop: 2,
+    
+  
   },
   searchButton: {
-    marginTop: 10,
+    marginTop: 20,
     backgroundColor: 'black',
-    borderWidth:3
+    borderWidth: 3,
   },
   viewButton: {
     marginTop: 10,
@@ -248,6 +277,14 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#777',
   },
+  textFix:{
+    marginLeft: 0,
+    marginTop: 10,
+    marginBottom: 10,
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#333'
+  }
 });
 
 export default History;
