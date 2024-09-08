@@ -34,13 +34,13 @@ const styles = StyleSheet.create({
     searchContainer: {
         backgroundColor: '#ffffff',
         paddingLeft: 20,
-        paddingRight: 5,
         borderRadius: 99,
         flexDirection: 'row',
         justifyContent: 'space-between',
         borderColor: '#C0C0C0',
         height: 50,
         width: 300,
+        alignItems: 'center',
     },
     searchInput: {
         fontSize: 18,
@@ -52,14 +52,18 @@ const styles = StyleSheet.create({
     },
     button: {
         backgroundColor: '#ffffff',
-        height: 50,
+        height: 52,
         width: 60,
-        borderWidth: 1,
-        borderBottomRightRadius: 30,
-        borderTopRightRadius: 30,
+        justifyContent: 'center',
+        paddingHorizontal: 10,
+        borderBottomRightRadius: 50,
+        borderTopRightRadius: 50,
         borderColor: '#C0C0C0',
         alignItems: 'center',
-        justifyContent: 'center',
+        borderWidth: 1,
+        paddingRight: 10,
+
+        
         
     },
     asembler: {
@@ -69,6 +73,6 @@ const styles = StyleSheet.create({
         marginBottom: 40,
     },
     icon: {
-        marginRight: 10,
+        marginRight: 0,
     },
 });
