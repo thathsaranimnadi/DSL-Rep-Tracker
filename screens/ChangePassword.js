@@ -111,12 +111,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#daa520',  // You can change the color as per your design
     paddingVertical: 12,
     paddingHorizontal: 30,
-    borderRadius: 5,
+    borderRadius: 10,
     alignItems: 'center',  // Centers the text horizontally
     justifyContent: 'center', // Centers the text vertically
     width: '100%',
     marginBottom: 10,  // To provide space below the button
     borderColor:'black',
+    borderWidth: 2,
     
   },
   buttonText: {
