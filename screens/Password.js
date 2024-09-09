@@ -1,14 +1,38 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Text, Image } from 'react-native';
 import { TextInput, Button } from 'react-native-paper';
+import { getAuth, updatePassword, reauthenticateWithCredential, EmailAuthProvider } from "firebase/auth";
+import app from '../firebaseConfig';
 
-const ChangePassword = () => {
+
+
+
+const Password = ({navigation}) => {
     const [currentPassword, setCurrentPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
+    const auth = getAuth(app); // Initialize Firebase Auth
+    const user = auth.currentUser;
 
-    const handleChangePassword = () => {
-        // Handle password change logic here
+    const handleChangePassword = async () => {
+        return reauthenticate(currentPassword).then(() => {
+            return updatePassword(user, newPassword).then(() => {
+                console.log('Password changed successfully');
+                navigation.navigate('HomeScreen');
+                alert('Password changed');
+                
+            }).catch((error) => {
+                console.log('Error updating password:', error.message);
+                alert(error.message);
+            });
+        }).catch((error) => {
+            alert(error.message);
+        });
+    };
+
+    const reauthenticate = (currentPassword) => {
+        const credential = EmailAuthProvider.credential(user.email, currentPassword);
+        return reauthenticateWithCredential(user, credential);     
+
     };
 
     return (
@@ -37,14 +61,7 @@ const ChangePassword = () => {
                 left={<TextInput.Icon icon="lock-outline" />}
             />
 
-            <TextInput
-                label="Confirm New Password"
-                value={confirmPassword}
-                onChangeText={setConfirmPassword}
-                secureTextEntry
-                style={styles.input}
-                left={<TextInput.Icon icon="lock-outline" />}
-            />
+            
 
             <Button
                 mode="contained"
@@ -52,8 +69,9 @@ const ChangePassword = () => {
                 style={styles.button}
                 contentStyle={styles.buttonContent}
             >
-                Update Password
+                Change Password
             </Button>
+
         </View>
     );
 };
@@ -92,4 +110,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default ChangePassword;
+export default Password;
