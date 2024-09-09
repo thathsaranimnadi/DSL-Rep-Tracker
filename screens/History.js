@@ -1,15 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet, Image } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Modal, FlatList, StyleSheet, Image, ScrollView } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Button, Card } from 'react-native-paper';
 import { MaterialIcons } from '@expo/vector-icons';
 import { getFirestore, collection, query, where, getDocs } from 'firebase/firestore';
 import app from '../firebaseConfig';
-
-
-
-
-
 
 const History = () => {
   const [salesRepName, setSalesRepName] = useState('');
@@ -20,36 +15,32 @@ const History = () => {
   const [showFromTimePicker, setShowFromTimePicker] = useState(false);
   const [showToTimePicker, setShowToTimePicker] = useState(false);
   const [locationHistory, setLocationHistory] = useState([]);
-  const [showResults, setShowResults] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
 
   const onSearch = async () => {
-    setShowResults(false);
+    setModalVisible(true);
     const db = getFirestore(app);
 
-  
     if (!salesRepName) {
       alert("Please enter a sales rep name");
       return;
     }
-  
-    // Convert fromDate and toDate to Firestore-compatible format
+
     const startDate = new Date(fromDate.setHours(0, 0, 0, 0));
     const endDate = new Date(toDate.setHours(23, 59, 59, 999));
-  
+
     try {
-      // Query the Sales Rep collection to find the document matching the salesRepName
       const salesRepQuery = query(
         collection(db, 'Sales Rep'),
         where('Name', '==', salesRepName)
       );
       const salesRepSnapshot = await getDocs(salesRepQuery);
-  
+
       if (salesRepSnapshot.empty) {
         alert("Sales rep not found");
         return;
       }
-  
-      // Loop through each sales rep found (though it should be unique)
+
       const salesRepData = [];
       for (const salesRepDoc of salesRepSnapshot.docs) {
         const locationHistoryRef = collection(salesRepDoc.ref, 'Location History');
@@ -59,8 +50,7 @@ const History = () => {
           where('Timestamp', '<=', endDate)
         );
         const historySnapshot = await getDocs(historyQuery);
-  
-  
+
         if (!historySnapshot.empty) {
           historySnapshot.forEach((historyDoc) => {
             const data = historyDoc.data();
@@ -75,20 +65,13 @@ const History = () => {
           alert("No location history found for the selected range");
         }
       }
-  
-      // Update the state with the location history results
+
       setLocationHistory(salesRepData);
-      setShowResults(true);
-  
+
     } catch (error) {
       console.error("Error fetching location history:", error);
       alert("Error fetching location history");
     }
-  };
-  
-
-  const onViewResults = () => {
-    setShowResults(true);
   };
 
   const renderItem = ({ item }) => (
@@ -101,7 +84,6 @@ const History = () => {
       </Card.Content>
     </Card>
   );
-  
 
   return (
     <View style={styles.container}>
@@ -127,12 +109,8 @@ const History = () => {
       <Text style={styles.textFix}>Date</Text>
 
       <View style={styles.dateTimeRow}>
-        {/* Date Picker for "From" */}
         <View style={styles.dateTimeContainer}>
-
-          {/* Display selected "From Date" */}
-          <Text style = {styles.textMark}>{'From:'}</Text>
-
+          <Text style={styles.textMark}>{'From:'}</Text>
           <TouchableOpacity onPress={() => setShowFromPicker(true)} style={styles.dateTimeButton}>
             <Text>{fromDate.toLocaleDateString()}</Text>
           </TouchableOpacity>
@@ -148,16 +126,12 @@ const History = () => {
               }}
             />
           )}
-          
         </View>
 
-        {/* Date Picker for "To" */}
         <View style={styles.dateTimeContainer}>
-          {/* Display selected "To Date" */}
-          <Text style = {styles.textMark}>{'To:'}</Text>
+          <Text style={styles.textMark}>{'To:'}</Text>
           <TouchableOpacity onPress={() => setShowToPicker(true)} style={styles.dateTimeButton}>
             <Text>{toDate.toLocaleDateString()}</Text>
-
           </TouchableOpacity>
           {showToPicker && (
             <DateTimePicker
@@ -171,20 +145,15 @@ const History = () => {
               }}
             />
           )}
-          
-
         </View>
       </View>
 
-      {/* Divider */}
       <View style={styles.divider} />
 
       <Text style={styles.textFix}>Time</Text>
-      <View style={styles.dateTimeRow}>        
-        {/* Time Picker for "From" */}
+      <View style={styles.dateTimeRow}>
         <View style={styles.dateTimeContainer}>
-          {/* Display selected "From Time" */}
-          <Text style = {styles.textMark}>{'From:'}</Text>
+          <Text style={styles.textMark}>{'From:'}</Text>
           <TouchableOpacity onPress={() => setShowFromTimePicker(true)} style={styles.dateTimeButton}>
             <Text>{fromDate.toLocaleTimeString()}</Text>
           </TouchableOpacity>
@@ -200,16 +169,12 @@ const History = () => {
               }}
             />
           )}
-          
-
         </View>
 
-        {/* Time Picker for "To" */}
         <View style={styles.dateTimeContainer}>
-          {/* Display selected "To Time" */}
-          <Text style = {styles.textMark}>{'To:'}</Text>
+          <Text style={styles.textMark}>{'To:'}</Text>
           <TouchableOpacity onPress={() => setShowToTimePicker(true)} style={styles.dateTimeButton}>
-            <Text>{toDate.toLocaleTimeString()}</Text>     
+            <Text>{toDate.toLocaleTimeString()}</Text>
           </TouchableOpacity>
           {showToTimePicker && (
             <DateTimePicker
@@ -223,7 +188,6 @@ const History = () => {
               }}
             />
           )}
-          
         </View>
       </View>
 
@@ -236,24 +200,32 @@ const History = () => {
         Search
       </Button>
 
-      <Button
-        mode="outlined"
-        onPress={onViewResults}
-        disabled={locationHistory.length === 0}
-        style={styles.viewButton}
-        icon="eye"
+      {/* Modal to show search results */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
       >
-        View
-      </Button>
-
-      {showResults && (
-        <FlatList
-          data={locationHistory}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={renderItem}
-          style={styles.historyList}
-        />
-      )}
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <ScrollView contentContainerStyle={styles.resultsContainer}>
+              <FlatList
+                data={locationHistory}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={renderItem}
+              />
+            </ScrollView>
+            <Button
+              mode="contained"
+              onPress={() => setModalVisible(false)}
+              style={styles.closeButton}
+            >
+              Close
+            </Button>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -264,10 +236,7 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: 'white',
   },
-  textMark:{
-    //marginLeft: 20
-  },
-  
+  textMark: {},
   header: {
     marginBottom: 20,
   },
@@ -307,55 +276,51 @@ const styles = StyleSheet.create({
   },
   dateTimeContainer: {
     width: '50%',
+    paddingHorizontal: 10,
     marginBottom: 10,
-    flexDirection: 'row',
-    justifyContent: 'flex-start', 
-    alignItems: 'center'
   },
   dateTimeButton: {
-    padding: 9,
-    borderRadius: 1,
-    elevation: 1,
+    padding: 10,
+    borderRadius: 5,
+    backgroundColor: '#eee',
+    borderWidth: 1,
   },
-  divider: {
-    height: 2,
-    
   
-  },
   searchButton: {
     marginTop: 20,
-    backgroundColor: 'black',
-    borderWidth: 3,
+    backgroundColor:'black'
   },
-  viewButton: {
-    marginTop: 10,
-    borderColor: 'black',
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
-  historyList: {
-    marginTop: 20,
+  modalContent: {
+    width: '90%',
+    height: '80%',
+    backgroundColor: 'white',
+    borderRadius: 10,
+    padding: 20,
+  },
+  resultsContainer: {
+    flexGrow: 1,
+    justifyContent: 'center',
   },
   historyItem: {
     marginBottom: 10,
-    elevation: 2,
-    borderRadius: 5,
   },
   historyDate: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#daa520',
   },
   historyLocation: {
     fontSize: 14,
-    color: '#777',
   },
-  textFix:{
-    marginLeft: 0,
-    marginTop: 10,
-    marginBottom: 10,
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#333'
-  }
+  closeButton: {
+    marginTop: 20,
+    backgroundColor:'black'
+  },
 });
 
 export default History;
