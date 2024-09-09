@@ -7,7 +7,6 @@ const ChangePassword = () => {
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
 
-
     const handleChangePassword = () => {
         // Handle password change logic here
     };
@@ -29,7 +28,6 @@ const ChangePassword = () => {
                 left={<TextInput.Icon icon="lock" />}
             />
 
-            
             <TextInput
                 label="New Password"
                 value={newPassword}

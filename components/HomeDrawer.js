@@ -7,7 +7,6 @@ import Welcome from '../screens/Welcome';
 import CustomDrawerContent from './CustomDrawerContent';
 import Password from '../screens/Password';
 
-
 const Drawer = createDrawerNavigator();
 
 export default function HomeDrawer() {

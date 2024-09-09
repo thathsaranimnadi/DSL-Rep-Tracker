@@ -62,9 +62,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderWidth: 1,
         paddingRight: 10,
-
-        
-        
     },
     asembler: {
         flexDirection: 'row',
