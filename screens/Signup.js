@@ -13,7 +13,7 @@ const Signup = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('');
-
+  const [isPasswordShown, setIsPasswordShown] = useState(false); // State for password visibility
 
   const auth = getAuth(app); // Initialize Firebase Auth
   const firestore = getFirestore(app); // Initialize Firestore
@@ -21,19 +21,22 @@ const Signup = ({ navigation }) => {
   const { params } = route; // Access params here
   const { name, employeeId, department, phone } = route.params || {};
 
+  // Function to toggle password visibility
+  const togglePasswordVisibility = () => {
+    setIsPasswordShown(!isPasswordShown);
+  };
 
-  //Add details of salesrep to the database
+  // Add details of salesrep to the database
   const addRepData = async (uid) => {
     try {
-      await setDoc(doc(firestore, "Sales Rep",uid), {
-        Role: role,     // Use the value from the input field
+      await setDoc(doc(firestore, "Sales Rep", uid), {
+        Role: role,     
         Email: email,
         Password: password,
-        Name: name,     // Use the value from the input field
+        Name: name,     
         Phone_No: phone,
         Employee_ID: employeeId,
         Department: department
-        
       });
       console.log("Document successfully written!");
     } catch (error) {
@@ -41,16 +44,15 @@ const Signup = ({ navigation }) => {
     }
   };
 
-  //Add details of salesrep to the database
+  // Add details of admin to the database
   const addAdminData = async (uid) => {
     try {
-      await setDoc(doc(firestore, "Admin",uid), {       
+      await setDoc(doc(firestore, "Admin", uid), {       
         Email: email,
         Password: password,
-        Name: name,     // Use the value from the input field
+        Name: name,     
         Employee_ID: employeeId,
         Department: department
-        
       });
       console.log("Document successfully written!");
     } catch (error) {
@@ -64,13 +66,12 @@ const Signup = ({ navigation }) => {
       alert('Please fill in all fields and agree to the terms and conditions.');
       return;
     }
-  
     
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        const { uid } = userCredential.user; // Get the UID of the created user
+        const { uid } = userCredential.user;
         console.log('User account created!');
-        if (role === 'sales_rep'){
+        if (role === 'sales_rep') {
           addRepData(uid);
           navigation.navigate("LoginRep");
         } else {
@@ -96,7 +97,7 @@ const Signup = ({ navigation }) => {
       <View style={{ flex: 1, marginHorizontal: 22 }}>
         
         <View style={{ marginBottom: 12 }}>
-          <Text style={{ fontSize: 16, fontWeight: '400', marginVertical: 8 ,marginTop:40}}>
+          <Text style={{ fontSize: 16, fontWeight: '400', marginVertical: 8, marginTop: 40 }}>
             Role
           </Text>
 
@@ -149,19 +150,18 @@ const Signup = ({ navigation }) => {
               value={password}
               onChangeText={setPassword}
             />
+            <TouchableOpacity onPress={togglePasswordVisibility}>
+              <Text>{isPasswordShown ? 'Hide' : 'Show'}</Text>
+            </TouchableOpacity>
           </View>
         </View>
-        
+
         <Button
-          onPress={() => {
-            handleSignup();
-      
-          }}
+          onPress={handleSignup}
           title="Sign up"
           filled
           style={styles.signupButton}
         />
-
 
         <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 20 }}>
           <View style={styles.divider} />
