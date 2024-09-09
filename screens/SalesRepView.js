@@ -67,9 +67,15 @@ export default function SalesRepView() {
   // Get location permission and start background tracking
   useEffect(() => {
     const getPermissionsAndLocation = async () => {
-      let { status } = await Location.requestBackgroundPermissionsAsync();
-      if (status !== 'granted') {
-        console.log("Please grant location permissions");
+      let { status: foregroundStatus } = await Location.requestForegroundPermissionsAsync();
+      if (foregroundStatus !== 'granted') {
+        console.log("Foreground location permission not granted");
+        return;
+      }
+
+      let { status: backgroundStatus } = await Location.requestBackgroundPermissionsAsync();
+      if (backgroundStatus !== 'granted') {
+        console.log("Background location permission not granted");
         return;
       }
 
