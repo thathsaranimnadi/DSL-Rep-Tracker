@@ -5,8 +5,7 @@ import { Picker } from '@react-native-picker/picker';
 import COLORS from '../constants/colors';
 import Button from '../components/Button';
 import app from '../firebaseConfig';
-import { getFirestore} from "firebase/firestore";
-
+import { getFirestore } from "firebase/firestore";
 
 const Signup = ({ navigation }) => {
   const [name, setName] = useState('');
@@ -14,7 +13,6 @@ const Signup = ({ navigation }) => {
   const [employeeId, setEmployeeId] = useState('');
   const [department, setDepartment] = useState('');
   const firestore = getFirestore(app); // Initialize Firestore
-  
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
@@ -78,21 +76,15 @@ const Signup = ({ navigation }) => {
             Mobile Number
           </Text>
           <View style={styles.phoneContainer}>
-            <TextInput
-              placeholder="+94"
-              placeholderTextColor={COLORS.black}
-              keyboardType="numeric"
-              style={styles.phoneCode}
-              value={phone.slice(0, 4)}
-              onChangeText={(text) => setPhone(`${text}${phone.slice(4)}`)}
-            />
+            <Text style={styles.phoneCode}>+94</Text>
             <TextInput
               placeholder="Enter your Mobile number"
               placeholderTextColor={COLORS.black}
               keyboardType="numeric"
               style={styles.phoneInput}
-              value={phone.slice(4)}
-              onChangeText={(text) => setPhone(`${phone.slice(0, 4)}${text}`)}
+              value={phone}
+              onChangeText={setPhone}
+              maxLength={9} // Assuming 9 digits after the prefix
             />
           </View>
         </View>
@@ -106,7 +98,7 @@ const Signup = ({ navigation }) => {
                 name: name,
                 employeeId: employeeId,
                 department: department,
-                phone: phone,
+                phone: `+94${phone}`, 
                });
             }
           }}
@@ -114,8 +106,6 @@ const Signup = ({ navigation }) => {
           filled
           style={{ marginTop: 18, marginBottom: 4, backgroundColor: '#daa520', borderColor: '#000000' }}
         />
-
-        
 
         <View style={styles.loginOptionsContainer}>
           <Text style={styles.loginText}>Already Have an Account?</Text>
@@ -161,18 +151,23 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 8,
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
     paddingLeft: 22,
   },
   phoneCode: {
-    width: '12%',
+    width: '20%',
+    textAlign: 'center',
+    lineHeight: 48,
+    fontSize: 16,
+    color: COLORS.black,
     borderRightWidth: 1,
     borderRightColor: COLORS.grey,
     height: '100%',
   },
   phoneInput: {
     width: '80%',
+    paddingLeft: 10,
+    fontSize: 14,
   },
   loginOptionsContainer: {
     alignItems: 'center',
