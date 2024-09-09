@@ -30,19 +30,21 @@ const History = () => {
     const endDate = new Date(toDate.setHours(23, 59, 59, 999));
 
     try {
-      const salesRepQuery = query(
-        collection(db, 'Sales Rep'),
-        where('Name', '==', salesRepName)
-      );
+      const salesRepQuery = query(collection(db, 'Sales Rep'));
       const salesRepSnapshot = await getDocs(salesRepQuery);
 
-      if (salesRepSnapshot.empty) {
-        alert("Sales rep not found");
+      const filteredSalesReps = salesRepSnapshot.docs.filter((doc) => {
+        const rep = doc.data();
+        return rep.Name.split(" ").some(word => word.toLowerCase().includes(salesRepName.toLowerCase()));
+      });
+  
+      if (filteredSalesReps.length === 0) {
+        alert("No sales reps found with the given name");
         return;
       }
 
       const salesRepData = [];
-      for (const salesRepDoc of salesRepSnapshot.docs) {
+      for (const salesRepDoc of filteredSalesReps) {
         const locationHistoryRef = collection(salesRepDoc.ref, 'Location History');
         const historyQuery = query(
           locationHistoryRef,
