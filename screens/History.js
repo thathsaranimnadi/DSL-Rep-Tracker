@@ -3,6 +3,13 @@ import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet, Image } 
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Button, Card } from 'react-native-paper';
 import { MaterialIcons } from '@expo/vector-icons';
+import { getFirestore, collection, query, where, getDocs } from 'firebase/firestore';
+import app from '../firebaseConfig';
+
+
+
+
+
 
 const History = () => {
   const [salesRepName, setSalesRepName] = useState('');
@@ -15,9 +22,70 @@ const History = () => {
   const [locationHistory, setLocationHistory] = useState([]);
   const [showResults, setShowResults] = useState(false);
 
-  const onSearch = () => {
+  const onSearch = async () => {
     setShowResults(false);
+    const db = getFirestore(app);
+
+  
+    if (!salesRepName) {
+      alert("Please enter a sales rep name");
+      return;
+    }
+  
+    // Convert fromDate and toDate to Firestore-compatible format
+    const startDate = new Date(fromDate.setHours(0, 0, 0, 0));
+    const endDate = new Date(toDate.setHours(23, 59, 59, 999));
+  
+    try {
+      // Query the Sales Rep collection to find the document matching the salesRepName
+      const salesRepQuery = query(
+        collection(db, 'Sales Rep'),
+        where('Name', '==', salesRepName)
+      );
+      const salesRepSnapshot = await getDocs(salesRepQuery);
+  
+      if (salesRepSnapshot.empty) {
+        alert("Sales rep not found");
+        return;
+      }
+  
+      // Loop through each sales rep found (though it should be unique)
+      const salesRepData = [];
+      for (const salesRepDoc of salesRepSnapshot.docs) {
+        const locationHistoryRef = collection(salesRepDoc.ref, 'Location History');
+        const historyQuery = query(
+          locationHistoryRef,
+          where('Timestamp', '>=', startDate),
+          where('Timestamp', '<=', endDate)
+        );
+        const historySnapshot = await getDocs(historyQuery);
+  
+  
+        if (!historySnapshot.empty) {
+          historySnapshot.forEach((historyDoc) => {
+            const data = historyDoc.data();
+            salesRepData.push({
+              date: data.Timestamp.toDate().toLocaleString(),
+              address: data.address,
+              latitude: data.latitude,
+              longitude: data.longitude,
+            });
+          });
+        } else {
+          alert("No location history found for the selected range");
+        }
+      }
+  
+      // Update the state with the location history results
+      setLocationHistory(salesRepData);
+      setShowResults(true);
+  
+    } catch (error) {
+      console.error("Error fetching location history:", error);
+      alert("Error fetching location history");
+    }
   };
+  
 
   const onViewResults = () => {
     setShowResults(true);
@@ -27,10 +95,13 @@ const History = () => {
     <Card style={styles.historyItem}>
       <Card.Content>
         <Text style={styles.historyDate}>{`Date: ${item.date}`}</Text>
-        <Text style={styles.historyLocation}>{`Location: ${item.location}`}</Text>
+        <Text style={styles.historyLocation}>{`Address: ${item.address}`}</Text>
+        <Text style={styles.historyLocation}>{`Latitude: ${item.latitude}`}</Text>
+        <Text style={styles.historyLocation}>{`Longitude: ${item.longitude}`}</Text>
       </Card.Content>
     </Card>
   );
+  
 
   return (
     <View style={styles.container}>
