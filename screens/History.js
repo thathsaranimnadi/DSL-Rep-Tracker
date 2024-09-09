@@ -58,9 +58,9 @@ const History = () => {
             const data = historyDoc.data();
             salesRepData.push({
               date: data.Timestamp.toDate().toLocaleString(),
-              address: data.address,
-              latitude: data.latitude,
-              longitude: data.longitude,
+              address: data.Address || 'No address available',
+              latitude: data.Latitude || 'No latitude available',
+              longitude: data.Longitude || 'No longitude available',
             });
           });
         } else {
@@ -210,14 +210,11 @@ const History = () => {
         onRequestClose={() => setModalVisible(false)}
       >
         <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <ScrollView contentContainerStyle={styles.resultsContainer}>
-              <FlatList
+              <FlatList contentContainerStyle={styles.resultsContainer}
                 data={locationHistory}
                 keyExtractor={(item, index) => index.toString()}
                 renderItem={renderItem}
               />
-            </ScrollView>
             <Button
               mode="contained"
               onPress={() => setModalVisible(false)}
@@ -225,7 +222,6 @@ const History = () => {
             >
               Close
             </Button>
-          </View>
         </View>
       </Modal>
     </View>
@@ -297,17 +293,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
-  modalContent: {
-    width: '90%',
+    width: '100%',
     height: '80%',
     backgroundColor: 'white',
     borderRadius: 10,
     padding: 20,
   },
+  
   resultsContainer: {
     flexGrow: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
   },
   historyItem: {
     marginBottom: 10,
@@ -321,7 +316,8 @@ const styles = StyleSheet.create({
   },
   closeButton: {
     marginTop: 20,
-    backgroundColor:'black'
+    backgroundColor:'black',
+    width: '80%',
   },
 });
 
