@@ -8,6 +8,7 @@ import app from '../firebaseConfig';
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { getFirestore, doc, setDoc } from 'firebase/firestore';
 import { useRoute } from '@react-navigation/native';
+import { Ionicons } from '@expo/vector-icons';
 
 const Signup = ({ navigation }) => {
   const [email, setEmail] = useState('');
@@ -142,16 +143,28 @@ const Signup = ({ navigation }) => {
           </Text>
 
           <View style={styles.inputContainer}>
-            <TextInput
+          <TextInput 
+              value={password}
+              onChangeText={text => setPassword(text)}
               placeholder="Enter your password"
               placeholderTextColor={COLORS.black}
               secureTextEntry={!isPasswordShown}
-              style={styles.input}
-              value={password}
-              onChangeText={setPassword}
+              style={{
+                width: '100%',
+              }}
             />
-            <TouchableOpacity onPress={togglePasswordVisibility}>
-              <Text>{isPasswordShown ? 'Hide' : 'Show'}</Text>
+            <TouchableOpacity
+              onPress={() => setIsPasswordShown(!isPasswordShown)}
+              style={{
+                position: 'absolute',
+                right: 12,
+              }}
+            >
+              {isPasswordShown ? (
+                <Ionicons name="eye-off" size={24} color={COLORS.black} />
+              ) : (
+                <Ionicons name="eye" size={24} color={COLORS.black} />
+              )}
             </TouchableOpacity>
           </View>
         </View>
