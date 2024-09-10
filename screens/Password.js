@@ -3,22 +3,26 @@ import { View, StyleSheet, Text, Image } from 'react-native';
 import { TextInput, Button } from 'react-native-paper';
 import { getAuth, updatePassword, reauthenticateWithCredential, EmailAuthProvider } from "firebase/auth";
 import app from '../firebaseConfig';
+import { useNavigation } from '@react-navigation/native';
 
 
 
 
-const Password = ({navigation}) => {
+const Password = () => {
     const [currentPassword, setCurrentPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const auth = getAuth(app); // Initialize Firebase Auth
     const user = auth.currentUser;
+    const navigation = useNavigation();
+
 
     const handleChangePassword = async () => {
         return reauthenticate(currentPassword).then(() => {
             return updatePassword(user, newPassword).then(() => {
                 console.log('Password changed successfully');
-                navigation.navigate('HomeScreen');
+                
                 alert('Password changed');
+                navigation.navigate('HomeScreen');
                 
             }).catch((error) => {
                 console.log('Error updating password:', error.message);
