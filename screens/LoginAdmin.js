@@ -1,4 +1,4 @@
-import { View, Text, TextInput, TouchableOpacity, Pressable,StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Pressable } from 'react-native';
 import React, { useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import COLORS from '../constants/colors';
@@ -6,7 +6,6 @@ import { Ionicons } from '@expo/vector-icons';
 import Button from '../components/Button';
 import app from '../firebaseConfig';
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import HomeScreen from './HomeScreen';
 import { getFirestore, collection, query, where, getDocs } from 'firebase/firestore';
 
 
