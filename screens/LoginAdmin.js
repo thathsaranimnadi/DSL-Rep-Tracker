@@ -7,6 +7,7 @@ import Button from '../components/Button';
 import app from '../firebaseConfig';
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import HomeScreen from './HomeScreen';
+import { getFirestore, collection, query, where, getDocs } from 'firebase/firestore';
 
 
 
@@ -14,26 +15,44 @@ const LoginAdmin = ({ navigation }) => {
   const [isPasswordShown, setIsPasswordShown] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
-  const loginWithEmailAndPassword = () => {
-
-    const auth = getAuth(app); // Initialize Firebase Auth
+  const db = getFirestore(app);
+  const auth = getAuth(app); // Initialize Firebase Auth
 
 
-    signInWithEmailAndPassword(auth, email, password)
-      .then((res) => {
-        console.log(res)
-        alert('Logged In');
-        // Navigate to the admin screen after successful login
-        navigation.navigate("HomeScreen");
-      })
-      .catch(error => {
-        if (error.code === 'auth/invalid-credential') {
-          alert('Invalid Username or Password');
-        }
+  const loginWithEmailAndPassword = async () => {
 
-        console.error(error);
-      });
+    try {
+      // Check if email is in the 'admins' collection
+      const adminQuery = query(collection(db, "Admin"), where("Email", "==", email));
+      const adminSnapshot = await getDocs(adminQuery);
+
+      if (!adminSnapshot.empty) {
+          console.log("User belongs to 'admins' collection");
+
+          signInWithEmailAndPassword(auth, email, password)
+          .then((res) => {
+            console.log(res)
+            alert('Logged In');
+            // Navigate to the admin screen after successful login
+            navigation.navigate("HomeScreen");
+          })
+          .catch(error => {
+            if (error.code === 'auth/invalid-credential') {
+              alert('Invalid Username or Password');
+            }
+
+            console.error(error);
+          });
+      }
+      else{
+        alert('You cannot login as an admin');
+      }
+
+  } catch (error) {
+      console.error("Error checking user collection: ", error);
+  }
+
+    
   };
 
   return (
