@@ -162,7 +162,7 @@ const LoginRep = ({ navigation }) => {
           <Text style={{ fontSize: 16, color: COLORS.black,marginTop: 15, }}>
             Don't have an account?
           </Text>
-          <Pressable onPress={() => navigation.navigate('Signup')}>
+          <Pressable onPress={() => navigation.navigate('Signup0')}>
             <Text
               style={{
                 fontSize: 16,

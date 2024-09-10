@@ -47,7 +47,7 @@ const ChangePassword = ({ navigation }) => {
         </TouchableOpacity>
         
         {/* back to login button */}
-        <TouchableOpacity onPress={() => navigation.navigate('LoginAdmin')}>
+        <TouchableOpacity onPress={() => navigation.navigate('Welcome')}>
             <Text style={styles.backToLogin}>Back to Login</Text>
         </TouchableOpacity>
 
