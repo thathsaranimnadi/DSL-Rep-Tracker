@@ -15,34 +15,38 @@ const Password = () => {
     const navigation = useNavigation();
 
     const handleChangePassword = async () => {
-        return reauthenticate(currentPassword).then(() => {
-            return updatePassword(user, newPassword).then(() => {
-                console.log('Password changed successfully');
-                
-                alert('Password changed');
-                // Clear the password fields after reset
-                setCurrentPassword('');
-                setNewPassword('');
-                navigation.navigate('HomeScreen');
-                
-            }).catch((error) => {
-                console.log('Error updating password:', error.message);
-                alert(error.message);
+        try {
+            // Re-authenticate user with the current password
+            await reauthenticate(currentPassword);
+            // Update password
+            await updatePassword(user, newPassword);
+            // Notify user of successful password change
+            alert('Password changed successfully');
+            console.log('Password changed successfully');
+            // Clear the password fields
+            setCurrentPassword('');
+            setNewPassword('');
+            // Reset the navigation stack and navigate to HomeScreen
+            navigation.reset({
+                index: 0,
+                routes: [{ name: 'HomeScreen' }],
             });
-        }).catch((error) => {
+        } catch (error) {
+            // Display any errors that occur during the process
+            console.log('Error updating password:', error.message);
             alert(error.message);
-        });
+        }
     };
 
     const reauthenticate = (currentPassword) => {
         const credential = EmailAuthProvider.credential(user.email, currentPassword);
-        return reauthenticateWithCredential(user, credential);     
+        return reauthenticateWithCredential(user, credential);
     };
 
     return (
         <View style={styles.container}>
             <Image
-                source={require('../assets/lock.png')} 
+                source={require('../assets/lock.png')}
                 style={styles.animation}
             />
             <Text style={styles.title}>Reset Password</Text>

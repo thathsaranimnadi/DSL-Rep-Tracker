@@ -1,5 +1,5 @@
 import { View, Text, TextInput, TouchableOpacity, Pressable } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import COLORS from '../constants/colors';
 import { Ionicons } from '@expo/vector-icons';
@@ -7,8 +7,7 @@ import Button from '../components/Button';
 import app from '../firebaseConfig';
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { getFirestore, collection, query, where, getDocs } from 'firebase/firestore';
-
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LoginAdmin = ({ navigation }) => {
   const [isPasswordShown, setIsPasswordShown] = useState(false);
@@ -17,22 +16,34 @@ const LoginAdmin = ({ navigation }) => {
   const db = getFirestore(app);
   const auth = getAuth(app); // Initialize Firebase Auth
 
+  useEffect(() => {
+    // Load the saved email from AsyncStorage when the component is mounted
+    const loadEmail = async () => {
+      const savedEmail = await AsyncStorage.getItem('savedEmail');
+      if (savedEmail) {
+        setEmail(savedEmail);
+      }
+    };
+    loadEmail();
+  }, []);
 
   const loginWithEmailAndPassword = async () => {
-
     try {
       // Check if email is in the 'admins' collection
       const adminQuery = query(collection(db, "Admin"), where("Email", "==", email));
       const adminSnapshot = await getDocs(adminQuery);
 
       if (!adminSnapshot.empty) {
-          console.log("User belongs to 'admins' collection");
+        console.log("User belongs to 'admins' collection");
 
-          signInWithEmailAndPassword(auth, email, password)
-          .then((res) => {
-            console.log(res)
+        signInWithEmailAndPassword(auth, email, password)
+          .then(async (res) => {
+            console.log(res);
             alert('Logged In');
-            // Navigate to the admin screen after successful login
+            // Save the email in AsyncStorage after successful login
+            await AsyncStorage.setItem('savedEmail', email);
+
+            // Navigate to the admin screen
             navigation.navigate("HomeScreen");
           })
           .catch(error => {
@@ -42,16 +53,13 @@ const LoginAdmin = ({ navigation }) => {
 
             console.error(error);
           });
-      }
-      else{
+      } else {
         alert('You cannot login as an admin');
       }
 
-  } catch (error) {
+    } catch (error) {
       console.error("Error checking user collection: ", error);
-  }
-
-    
+    }
   };
 
   return (
@@ -166,60 +174,12 @@ const LoginAdmin = ({ navigation }) => {
           style={{
             marginTop: 18,
             marginBottom: 4,
-            backgroundColor:'#daa520',
-            borderColor:'black',
-         
+            backgroundColor: '#daa520',
+            borderColor: 'black',
           }}
         />
         
-
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'center',
-            
-          }}
-        >
-          <Text style={{ fontSize: 16, color: COLORS.black , marginTop: 15,}}>
-            Don't have an account?
-          </Text>
-          <Pressable onPress={() => navigation.navigate('Signup0')}>
-            <Text
-              style={{
-                fontSize: 16,
-                color: '#daa520',
-                fontWeight: 'bold',
-                marginLeft: 6,
-                marginTop: 15,
-              }}
-            >
-              Sign up
-            </Text>
-          </Pressable>
-        </View>
-
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'center',
-            marginVertical: 10,
-            color:'black',
-          }}
-        >
-         
-          <Pressable onPress={() => navigation.navigate('ChangePassword')}>
-            <Text
-              style={{
-                fontSize: 16,
-                color: 'black',
-                marginLeft: 6,
-              }}
-            >
-              Forgot Your Password ?
-            </Text>
-          </Pressable>
-        </View>
-        
+        {/* Additional UI elements */}
       </View>
     </SafeAreaView>
   );
