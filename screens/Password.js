@@ -5,16 +5,14 @@ import { getAuth, updatePassword, reauthenticateWithCredential, EmailAuthProvide
 import app from '../firebaseConfig';
 import { useNavigation } from '@react-navigation/native';
 
-
-
-
 const Password = () => {
     const [currentPassword, setCurrentPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
+    const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+    const [showNewPassword, setShowNewPassword] = useState(false);
     const auth = getAuth(app); // Initialize Firebase Auth
     const user = auth.currentUser;
     const navigation = useNavigation();
-
 
     const handleChangePassword = async () => {
         return reauthenticate(currentPassword).then(() => {
@@ -22,6 +20,9 @@ const Password = () => {
                 console.log('Password changed successfully');
                 
                 alert('Password changed');
+                // Clear the password fields after reset
+                setCurrentPassword('');
+                setNewPassword('');
                 navigation.navigate('HomeScreen');
                 
             }).catch((error) => {
@@ -36,7 +37,6 @@ const Password = () => {
     const reauthenticate = (currentPassword) => {
         const credential = EmailAuthProvider.credential(user.email, currentPassword);
         return reauthenticateWithCredential(user, credential);     
-
     };
 
     return (
@@ -47,26 +47,39 @@ const Password = () => {
             />
             <Text style={styles.title}>Reset Password</Text>
 
+            {/* Current Password Input */}
             <TextInput
                 label="Current Password"
                 value={currentPassword}
                 onChangeText={setCurrentPassword}
-                secureTextEntry
+                secureTextEntry={!showCurrentPassword}
                 style={styles.input}
                 left={<TextInput.Icon icon="lock" />}
+                right={
+                    <TextInput.Icon
+                        icon={showCurrentPassword ? "eye" : "eye-off"}
+                        onPress={() => setShowCurrentPassword(!showCurrentPassword)}
+                    />
+                }
             />
 
+            {/* New Password Input */}
             <TextInput
                 label="New Password"
                 value={newPassword}
                 onChangeText={setNewPassword}
-                secureTextEntry
+                secureTextEntry={!showNewPassword}
                 style={styles.input}
                 left={<TextInput.Icon icon="lock-outline" />}
+                right={
+                    <TextInput.Icon
+                        icon={showNewPassword ? "eye" : "eye-off"}
+                        onPress={() => setShowNewPassword(!showNewPassword)}
+                    />
+                }
             />
 
-            
-
+            {/* Change Password Button */}
             <Button
                 mode="contained"
                 onPress={handleChangePassword}
