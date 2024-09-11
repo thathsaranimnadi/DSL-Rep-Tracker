@@ -353,7 +353,7 @@ const styles = StyleSheet.create({
   },
   resultsContainer: {
     paddingBottom: 20,
-    height:'100%'
+    flexGrow: 1,
   },
   historyItem: {
     marginBottom: 10,
