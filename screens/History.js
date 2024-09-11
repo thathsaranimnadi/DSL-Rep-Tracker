@@ -3,11 +3,13 @@ import { View, Text, TextInput, TouchableOpacity, Modal, FlatList, StyleSheet, I
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Button, Card } from 'react-native-paper';
 import { MaterialIcons } from '@expo/vector-icons';
+import { Picker } from '@react-native-picker/picker';
 import { getFirestore, collection, query, where, getDocs } from 'firebase/firestore';
 import app from '../firebaseConfig';
 
 const History = () => {
   const [salesRepName, setSalesRepName] = useState('');
+  const [department, setDepartment] = useState('');
   const [fromDate, setFromDate] = useState(new Date());
   const [toDate, setToDate] = useState(new Date());
   const [showFromPicker, setShowFromPicker] = useState(false);
@@ -37,7 +39,7 @@ const History = () => {
         const rep = doc.data();
         return rep.Name.split(" ").some(word => word.toLowerCase().includes(salesRepName.toLowerCase()));
       });
-  
+
       if (filteredSalesReps.length === 0) {
         alert("No sales reps found with the given name");
         return;
@@ -89,10 +91,6 @@ const History = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Sales Rep History</Text>
-      </View>
-
       <Image
         source={require('../assets/map.png')}
         style={styles.image}
@@ -108,88 +106,111 @@ const History = () => {
         />
       </View>
 
-      <Text style={styles.textFix}>Date</Text>
+      {/* Department Picker */}
+      <View style={styles.pickerContainer}>
+        <Picker
+          selectedValue={department}
+          onValueChange={(itemValue) => setDepartment(itemValue)}
+          style={styles.picker}
+        >
+          <Picker.Item label="Select Department" value="" />
+          <Picker.Item label="Tyre" value="tyre" />
+          <Picker.Item label="Battery" value="battery" />
+          <Picker.Item label="Spare Parts" value="spare_parts" />
+        </Picker>
+      </View>
 
-      <View style={styles.dateTimeRow}>
-        <View style={styles.dateTimeContainer}>
-          <Text style={styles.textMark}>{'From:'}</Text>
-          <TouchableOpacity onPress={() => setShowFromPicker(true)} style={styles.dateTimeButton}>
-            <Text>{fromDate.toLocaleDateString()}</Text>
-          </TouchableOpacity>
-          {showFromPicker && (
-            <DateTimePicker
-              value={fromDate}
-              mode="date"
-              display="default"
-              onChange={(event, selectedDate) => {
-                const currentDate = selectedDate || fromDate;
-                setShowFromPicker(false);
-                setFromDate(currentDate);
-              }}
-            />
-          )}
-        </View>
+      {/* Date Picker Section */}
+      <View style={styles.sectionContainer}>
+        <Text style={styles.sectionTitle}>Date</Text>
+        <View style={styles.dateTimeRow}>
+          {/* From Date Picker */}
+          <View style={styles.dateTimeContainer}>
+            <Text style={styles.label}>From:</Text>
+            <TouchableOpacity onPress={() => setShowFromPicker(true)} style={styles.dateTimeButton}>
+              <Text>{fromDate.toLocaleDateString()}</Text>
+            </TouchableOpacity>
+            {showFromPicker && (
+              <DateTimePicker
+                value={fromDate}
+                mode="date"
+                display="default"
+                onChange={(event, selectedDate) => {
+                  const currentDate = selectedDate || fromDate;
+                  setShowFromPicker(false);
+                  setFromDate(currentDate);
+                }}
+              />
+            )}
+          </View>
 
-        <View style={styles.dateTimeContainer}>
-          <Text style={styles.textMark}>{'To:'}</Text>
-          <TouchableOpacity onPress={() => setShowToPicker(true)} style={styles.dateTimeButton}>
-            <Text>{toDate.toLocaleDateString()}</Text>
-          </TouchableOpacity>
-          {showToPicker && (
-            <DateTimePicker
-              value={toDate}
-              mode="date"
-              display="default"
-              onChange={(event, selectedDate) => {
-                const currentDate = selectedDate || toDate;
-                setShowToPicker(false);
-                setToDate(currentDate);
-              }}
-            />
-          )}
+          {/* To Date Picker */}
+          <View style={styles.dateTimeContainer}>
+            <Text style={styles.label}>To:</Text>
+            <TouchableOpacity onPress={() => setShowToPicker(true)} style={styles.dateTimeButton}>
+              <Text>{toDate.toLocaleDateString()}</Text>
+            </TouchableOpacity>
+            {showToPicker && (
+              <DateTimePicker
+                value={toDate}
+                mode="date"
+                display="default"
+                onChange={(event, selectedDate) => {
+                  const currentDate = selectedDate || toDate;
+                  setShowToPicker(false);
+                  setToDate(currentDate);
+                }}
+              />
+            )}
+          </View>
         </View>
       </View>
 
       <View style={styles.divider} />
 
-      <Text style={styles.textFix}>Time</Text>
-      <View style={styles.dateTimeRow}>
-        <View style={styles.dateTimeContainer}>
-          <Text style={styles.textMark}>{'From:'}</Text>
-          <TouchableOpacity onPress={() => setShowFromTimePicker(true)} style={styles.dateTimeButton}>
-            <Text>{fromDate.toLocaleTimeString()}</Text>
-          </TouchableOpacity>
-          {showFromTimePicker && (
-            <DateTimePicker
-              value={fromDate}
-              mode="time"
-              display="default"
-              onChange={(event, selectedTime) => {
-                const currentTime = selectedTime || fromDate;
-                setShowFromTimePicker(false);
-                setFromDate(currentTime);
-              }}
-            />
-          )}
-        </View>
+      {/* Time Picker Section */}
+      <View style={styles.sectionContainer}>
+        <Text style={styles.sectionTitle}>Time</Text>
+        <View style={styles.dateTimeRow}>
+          {/* From Time Picker */}
+          <View style={styles.dateTimeContainer}>
+            <Text style={styles.label}>From:</Text>
+            <TouchableOpacity onPress={() => setShowFromTimePicker(true)} style={styles.dateTimeButton}>
+              <Text>{fromDate.toLocaleTimeString()}</Text>
+            </TouchableOpacity>
+            {showFromTimePicker && (
+              <DateTimePicker
+                value={fromDate}
+                mode="time"
+                display="default"
+                onChange={(event, selectedTime) => {
+                  const currentTime = selectedTime || fromDate;
+                  setShowFromTimePicker(false);
+                  setFromDate(currentTime);
+                }}
+              />
+            )}
+          </View>
 
-        <View style={styles.dateTimeContainer}>
-          <Text style={styles.textMark}>{'To:'}</Text>
-          <TouchableOpacity onPress={() => setShowToTimePicker(true)} style={styles.dateTimeButton}>
-            <Text>{toDate.toLocaleTimeString()}</Text>
-          </TouchableOpacity>
-          {showToTimePicker && (
-            <DateTimePicker
-              value={toDate}
-              mode="time"
-              display="default"
-              onChange={(event, selectedTime) => {
-                const currentTime = selectedTime || toDate;
-                setShowToTimePicker(false);
-                setToDate(currentTime);
-              }}
-            />
-          )}
+          {/* To Time Picker */}
+          <View style={styles.dateTimeContainer}>
+            <Text style={styles.label}>To:</Text>
+            <TouchableOpacity onPress={() => setShowToTimePicker(true)} style={styles.dateTimeButton}>
+              <Text>{toDate.toLocaleTimeString()}</Text>
+            </TouchableOpacity>
+            {showToTimePicker && (
+              <DateTimePicker
+                value={toDate}
+                mode="time"
+                display="default"
+                onChange={(event, selectedTime) => {
+                  const currentTime = selectedTime || toDate;
+                  setShowToTimePicker(false);
+                  setToDate(currentTime);
+                }}
+              />
+            )}
+          </View>
         </View>
       </View>
 
@@ -209,12 +230,14 @@ const History = () => {
         visible={modalVisible}
         onRequestClose={() => setModalVisible(false)}
       >
-        <View style={styles.modalContainer}>
-              <FlatList contentContainerStyle={styles.resultsContainer}
-                data={locationHistory}
-                keyExtractor={(item, index) => index.toString()}
-                renderItem={renderItem}
-              />
+        <View style={styles.modalBackground}>
+          <View style={styles.modalContainer}>
+            <FlatList
+              contentContainerStyle={styles.resultsContainer}
+              data={locationHistory}
+              keyExtractor={(item, index) => index.toString()}
+              renderItem={renderItem}
+            />
             <Button
               mode="contained"
               onPress={() => setModalVisible(false)}
@@ -222,6 +245,7 @@ const History = () => {
             >
               Close
             </Button>
+          </View>
         </View>
       </Modal>
     </View>
@@ -234,75 +258,97 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: 'white',
   },
-  textMark: {},
-  header: {
-    marginBottom: 20,
-  },
-  title: {
-    fontSize: 24,
-    color: '#333',
-    textAlign: 'center',
-  },
   image: {
     width: '100%',
     height: 170,
     resizeMode: 'contain',
     marginBottom: 30,
-    marginTop: 20,
+    marginTop: 10,
   },
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#fff',
-    borderRadius: 5,
-    paddingHorizontal: 10,
-    paddingVertical: 8,
     marginBottom: 20,
-    elevation: 1,
+    borderColor: '#ccc',
     borderWidth: 1,
+    borderRadius: 5,
+    padding: 10,
   },
   input: {
     flex: 1,
+    fontSize: 18,
     marginLeft: 10,
-    fontSize: 16,
+  },
+  pickerContainer: {
+    marginBottom: 20,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 5,
+  },
+  picker: {
+    height: 50,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 5,
+  },
+  sectionContainer: {
+    marginBottom: 20,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    marginBottom: 10,
     color: '#333',
+    fontWeight: 'bold',
   },
   dateTimeRow: {
     flexDirection: 'row',
-    marginBottom: 10,
-    marginLeft: 30,
+    justifyContent: 'space-between',
+    marginRight:10,
+ 
   },
   dateTimeContainer: {
-    width: '50%',
-    paddingHorizontal: 10,
-    marginBottom: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '48%',
+    marginRight:10,
+    
+  },
+  label: {
+    fontSize: 16,
+    width: 50, // Fixed width for labels to align properly
+   
   },
   dateTimeButton: {
-    padding: 10,
+    flex: 1,
+    padding: 9,
     borderRadius: 5,
     backgroundColor: '#eee',
     borderWidth: 1,
-  },
-  
-  searchButton: {
-    marginTop: 20,
-    backgroundColor:'black'
-  },
-  modalContainer: {
-    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  searchButton: {
+    marginTop: 15,
+    backgroundColor: 'black',
+    
+  },
+  modalBackground: {
+    flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContainer: {
     width: '100%',
-    height: '80%',
+    maxHeight: '100%',
     backgroundColor: 'white',
     borderRadius: 10,
     padding: 20,
+    
   },
-  
   resultsContainer: {
-    flexGrow: 1,
-    justifyContent: 'flex-start',
+    paddingBottom: 20,
+    height:'100%'
   },
   historyItem: {
     marginBottom: 10,
@@ -313,11 +359,13 @@ const styles = StyleSheet.create({
   },
   historyLocation: {
     fontSize: 14,
+    marginTop: 5,
   },
   closeButton: {
     marginTop: 20,
-    backgroundColor:'black',
-    width: '80%',
+    backgroundColor: 'black',
+    width: '100%',
+    padding: 10,
   },
 });
 
