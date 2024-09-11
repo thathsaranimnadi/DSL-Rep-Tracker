@@ -12,26 +12,37 @@ const LoginRep = ({ navigation }) => {
   const [isPasswordShown, setIsPasswordShown] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const auth = getAuth(app); // Initialize Firebase Auth
 
-  const loginWithEmailAndPassword = () => {
+  const loginWithEmailAndPassword = async () => {
+    try{
 
-    const auth = getAuth(app); // Initialize Firebase Auth
+      const userCredential = await signInWithEmailAndPassword(auth, email, password)
+      const user = userCredential.user
 
-
-    signInWithEmailAndPassword(auth, email, password)
-      .then((res) => {
-        console.log(res)
+      if (user.emailVerified) {
         alert('Logged In');
         // Navigate to the sale's rep screen after successful login
         navigation.navigate("SalesRepView");
-      })
-      .catch(error => {
-        if (error.code === 'auth/invalid-credential') {
-          alert('Invalid Username or Password');
-        }
+      
+      }
+      else{
+        alert('Please verify your email before logging in.');
+        // Optionally sign the user out
+        auth.signOut();
+      }
+    }
 
-        console.error(error);
-      });
+    catch (error) {
+      if (error.code === 'auth/invalid-credential') {
+        alert('Invalid Username or Password');
+      }
+      console.error("Error during login: ", error);
+    }
+    
+
+    
+      
   };
 
   return (
