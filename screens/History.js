@@ -32,8 +32,13 @@ const History = () => {
     const endDate = new Date(toDate.setHours(23, 59, 59, 999));
 
     try {
-      const salesRepQuery = query(collection(db, 'Sales Rep'));
+      const salesRepQuery = query(
+        collection(db, 'Sales Rep'),
+        where('Department', '==', department)  // Add filtering by department
+      );
+      
       const salesRepSnapshot = await getDocs(salesRepQuery);
+  
 
       const filteredSalesReps = salesRepSnapshot.docs.filter((doc) => {
         const rep = doc.data();
@@ -41,7 +46,7 @@ const History = () => {
       });
 
       if (filteredSalesReps.length === 0) {
-        alert("No sales reps found with the given name");
+        alert("No sales reps found");
         return;
       }
 
