@@ -20,7 +20,6 @@ const History = () => {
   const [modalVisible, setModalVisible] = useState(false);
 
   const onSearch = async () => {
-    setModalVisible(true);
     const db = getFirestore(app);
 
     if (!salesRepName) {
@@ -47,6 +46,11 @@ const History = () => {
 
       if (filteredSalesReps.length === 0) {
         alert("No sales reps found");
+        return;
+        setSalesRepName('');
+        setDepartment('');
+        setFromDate(new Date());
+        setToDate(new Date());
         return;
       }
 
@@ -76,6 +80,14 @@ const History = () => {
       }
 
       setLocationHistory(salesRepData);
+      setModalVisible(true);
+
+       // Reset state after search
+    setSalesRepName('');
+    setDepartment('');
+    setFromDate(new Date());
+    setToDate(new Date());
+
 
     } catch (error) {
       console.error("Error fetching location history:", error);
@@ -354,6 +366,7 @@ const styles = StyleSheet.create({
   resultsContainer: {
     paddingBottom: 20,
     flexGrow: 1,
+    height:'100%'
   },
   historyItem: {
     marginBottom: 10,
