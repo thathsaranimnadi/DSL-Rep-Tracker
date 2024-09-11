@@ -64,9 +64,13 @@ const Signup = ({ navigation }) => {
               style={{ width: '100%' }}
             >
               <Picker.Item label="Select your department" value="" />
-              <Picker.Item label="Battery" value="battery" />
-              <Picker.Item label="Tyre" value="tyre" />
-              <Picker.Item label="Spare Parts" value="spare_parts" />
+              <Picker.Item label="Tyre" value="Tyre" />
+              <Picker.Item label="Energy" value="Energy" />
+              <Picker.Item label="Auto-Parts" value="Auto-Parts" />
+              <Picker.Item label="Ronet" value="Ronet" />
+              <Picker.Item label="Ekway" value="Ekway" />
+              <Picker.Item label="GCR" value="GCR" />
+              <Picker.Item label="Industrial" value="Industrial" />
             </Picker>
           </View>
         </View>

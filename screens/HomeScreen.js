@@ -131,9 +131,13 @@ const HomeScreen = () => {
 // CustomMapView Component
 const CustomMapView = ({ salesReps = [], currentLocation, onMarkerPress }) => {
     const departmentColors = {
-        'battery': 'red',
-        'tyre': 'blue',
-        'spare_parts': 'yellow',
+        'Energy': 'red',
+        'Tyre': 'blue',
+        'Auto-Parts': 'yellow',
+        'Ronet':'green',
+        'Ekway':'pink',
+        'GCR':'purple',
+        'Industrial':'orange'
     };
 
     return (

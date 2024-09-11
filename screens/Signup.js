@@ -15,7 +15,6 @@ const Signup = ({ navigation }) => {
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('');
   const [isPasswordShown, setIsPasswordShown] = useState(false); // State for password visibility
-
   const auth = getAuth(app); // Initialize Firebase Auth
   const firestore = getFirestore(app); // Initialize Firestore
   const route = useRoute(); // Use the useRoute hook to access route params
