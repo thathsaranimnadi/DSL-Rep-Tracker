@@ -29,36 +29,38 @@ const LoginAdmin = ({ navigation }) => {
 
   const loginWithEmailAndPassword = async () => {
     try {
-      // Check if email is in the 'admins' collection
-      const adminQuery = query(collection(db, "Admin"), where("Email", "==", email));
-      const adminSnapshot = await getDocs(adminQuery);
+      // Log in the user
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
 
-      if (!adminSnapshot.empty) {
-        console.log("User belongs to 'admins' collection");
+      // Check if the email is verified
+      if (user.emailVerified) {
+        // Check if the user is an admin
+        const adminQuery = query(collection(db, "Admin"), where("Email", "==", email));
+        const adminSnapshot = await getDocs(adminQuery);
 
-        signInWithEmailAndPassword(auth, email, password)
-          .then(async (res) => {
-            console.log(res);
-            alert('Logged In');
-            // Save the email in AsyncStorage after successful login
-            await AsyncStorage.setItem('savedEmail', email);
+        if (!adminSnapshot.empty) {
+          console.log("User belongs to 'admins' collection");
 
-            // Navigate to the admin screen
-            navigation.navigate("HomeScreen");
-          })
-          .catch(error => {
-            if (error.code === 'auth/invalid-credential') {
-              alert('Invalid Username or Password');
-            }
+          alert('Logged In');
+          // Save the email in AsyncStorage after successful login
+          await AsyncStorage.setItem('savedEmail', email);
 
-            console.error(error);
-          });
+          // Navigate to the admin screen
+          navigation.navigate("HomeScreen");
+        } else {
+          alert('You cannot login as an admin');
+        }
       } else {
-        alert('You cannot login as an admin');
+        alert('Please verify your email before logging in.');
+        // Optionally sign the user out
+        auth.signOut();
       }
-
     } catch (error) {
-      console.error("Error checking user collection: ", error);
+      if (error.code === 'auth/invalid-credential') {
+        alert('Invalid Username or Password');
+      }
+      console.error("Error during login: ", error);
     }
   };
 

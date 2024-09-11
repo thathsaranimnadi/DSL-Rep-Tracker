@@ -5,7 +5,7 @@ import { RadioButton } from 'react-native-paper';
 import COLORS from '../constants/colors';
 import Button from '../components/Button';
 import app from '../firebaseConfig';
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
 import { getFirestore, doc, setDoc } from 'firebase/firestore';
 import { useRoute } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
@@ -71,14 +71,25 @@ const Signup = ({ navigation }) => {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const { uid } = userCredential.user;
-        console.log('User account created!');
-        if (role === 'sales_rep') {
-          addRepData(uid);
-          navigation.navigate("LoginRep");
-        } else {
-          addAdminData(uid);
-          navigation.navigate("LoginAdmin");
-        }
+        
+        //Email verification
+        sendEmailVerification(userCredential.user)
+        .then(() => {
+          alert('A verification email has been sent to your email address. Please verify before logging in.');
+
+          // Save user data to Firestore based on the role
+          if (role === 'sales_rep') {
+            addRepData(uid);
+            // Optionally navigate to the login page
+            navigation.navigate("LoginRep");
+          } else {
+            addAdminData(uid);
+            navigation.navigate("LoginAdmin");
+          }
+        })
+        .catch((error) => {
+          console.error('Error sending email verification: ', error);
+        });
       })
       .catch(error => {
         if (error.code === 'auth/email-already-in-use') {
