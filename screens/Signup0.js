@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Pressable, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Pressable, StyleSheet, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Picker } from '@react-native-picker/picker';
 import COLORS from '../constants/colors';
@@ -13,6 +13,31 @@ const Signup = ({ navigation }) => {
   const [employeeId, setEmployeeId] = useState('');
   const [department, setDepartment] = useState('');
   const firestore = getFirestore(app); // Initialize Firestore
+
+  // Employee ID validation function
+  const isValidEmployeeId = (id) => {
+    const regex = /^(DSL|EKW|RNT)\d{4}$/;
+    return regex.test(id);
+  };
+
+  const handleNext = () => {
+    if (!name || !employeeId || !department || !phone) {
+      alert('Please fill in all fields.');
+      return;
+    }
+    if (!isValidEmployeeId(employeeId)) {
+      Alert.alert('Invalid Employee ID');
+      return;
+    }
+    
+    // If validation passes, navigate to the next page
+    navigation.navigate('Signup', { 
+      name: name,
+      employeeId: employeeId,
+      department: department,
+      phone: `+94${phone}`, 
+    });
+  };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
@@ -94,18 +119,7 @@ const Signup = ({ navigation }) => {
         </View>
 
         <Button
-          onPress={() => {
-            if (!name || !employeeId || !department) {
-              alert('Please fill in all fields and agree to the terms and conditions.');
-            } else {
-              navigation.navigate('Signup', { 
-                name: name,
-                employeeId: employeeId,
-                department: department,
-                phone: `+94${phone}`, 
-               });
-            }
-          }}
+          onPress={handleNext}
           title="Next"
           filled
           style={{ marginTop: 18, marginBottom: 4, backgroundColor: '#daa520', borderColor: '#000000' }}
