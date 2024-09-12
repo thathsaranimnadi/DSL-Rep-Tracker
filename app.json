@@ -17,8 +17,7 @@
         "backgroundColor": "#ffffff"
       },
       "package": "com.example.Tracker",
-      "googleServicesFile":"./android/app/google-services.json",
-      
+      "googleServicesFile": "./android/app/google-services.json",
       "permissions": [
         "ACCESS_FINE_LOCATION",
         "ACCESS_COARSE_LOCATION",
@@ -27,7 +26,6 @@
       ],
       "backgroundColor": "#ffffff",
       "backgroundLocation": true
-    
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -37,9 +35,14 @@
       "expo-build-properties",
       "@react-native-firebase/app",
       "@react-native-firebase/auth"
-
-      
-
-    ]
+    ],
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "a0088818-3b54-4dd6-8663-195299212fd0"
+      }
+    }
   }
 }
