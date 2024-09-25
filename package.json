@@ -19,6 +19,7 @@
     "@react-navigation/drawer": "^6.7.2",
     "@react-navigation/native": "^6.1.18",
     "@react-navigation/native-stack": "^6.11.0",
+    "@transistorsoft/capacitor-background-fetch": "^6.0.1",
     "axios": "^1.7.4",
     "expo": "~51.0.34",
     "expo-background-fetch": "^12.0.1",
