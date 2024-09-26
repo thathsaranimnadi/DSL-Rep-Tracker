@@ -28,6 +28,6 @@ allprojects {
     repositories {
         google()       // Google's Maven repository
         mavenCentral() // Central Maven repository
-        maven { url 'https://www.jitpack.io' } // JitPack for 3rd-party libraries
+        maven { "$rootDir/../node_modules/react-native-background-fetch/android/libs" } 
     }
 }
