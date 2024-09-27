@@ -13,15 +13,14 @@ buildscript {
     repositories {
         google()
         mavenCentral()
-        maven {  "$rootDir/../node_modules/react-native-background-fetch/android/libs" } 
-        maven { 'https://www.jitpack.io' }
-        maven{ "https://repo.maven.apache.org/maven2"}
+        
+       
     }
     dependencies {
         classpath('com.android.tools.build:gradle')
         classpath('com.facebook.react:react-native-gradle-plugin')
         classpath('org.jetbrains.kotlin:kotlin-gradle-plugin')
-        classpath('com.android.tools.build:gradle')
+      
         
     }
 }
@@ -34,6 +33,6 @@ allprojects {
         mavenCentral() // Central Maven repository
         maven {  "$rootDir/../node_modules/react-native-background-fetch/android/libs" } 
         maven { 'https://www.jitpack.io' }
-        maven{ "https://repo.maven.apache.org/maven2"}
+        
     }
 }
