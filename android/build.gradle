@@ -7,21 +7,21 @@ buildscript {
         compileSdkVersion = Integer.parseInt(findProperty('android.compileSdkVersion') ?: '34')
         targetSdkVersion = Integer.parseInt(findProperty('android.targetSdkVersion') ?: '34')
         kotlinVersion = findProperty('android.kotlinVersion') ?: '1.9.23'
-
+        
         ndkVersion = "26.1.10909125"
+        androidGradlePluginVersion = '8.2.1' // Compatible with Gradle 8.8
+        reactNativePluginVersion = '0.71.8' // Update based on your React Native version
     }
+    
     repositories {
         google()
         mavenCentral()
-        
-       
     }
+
     dependencies {
-        classpath('com.android.tools.build:gradle')
-        classpath('com.facebook.react:react-native-gradle-plugin')
-        classpath('org.jetbrains.kotlin:kotlin-gradle-plugin')
-      
-        
+        classpath("com.android.tools.build:gradle:$androidGradlePluginVersion")
+        classpath("com.facebook.react:react-native-gradle-plugin:$reactNativePluginVersion")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
     }
 }
 
@@ -31,8 +31,7 @@ allprojects {
     repositories {
         google()       // Google's Maven repository
         mavenCentral() // Central Maven repository
-        maven {  "$rootDir/../node_modules/react-native-background-fetch/android/libs" } 
-        maven { 'https://www.jitpack.io' }
-        
+        maven { url "$rootDir/../node_modules/react-native-background-fetch/android/libs" } 
+        maven { url 'https://www.jitpack.io' }
     }
 }
