@@ -201,5 +201,7 @@ if (rnVersion < versionToNumber(0, 75, 0)) {
     applyNativeModulesAppBuildGradle(project)
 }
 project.ext.react = [
-     entryFile: "index.js"
+     entryFile: "index.js",
+     enableHermes: false 
+
 ]
