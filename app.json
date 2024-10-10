@@ -1,8 +1,8 @@
 {
   "expo": {
     "owner": "pabani",
-    "name": "Sales Pulse",
-    "slug": "Sales Pulse",
+    "name": "LocationTracker",
+    "slug": "LocationTracker",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/dsl.png",
