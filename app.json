@@ -1,5 +1,6 @@
 {
   "expo": {
+    "owner": "pabani",
     "name": "LocationTracker",
     "slug": "LocationTracker",
     "version": "1.0.0",
@@ -41,7 +42,7 @@
         "origin": false
       },
       "eas": {
-        "projectId": "0d5eef77-2c71-4b38-9ad4-e79f2bee115c"
+        "projectId": "c260a721-cf2d-49a7-9bac-ec5473eb9979"
       }
     }
   }
