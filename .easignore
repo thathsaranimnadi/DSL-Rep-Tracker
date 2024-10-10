@@ -1,0 +1,72 @@
+# Ignore the node_modules directory (if you prefer to install it during the build)
+node_modules/
+
+# Ignore build artifacts and temporary directories
+android/app/build/
+ios/build/
+dist/
+out/
+build/
+tmp/
+.expo/
+.expo-shared/
+build/outputs/
+build/intermediates/
+
+# Ignore local environment files (sensitive data)
+.env
+.env.local
+.env.development
+.env.production
+.env.test
+
+# Ignore log files and debugging output
+*.log
+yarn-error.log
+npm-debug.log
+pnpm-debug.log
+
+# Ignore IDE and editor configuration files
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+*.iml
+
+# Ignore test files and test output directories
+**/__tests__/
+**/*.spec.js
+**/*.test.js
+test-logs/
+jest-test-results/
+coverage/
+
+# Ignore temporary and backup files
+*.bak
+*.swp
+*.tmp
+*.orig
+.DS_Store
+*.tmp.*
+
+# Ignore documentation files (if not needed for the build)
+docs/
+README.md
+
+# Ignore any additional asset folders not required for production
+assets/old/
+assets/temp/
+
+# Ignore package lock files and yarn lock files (if you don't need them)
+package-lock.json
+yarn.lock
+
+# Ignore any generated files
+*.generated.js
+*.generated.ts
+
+# Ignore miscellaneous directories that may contain unnecessary files
+public/
+logs/
+tmp/
+cache/
