@@ -14,10 +14,9 @@ const LoginAdmin = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const db = getFirestore(app);
-  const auth = getAuth(app); // Initialize Firebase Auth
+  const auth = getAuth(app);
 
   useEffect(() => {
-    // Load the saved email from AsyncStorage when the component is mounted
     const loadEmail = async () => {
       const savedEmail = await AsyncStorage.getItem('savedEmail');
       if (savedEmail) {
@@ -29,31 +28,22 @@ const LoginAdmin = ({ navigation }) => {
 
   const loginWithEmailAndPassword = async () => {
     try {
-      // Log in the user
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      // Check if the email is verified
       if (user.emailVerified) {
-        // Check if the user is an admin
         const adminQuery = query(collection(db, "Admin"), where("Email", "==", email));
         const adminSnapshot = await getDocs(adminQuery);
 
         if (!adminSnapshot.empty) {
-          console.log("User belongs to 'admins' collection");
-
           alert('Logged In');
-          // Save the email in AsyncStorage after successful login
           await AsyncStorage.setItem('savedEmail', email);
-
-          // Navigate to the admin screen
           navigation.navigate("HomeScreen");
         } else {
           alert('You cannot login as an admin');
         }
       } else {
         alert('Please verify your email before logging in.');
-        // Optionally sign the user out
         auth.signOut();
       }
     } catch (error) {
@@ -66,125 +56,126 @@ const LoginAdmin = ({ navigation }) => {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
-      <View style={{ flex: 1, marginHorizontal: 22 }}>
-        <View style={{ marginVertical: 22 }}>
-          <Text
-            style={{
-              fontSize: 22,
-              fontWeight: 'bold',
-              marginVertical: 12,
-              color: '#daa520',
-            }}
-          >
+      <View style={{ flex: 1, paddingHorizontal: 24 }}>
+        {/* Welcome Text */}
+        <View style={{ marginVertical: 20 }}>
+          <Text style={{ fontSize: 24, fontWeight: 'bold', color: '#daa520' }}>
             Hey, Welcome Back
           </Text>
-
-          <Text style={{ fontSize: 16, color: COLORS.black }}>
+          <Text style={{ fontSize: 16, color: COLORS.black, marginTop: 6 }}>
             Login as an admin
           </Text>
         </View>
 
-        <View style={{ marginBottom: 12 }}>
-          <Text
-            style={{
-              fontSize: 16,
-              fontWeight: '400',
-              marginVertical: 8,
-            }}
-          >
+        {/* Email Input */}
+        <View style={{ marginBottom: 16 }}>
+          <Text style={{ fontSize: 16, fontWeight: '500', marginBottom: 8 }}>
             Email Address
           </Text>
-
-          <View
-            style={{
-              width: '100%',
-              height: 48,
-              borderColor: COLORS.black,
-              borderWidth: 1,
-              borderRadius: 8,
-              alignItems: 'center',
-              justifyContent: 'center',
-              paddingLeft: 22,
-            }}
-          >
+          <View style={styles.inputContainer}>
             <TextInput 
               value={email}
               onChangeText={text => setEmail(text)}
               placeholder="Enter Your Email Address"
               placeholderTextColor={COLORS.black}
               keyboardType="email-address"
-              style={{
-                width: '100%',
-              }}
+              style={styles.input}
             />
           </View>
         </View>
 
-        <View style={{ marginBottom: 12 }}>
-          <Text
-            style={{
-              fontSize: 16,
-              fontWeight: '400',
-              marginVertical: 8,
-            }}
-          >
+        {/* Password Input */}
+        <View style={{ marginBottom: 16 }}>
+          <Text style={{ fontSize: 16, fontWeight: '500', marginBottom: 8 }}>
             Password
           </Text>
-
-          <View
-            style={{
-              width: '100%',
-              height: 48,
-              borderColor: COLORS.black,
-              borderWidth: 1,
-              borderRadius: 8,
-              alignItems: 'center',
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              paddingLeft: 22,
-            }}
-          >
+          <View style={styles.inputContainer}>
             <TextInput 
               value={password}
               onChangeText={text => setPassword(text)}
               placeholder="Enter your password"
               placeholderTextColor={COLORS.black}
               secureTextEntry={!isPasswordShown}
-              style={{
-                width: '100%',
-              }}
+              style={styles.input}
             />
             <TouchableOpacity
               onPress={() => setIsPasswordShown(!isPasswordShown)}
-              style={{
-                position: 'absolute',
-                right: 12,
-              }}
+              style={styles.eyeIcon}
             >
-              {isPasswordShown ? (
-                <Ionicons name="eye-off" size={24} color={COLORS.black} />
-              ) : (
-                <Ionicons name="eye" size={24} color={COLORS.black} />
-              )}
+              <Ionicons name={isPasswordShown ? "eye-off" : "eye"} size={24} color={COLORS.black} />
             </TouchableOpacity>
           </View>
         </View>
 
-        <Button onPress={loginWithEmailAndPassword}
+        {/* Login Button */}
+        <Button 
+          onPress={loginWithEmailAndPassword}
           title="Login"
           filled
-          style={{
-            marginTop: 18,
-            marginBottom: 4,
-            backgroundColor: '#daa520',
-            borderColor: 'black',
-          }}
+          style={styles.loginButton}
         />
-        
-        {/* Additional UI elements */}
+
+        {/* Sign Up Link */}
+        <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 20 }}>
+          <Text style={{ fontSize: 16, color: COLORS.black }}>
+            Don't have an account? 
+          </Text>
+          <Pressable onPress={() => navigation.navigate('Signup0')}>
+            <Text style={styles.signupText}> Sign up</Text>
+          </Pressable>
+        </View>
+
+        {/* Forgot Password Link */}
+        <View style={styles.forgotPasswordContainer}>
+          <Pressable onPress={() => navigation.navigate('ForgotPassword')}>
+            <Text style={styles.forgotPasswordText}>Forgot Your Password?</Text>
+          </Pressable>
+        </View>
       </View>
     </SafeAreaView>
   );
+};
+
+const styles = {
+  inputContainer: {
+    width: '100%',
+    height: 50,
+    borderColor: COLORS.black,
+    borderWidth: 1,
+    borderRadius: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingLeft: 16,
+  },
+  input: {
+    flex: 1,
+    fontSize: 16,
+    color: COLORS.black,
+  },
+  eyeIcon: {
+    paddingRight: 16,
+  },
+  loginButton: {
+    marginTop: 20,
+    backgroundColor: '#daa520',
+    borderColor: 'black',
+  },
+  signupText: {
+    fontSize: 16,
+    color: '#daa520',
+    fontWeight: 'bold',
+    marginLeft: 5,
+  },
+  forgotPasswordContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginTop: 20,
+  },
+  forgotPasswordText: {
+    fontSize: 16,
+    color: COLORS.black,
+    marginLeft: 6,
+  },
 };
 
 export default LoginAdmin;

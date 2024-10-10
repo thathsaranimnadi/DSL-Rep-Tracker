@@ -1,11 +1,11 @@
 {
   "expo": {
     "owner": "pabani",
-    "name": "LocationTracker",
-    "slug": "LocationTracker",
+    "name": "Sales Pulse",
+    "slug": "Sales Pulse",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/dsl.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
@@ -14,7 +14,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/dsl.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.example.Tracker",
@@ -29,7 +29,7 @@
       "backgroundLocation": true
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/dsl.png"
     },
     "plugins": [
       "expo-router",
