@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, ScrollView } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
@@ -11,7 +11,6 @@ const Header = ({ onSearch }) => {
     return (
         <View>
             <View style={styles.headerContainer}>
-                
                 <Text style={styles.welcomeText}>Welcome,</Text>
             </View>
             <View style={styles.searchContainer}>
@@ -92,52 +91,53 @@ const HomeScreen = () => {
             </View>
 
             {showInfo && (
-                <View style={styles.infoContainer}>
+                <ScrollView style={styles.infoContainer}>
                     <View style={styles.row}>
-                        <Text style={styles.label}>Name:</Text>
+                        <Text style={styles.label}>Name:  </Text>
                         <Text style={styles.value}>{selectedRep?.Name || 'Name not available'}</Text>
                     </View>
                     <View style={styles.row}>
-                        <Text style={styles.label}>Employee ID:</Text>
+                        <Text style={styles.label}>Employee ID:  </Text>
                         <Text style={styles.value}>{selectedRep?.Employee_ID || 'Employee ID not available'}</Text>
                     </View>
                     <View style={styles.row}>
-                        <Text style={styles.label}>Role:</Text>
+                        <Text style={styles.label}>Role:  </Text>
                         <Text style={styles.value}>{selectedRep?.Role || 'Role not available'}</Text>
                     </View>
                     <View style={styles.row}>
-                        <Text style={styles.label}>Department:</Text>
+                        <Text style={styles.label}>Department:  </Text>
                         <Text style={styles.value}>{selectedRep?.Department || 'Department not available'}</Text>
                     </View>
                     <View style={styles.row}>
-                        <Text style={styles.label}>Mobile No:</Text>
+                        <Text style={styles.label}>Mobile No:  </Text>
                         <Text style={styles.value}>{selectedRep?.Phone_No || 'Mobile No not available'}</Text>
                     </View>
                     <View style={styles.row}>
-                        <Text style={styles.label}>Current Address:</Text>
+                        <Text style={styles.label}>Current Address:  </Text>
                         <Text style={styles.value}>{selectedRep?.Address || 'Address not available'}</Text>
                     </View>
                     <View style={styles.row}>
-                        <Text style={styles.label}>Timestamp:</Text>
+                        <Text style={styles.label}>Timestamp:  </Text>
                         <Text style={styles.value}>
                             {selectedRep?.Timestamp ? selectedRep.Timestamp.toDate().toLocaleString() : 'Time not available'}
                         </Text>
                     </View>
-                </View>
+                </ScrollView>
             )}
         </View>
     );
 };
+
 // CustomMapView Component
 const CustomMapView = ({ salesReps = [], currentLocation, onMarkerPress }) => {
     const departmentColors = {
         'Energy': 'red',
         'Tyre': 'blue',
         'Auto-Parts': 'yellow',
-        'Ronet':'green',
-        'Ekway':'pink',
-        'GCR':'purple',
-        'Industrial':'orange'
+        'Ronet': 'green',
+        'Ekway': 'pink',
+        'GCR': 'purple',
+        'Industrial': 'orange'
     };
 
     return (
@@ -172,20 +172,12 @@ const CustomMapView = ({ salesReps = [], currentLocation, onMarkerPress }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        
     },
     headerContainer: {
         flexDirection: 'row',
         alignItems: 'center',
         marginBottom: 5,
         height: 5,
-    },
-    animation: {
-        width: 50,
-        height: 50,
-        borderRadius: 150,
-        marginTop: 60,
-        marginBottom: 10,
     },
     welcomeText: {
         color: '#000000',
@@ -214,7 +206,6 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-       
     },
     mapContainerWithInfo: {
         flex: 0.6, 
@@ -222,12 +213,22 @@ const styles = StyleSheet.create({
     map: {
         width: '100%',
         height: '100%',
-        marginTop:30,
+        marginTop: 40,
     },
     infoContainer: {
-        paddingTop: 15,
-        paddingLeft: 10,
-        height: 100, 
+        maxHeight: 300, // Set maximum height for the info container
+        padding: 10,
+        backgroundColor: '#fff',
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.2,
+        shadowRadius: 2.0,
+        elevation: 2,
     },
     label: {
         fontSize: 16,
@@ -243,7 +244,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         marginBottom: 10,
     },
-    
 });
 
 export default HomeScreen;

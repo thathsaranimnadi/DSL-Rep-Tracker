@@ -55,7 +55,7 @@ const Signup = ({ navigation }) => {
           <View style={styles.inputContainer}>
             <TextInput
               placeholder="Enter your name"
-              placeholderTextColor={COLORS.black}
+              placeholderTextColor='rgba(0, 0, 0, 0.5)'
               style={styles.input}
               value={name}
               onChangeText={setName}
@@ -69,8 +69,8 @@ const Signup = ({ navigation }) => {
           </Text>
           <View style={styles.inputContainer}>
             <TextInput
-              placeholder="Enter your Employee ID"
-              placeholderTextColor={COLORS.black}
+              placeholder="Eg: DSL1234, EKW1234, RNT1234"
+              placeholderTextColor='rgba(0, 0, 0, 0.5)'
               style={styles.input}
               value={employeeId}
               onChangeText={setEmployeeId}
@@ -88,7 +88,7 @@ const Signup = ({ navigation }) => {
               onValueChange={(itemValue) => setDepartment(itemValue)}
               style={{ width: '100%' }}
             >
-              <Picker.Item label="Select your department" value="" />
+              <Picker.Item label="Select your department" value="" color='rgba(0, 0, 0, 0.5)' enabled={false} />
               <Picker.Item label="Tyre" value="Tyre" />
               <Picker.Item label="Energy" value="Energy" />
               <Picker.Item label="Auto-Parts" value="Auto-Parts" />
@@ -108,7 +108,7 @@ const Signup = ({ navigation }) => {
             <Text style={styles.phoneCode}>+94</Text>
             <TextInput
               placeholder="Enter your Mobile number"
-              placeholderTextColor={COLORS.black}
+              placeholderTextColor='rgba(0, 0, 0, 0.5)'
               keyboardType="numeric"
               style={styles.phoneInput}
               value={phone}
@@ -170,17 +170,17 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     flexDirection: 'row',
     alignItems: 'center',
-    paddingLeft: 22,
+    paddingLeft: 10,
   },
   phoneCode: {
-    width: '20%',
-    textAlign: 'center',
+    width: '10%',
     lineHeight: 48,
     fontSize: 16,
     color: COLORS.black,
     borderRightWidth: 1,
     borderRightColor: COLORS.grey,
     height: '100%',
+    paddingRight:'1'
   },
   phoneInput: {
     width: '80%',
