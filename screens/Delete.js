@@ -34,12 +34,21 @@ export default function Delete() {
         setData();
     }, []);
 
+    const normalizeString = (str) => {
+        return str
+            .toLowerCase()         // Convert to lowercase
+            .replace(/\s+/g, '')   // Remove all spaces
+            .replace(/\./g, '');   // Remove all dots
+    };
+
     const handleSearch = (query) => {
         if (query) {
-            const filtered = salesReps.filter(rep =>
-                rep.Name.split(" ").some(word => word.toLowerCase().includes(query.toLowerCase())) || 
-                rep.Employee_ID.toLowerCase() === query.toLowerCase()
-            );
+            const normalizedQuery = normalizeString(query);
+            const filtered = salesReps.filter(rep =>{
+                const normalizedName = normalizeString(rep.Name); // Normalize the stored name
+                return normalizedName.includes(normalizedQuery) || 
+                rep.Employee_ID.toLowerCase() === normalizedQuery;
+        });
             setFilteredSalesReps(filtered.length > 0 ? filtered : []);
         } else {
             setFilteredSalesReps(salesReps);
