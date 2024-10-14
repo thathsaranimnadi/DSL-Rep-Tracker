@@ -92,7 +92,7 @@ const LoginRep = ({ navigation }) => {
               value={email}
               onChangeText={text => setEmail(text)}
               placeholder="Enter Your Email Address"
-              placeholderTextColor={COLORS.black}
+              placeholderTextColor="rgba(0, 0, 0, 0.5)"
               keyboardType="email-address"
               style={{
                 width: '100%',
@@ -129,7 +129,7 @@ const LoginRep = ({ navigation }) => {
               value={password}
               onChangeText={text => setPassword(text)}
               placeholder="Enter your password"
-              placeholderTextColor={COLORS.black}
+              placeholderTextColor="rgba(0, 0, 0, 0.5)"
               secureTextEntry={!isPasswordShown}
               style={{
                 width: '100%',
@@ -203,6 +203,7 @@ const LoginRep = ({ navigation }) => {
                 fontSize: 16,
                 color: 'black',
                 marginLeft: 6,
+                textDecorationLine: 'underline',
               }}
             >
               Forgot Your Password ?

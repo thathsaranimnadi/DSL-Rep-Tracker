@@ -58,7 +58,7 @@ const LoginAdmin = ({ navigation }) => {
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
       <View style={{ flex: 1, paddingHorizontal: 24 }}>
         {/* Welcome Text */}
-        <View style={{ marginVertical: 20 }}>
+        <View style={{ marginVertical: 30 }}>
           <Text style={{ fontSize: 24, fontWeight: 'bold', color: '#daa520' }}>
             Hey, Welcome Back
           </Text>
@@ -77,7 +77,7 @@ const LoginAdmin = ({ navigation }) => {
               value={email}
               onChangeText={text => setEmail(text)}
               placeholder="Enter Your Email Address"
-              placeholderTextColor={COLORS.black}
+              placeholderTextColor="rgba(0, 0, 0, 0.5)"
               keyboardType="email-address"
               style={styles.input}
             />
@@ -94,7 +94,7 @@ const LoginAdmin = ({ navigation }) => {
               value={password}
               onChangeText={text => setPassword(text)}
               placeholder="Enter your password"
-              placeholderTextColor={COLORS.black}
+              placeholderTextColor="rgba(0, 0, 0, 0.5)"
               secureTextEntry={!isPasswordShown}
               style={styles.input}
             />
@@ -127,7 +127,7 @@ const LoginAdmin = ({ navigation }) => {
 
         {/* Forgot Password Link */}
         <View style={styles.forgotPasswordContainer}>
-          <Pressable onPress={() => navigation.navigate('ForgotPassword')}>
+          <Pressable onPress={() => navigation.navigate('ChangePassword')}>
             <Text style={styles.forgotPasswordText}>Forgot Your Password?</Text>
           </Pressable>
         </View>
@@ -170,11 +170,14 @@ const styles = {
     flexDirection: 'row',
     justifyContent: 'center',
     marginTop: 20,
+
   },
   forgotPasswordText: {
     fontSize: 16,
     color: COLORS.black,
     marginLeft: 6,
+    textDecorationLine: 'underline',
+
   },
 };
 
