@@ -20,8 +20,6 @@ const Signup = ({ navigation }) => {
     return regex.test(id);
   };
   
-
-
   const handleNext = () => {
     if (!name || !employeeId || !department || !phone) {
       alert('Please fill in all fields.');
@@ -32,7 +30,7 @@ const Signup = ({ navigation }) => {
       return;
     }
     if (phone.length !== 9) { // Check if phone has exactly 9 digits
-      Alert.alert('Phone number must be exactly 9 digits.');
+      Alert.alert('Please Enter Valid Mobile number.');
       return;
     }
 
