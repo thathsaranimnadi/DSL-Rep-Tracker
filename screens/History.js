@@ -19,6 +19,13 @@ const History = () => {
   const [locationHistory, setLocationHistory] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
 
+  const normalizeString = (str) => {
+  return str
+    .toLowerCase()         // Convert to lowercase
+    .replace(/\s+/g, '')   // Remove all spaces
+    .replace(/\./g, '');   // Remove all dots
+};
+
   const onSearch = async () => {
     const db = getFirestore(app);
 
@@ -27,6 +34,7 @@ const History = () => {
       return;
     }
 
+    const normalizedInput = normalizeString(salesRepName);
     const startDate = new Date(fromDate.setHours(0, 0, 0, 0));
     const endDate = new Date(toDate.setHours(23, 59, 59, 999));
 
@@ -41,7 +49,8 @@ const History = () => {
 
       const filteredSalesReps = salesRepSnapshot.docs.filter((doc) => {
         const rep = doc.data();
-        return rep.Name.split(" ").some(word => word.toLowerCase().includes(salesRepName.toLowerCase()));
+        const normalizedRepName = normalizeString(rep.Name); // Normalize the stored name
+        return normalizedRepName.includes(normalizedInput);
       });
 
       if (filteredSalesReps.length === 0) {
