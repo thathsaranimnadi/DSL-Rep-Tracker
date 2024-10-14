@@ -138,7 +138,7 @@ const Signup = ({ navigation }) => {
           <View style={styles.inputContainer}>
             <TextInput
               placeholder="Enter Your Email Address"
-              placeholderTextColor={COLORS.black}
+              placeholderTextColor='rgba(0, 0, 0, 0.5)'
               keyboardType="email-address"
               style={styles.input}
               value={email}
@@ -157,7 +157,7 @@ const Signup = ({ navigation }) => {
               value={password}
               onChangeText={text => setPassword(text)}
               placeholder="Enter your password"
-              placeholderTextColor={COLORS.black}
+              placeholderTextColor='rgba(0, 0, 0, 0.5)'
               secureTextEntry={!isPasswordShown}
               style={{
                 width: '100%',
