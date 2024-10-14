@@ -16,9 +16,11 @@ const Signup = ({ navigation }) => {
 
   // Employee ID validation function
   const isValidEmployeeId = (id) => {
-    const regex = /^(DSL|EKW|RNT)\d{4}$/;
+    const regex = /^(DSL|EKW|RNT)\d{4}$/i;
     return regex.test(id);
   };
+  
+
 
   const handleNext = () => {
     if (!name || !employeeId || !department || !phone) {
@@ -29,6 +31,11 @@ const Signup = ({ navigation }) => {
       Alert.alert('Invalid Employee ID');
       return;
     }
+    if (phone.length !== 9) { // Check if phone has exactly 9 digits
+      Alert.alert('Phone number must be exactly 9 digits.');
+      return;
+    }
+
     
     // If validation passes, navigate to the next page
     navigation.navigate('Signup', { 

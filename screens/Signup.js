@@ -66,6 +66,12 @@ const Signup = ({ navigation }) => {
       alert('Please fill in all fields and agree to the terms and conditions.');
       return;
     }
+
+     // Check if password length is at least 6 characters
+     if (password.length !== 6) {
+      alert('Password must be exactly 6 characters long.');
+      return;
+    }
     
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
