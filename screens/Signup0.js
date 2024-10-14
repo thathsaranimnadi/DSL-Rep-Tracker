@@ -30,7 +30,7 @@ const Signup = ({ navigation }) => {
       return;
     }
     if (phone.length !== 9) { // Check if phone has exactly 9 digits
-      Alert.alert('Please Enter Valid Mobile number.');
+      Alert.alert('Please enter a valid mobile number.');
       return;
     }
 
