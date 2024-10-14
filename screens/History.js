@@ -56,11 +56,6 @@ const History = () => {
       if (filteredSalesReps.length === 0) {
         alert("No sales reps found");
         return;
-        setSalesRepName('');
-        setDepartment('');
-        setFromDate(new Date());
-        setToDate(new Date());
-        return;
       }
 
       const salesRepData = [];
@@ -139,7 +134,7 @@ const History = () => {
           onValueChange={(itemValue) => setDepartment(itemValue)}
           style={styles.picker}
         >
-          <Picker.Item label="Select Department" value="" />
+          <Picker.Item label="Select the Department" value="" color= "rgba(0, 0, 0, 0.4)" />
           <Picker.Item label="Tyre" value="Tyre" />
           <Picker.Item label="Energy" value="Energy" />
           <Picker.Item label="Auto-Parts" value="Auto-Parts" />
@@ -306,7 +301,7 @@ const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
-    fontSize: 18,
+    fontSize: 17,
     marginLeft: 10,
   },
   pickerContainer: {
