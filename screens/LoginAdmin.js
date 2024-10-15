@@ -27,6 +27,20 @@ const LoginAdmin = ({ navigation }) => {
   }, []);
 
   const loginWithEmailAndPassword = async () => {
+
+    if (!email.trim() && !password.trim()) {
+      alert('Please enter both email and password');
+      return;
+    }
+    else if (!email.trim()){
+      alert('Please enter the email');
+      return;
+    }
+    else if (!password.trim()){
+      alert('Please enter the password');
+      return;
+    }
+
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
