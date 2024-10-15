@@ -33,8 +33,8 @@ const Password = () => {
             });
         } catch (error) {
             // Display any errors that occur during the process
-            console.log('Error updating password:', error.message);
-            alert(error.message);
+            console.log('Enter your password correctly');
+            alert('Enter your password correctly');
         }
     };
 
@@ -61,7 +61,7 @@ const Password = () => {
                 left={<TextInput.Icon icon="lock" />}
                 right={
                     <TextInput.Icon
-                        icon={showCurrentPassword ? "eye" : "eye-off"}
+                        icon={showCurrentPassword ? "eye-off" : "eye"}
                         onPress={() => setShowCurrentPassword(!showCurrentPassword)}
                     />
                 }
@@ -77,7 +77,7 @@ const Password = () => {
                 left={<TextInput.Icon icon="lock-outline" />}
                 right={
                     <TextInput.Icon
-                        icon={showNewPassword ? "eye" : "eye-off"}
+                        icon={showCurrentPassword ? "eye-off" : "eye"}
                         onPress={() => setShowNewPassword(!showNewPassword)}
                     />
                 }
