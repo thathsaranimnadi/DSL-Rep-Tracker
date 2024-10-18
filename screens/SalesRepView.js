@@ -82,7 +82,7 @@ export default function SalesRepView() {
       // Start tracking the location in the background every 15 minutes
       await Location.startLocationUpdatesAsync('background-location-task', {
         accuracy: Location.Accuracy.High,
-        timeInterval: 60000, // 1 minutes in milliseconds
+        timeInterval: 900000, // 15 minutes in milliseconds
         distanceInterval: 0, // Receive updates as the user moves
         showsBackgroundLocationIndicator: true,
         foregroundService: {
