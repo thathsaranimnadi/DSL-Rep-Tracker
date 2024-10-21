@@ -7,7 +7,6 @@ import Button from '../components/Button';
 import app from '../firebaseConfig';
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
-
 const LoginRep = ({ navigation }) => {
   const [isPasswordShown, setIsPasswordShown] = useState(false);
   const [email, setEmail] = useState('');
@@ -25,7 +24,7 @@ const LoginRep = ({ navigation }) => {
       return;
     }
     else if (!password.trim()){
-      alert('Please enter the password');
+      alert('Please enter the password');5
       return;
     }
     
@@ -50,13 +49,12 @@ const LoginRep = ({ navigation }) => {
       if (error.code === 'auth/invalid-credential') {
         alert('Invalid Username or Password');
       }
+      if (error.code === 'auth/invalid-email') {
+        alert('That email address is invalid!');
+      }
       console.error("Error during login: ", error);
     }
-    
-
-    
-      
-  };
+};
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>

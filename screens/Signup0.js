@@ -19,7 +19,7 @@ const Signup = ({ navigation }) => {
     const regex = /^(DSL|EKW|RNT)\d{4}$/i;
     return regex.test(id);
   };
-  
+
   const handleNext = () => {
     if (!name || !employeeId || !department || !phone) {
       alert('Please fill in all fields.');
@@ -33,7 +33,6 @@ const Signup = ({ navigation }) => {
       Alert.alert('Please enter a valid mobile number.');
       return;
     }
-
     
     // If validation passes, navigate to the next page
     navigation.navigate('Signup', { 
@@ -53,6 +52,7 @@ const Signup = ({ navigation }) => {
           </Text>
         </View>
 
+        {/* Name input with validation for letters only */}
         <View style={{ marginBottom: 12 }}>
           <Text style={{ fontSize: 16, fontWeight: '400', marginVertical: 8 }}>
             Name
@@ -63,11 +63,16 @@ const Signup = ({ navigation }) => {
               placeholderTextColor='rgba(0, 0, 0, 0.5)'
               style={styles.input}
               value={name}
-              onChangeText={setName}
+              onChangeText={(text) => {
+                // Allow only letters and spaces
+                const validName = text.replace(/[^a-zA-Z\s]/g, '');
+                setName(validName);
+              }}
             />
           </View>
         </View>
 
+        {/* Employee ID input */}
         <View style={{ marginBottom: 12 }}>
           <Text style={{ fontSize: 16, fontWeight: '400', marginVertical: 8 }}>
             Employee ID
@@ -83,6 +88,7 @@ const Signup = ({ navigation }) => {
           </View>
         </View>
 
+        {/* Department picker */}
         <View style={{ marginBottom: 12 }}>
           <Text style={{ fontSize: 16, fontWeight: '400', marginVertical: 8 }}>
             Department
@@ -105,6 +111,7 @@ const Signup = ({ navigation }) => {
           </View>
         </View>
 
+        {/* Mobile Number input with numeric validation */}
         <View style={{ marginBottom: 12 }}>
           <Text style={{ fontSize: 16, fontWeight: '400', marginVertical: 8 }}>
             Mobile Number
@@ -117,8 +124,12 @@ const Signup = ({ navigation }) => {
               keyboardType="numeric"
               style={styles.phoneInput}
               value={phone}
-              onChangeText={setPhone}
-              maxLength={9} // Assuming 9 digits after the prefix
+              onChangeText={(text) => {
+                // Ensure the input is numeric and avoid leading zero
+                const validPhone = text.replace(/[^0-9]/g, '').slice(0, 9); 
+                setPhone(validPhone);
+              }}
+              maxLength={9} // Limit to 9 digits
             />
           </View>
         </View>
@@ -185,7 +196,6 @@ const styles = StyleSheet.create({
     borderRightWidth: 1,
     borderRightColor: COLORS.grey,
     height: '100%',
-    paddingRight:'1'
   },
   phoneInput: {
     width: '80%',
