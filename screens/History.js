@@ -257,12 +257,14 @@ const History = () => {
       >
         <View style={styles.modalBackground}>
           <View style={styles.modalContainer}>
+            
             <FlatList
-              contentContainerStyle={styles.resultsContainer}
+             
               data={locationHistory}
               keyExtractor={(item, index) => index.toString()}
               renderItem={renderItem}
             />
+          
             <Button
               mode="contained"
               onPress={() => setModalVisible(false)}
@@ -393,6 +395,9 @@ const styles = StyleSheet.create({
     width: '100%',
     padding: 10,
   },
+ 
+  
+  
 });
 
 export default History;

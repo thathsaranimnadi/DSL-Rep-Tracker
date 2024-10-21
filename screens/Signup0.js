@@ -112,14 +112,22 @@ const Signup = ({ navigation }) => {
           <View style={styles.phoneContainer}>
             <Text style={styles.phoneCode}>+94</Text>
             <TextInput
-              placeholder="Enter your Mobile number"
-              placeholderTextColor='rgba(0, 0, 0, 0.5)'
-              keyboardType="numeric"
-              style={styles.phoneInput}
-              value={phone}
-              onChangeText={setPhone}
-              maxLength={9} // Assuming 9 digits after the prefix
-            />
+  placeholder="Enter your Mobile number"
+  placeholderTextColor='rgba(0, 0, 0, 0.5)'
+  keyboardType="numeric"
+  style={styles.phoneInput}
+  value={phone}
+  onChangeText={(text) => {
+    // Prevent 0 from being the first digit
+    if (text.length === 1 && text === '0') {
+      setPhone(''); // Clear input if 0 is entered as the first digit
+    } else {
+      setPhone(text); // Set the phone input value normally
+    }
+  }}
+  maxLength={9} // Limit to 9 digits
+/>
+
           </View>
         </View>
 

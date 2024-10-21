@@ -64,6 +64,9 @@ const LoginAdmin = ({ navigation }) => {
       if (error.code === 'auth/invalid-credential') {
         alert('Invalid Username or Password');
       }
+      if (error.code === 'auth/invalid-email') {
+        alert('That email address is invalid!');
+      }
       console.error("Error during login: ", error);
     }
   };
