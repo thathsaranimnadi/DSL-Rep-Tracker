@@ -60,13 +60,13 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 20,
+    padding: 30,
     backgroundColor: '#fffbf2',
     
   },
   image: {
-    width: 200,
-    height: 200,
+    width: 300,
+    height: 300,
     marginBottom: 20,
   },
   input: {
@@ -85,6 +85,8 @@ const styles = StyleSheet.create({
     textDecorationLine: 'underline',
     justifyContent: 'flex-end',
     paddingBottom: 20,
+    fontSize: 17,
+    
     
   },
   sentence: {
@@ -94,7 +96,7 @@ const styles = StyleSheet.create({
 
   sentenceText: {
     fontSize: 16,
-    marginBottom: 10,
+    marginBottom: 20,
     color: '#a9a9a9',
     textAlign: 'center'
   },
@@ -108,7 +110,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   button: {
-    backgroundColor: '#daa520',  // You can change the color as per your design
+    backgroundColor: '#daa520',
     paddingVertical: 12,
     paddingHorizontal: 30,
     borderRadius: 10,
@@ -116,8 +118,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center', // Centers the text vertically
     width: '100%',
     marginBottom: 10,  // To provide space below the button
-    borderColor:'black',
-    borderWidth: 2,
+    
     
   },
   buttonText: {

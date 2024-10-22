@@ -138,7 +138,7 @@ const Signup = ({ navigation }) => {
           onPress={handleNext}
           title="Next"
           filled
-          style={{ marginTop: 18, marginBottom: 4, backgroundColor: '#daa520', borderColor: '#000000' }}
+          style={{ marginTop: 18, marginBottom: 4, backgroundColor: '#daa520' }}
         />
 
         <View style={styles.loginOptionsContainer}>
