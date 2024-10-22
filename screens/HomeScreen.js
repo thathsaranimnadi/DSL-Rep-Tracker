@@ -181,7 +181,6 @@ const styles = StyleSheet.create({
     },
     welcomeText: {
         color: '#000000',
-        marginTop: 75,
         fontSize: 30,
         marginBottom: 5,
     },
@@ -193,6 +192,7 @@ const styles = StyleSheet.create({
         marginTop: 5,
         flexDirection: 'row',
         justifyContent: 'space-between',
+    
     },
     searchInput: {
         fontSize: 18,
@@ -201,7 +201,8 @@ const styles = StyleSheet.create({
     homeContainer: {
         backgroundColor: '#070738',
         height: 111,
-        padding: 20,
+        paddingTop: 15,
+        paddingBottom: 30,
     },
     mapContainer: {
         flex: 1,
@@ -214,7 +215,7 @@ const styles = StyleSheet.create({
     map: {
         width: '100%',
         height: '100%',
-        marginTop: 40,
+        marginTop: 0,
     },
     infoContainer: {
         

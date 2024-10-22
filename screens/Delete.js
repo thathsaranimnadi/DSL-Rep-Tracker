@@ -140,7 +140,7 @@ const styles = StyleSheet.create({
         borderColor: 'black',
     },
     deleteb: {
-        backgroundColor: "#070738",
+        backgroundColor: 'red',
         width: 100,
         alignSelf: 'flex-end',
         borderBottomColor: '#101010',
