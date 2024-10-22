@@ -88,11 +88,11 @@ const styles = StyleSheet.create({
     subtitleText: {
         fontSize: 55,
         fontWeight: '800',
-        color: 'black',
+        color: '#2F4F4F',
         textAlign: 'center',
         marginTop: 10,
-        textShadowOffset: { width: 5, height: 6 },
-        textShadowRadius: 10,
+        //textShadowOffset: { width: 5, height: 6 },
+        //textShadowRadius: 10,
     },
     buttonContainer: {
         marginTop: 'auto',
@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
         paddingBottom: 50,
     },
     joinButton: {
-        backgroundColor: '#daa520',
+        backgroundColor: '#DAA520',
         padding: 6,
         borderRadius: 150,
         alignItems: 'center',
@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
     },
     loginButton: {
         fontSize: 16,
-        color: '#daa520', 
+        color: '#2F4F4F', 
         fontWeight: "bold",
         marginLeft: 4,
         marginVertical: 1,

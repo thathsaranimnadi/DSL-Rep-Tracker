@@ -287,10 +287,10 @@ const styles = StyleSheet.create({
   },
   image: {
     width: '100%',
-    height: 170,
+    height: 260,
     resizeMode: 'contain',
     marginBottom: 30,
-    marginTop: 10,
+    
   },
   inputContainer: {
     flexDirection: 'row',
@@ -357,6 +357,10 @@ const styles = StyleSheet.create({
   searchButton: {
     marginTop: 15,
     backgroundColor: 'black',
+    width:290,
+    justifyContent:'center',
+    alignSelf: 'center',
+    
     
   },
   modalBackground: {
