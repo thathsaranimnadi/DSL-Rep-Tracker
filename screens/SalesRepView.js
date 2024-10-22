@@ -192,8 +192,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   animation: {
-    width: 100,
-    height: 100,
+    width: 400,
+    height: 300,
     marginBottom: 20,
     marginTop: 10,
   },

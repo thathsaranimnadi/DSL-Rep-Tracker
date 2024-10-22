@@ -172,7 +172,6 @@ const styles = {
   loginButton: {
     marginTop: 20,
     backgroundColor: '#daa520',
-    borderColor: 'black',
   },
   signupText: {
     fontSize: 16,
