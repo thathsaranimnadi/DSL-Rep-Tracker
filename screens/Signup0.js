@@ -44,10 +44,10 @@ const Signup = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#ADD8E6' }}>
       <View style={{ flex: 1, marginHorizontal: 22 }}>
         <View style={{ marginVertical: 22 }}>
-          <Text style={{ fontSize: 22, fontWeight: 'bold', marginVertical: 12, color: '#2F4F4F' }}>
+          <Text style={{ fontSize: 22, fontWeight: 'bold', marginVertical: 12, color: '#070738' }}>
             Create Account
           </Text>
         </View>
@@ -138,7 +138,7 @@ const Signup = ({ navigation }) => {
           onPress={handleNext}
           title="Next"
           filled
-          style={{ marginTop: 18, marginBottom: 4, backgroundColor: '#daa520' }}
+          style={{ marginTop: 18, marginBottom: 4, backgroundColor: '#070738' }}
         />
 
         <View style={styles.loginOptionsContainer}>
@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
   inputContainer: {
     width: '100%',
     height: 48,
-    borderColor: COLORS.black,
+    borderColor: '#070738',
     borderWidth: 1,
     borderRadius: 8,
     justifyContent: 'center',
@@ -173,7 +173,7 @@ const styles = StyleSheet.create({
   pickerContainer: {
     width: '100%',
     height: 48,
-    borderColor: COLORS.black,
+    borderColor: '#070738',
     borderWidth: 1,
     borderRadius: 8,
     justifyContent: 'center',
@@ -181,7 +181,7 @@ const styles = StyleSheet.create({
   phoneContainer: {
     width: '100%',
     height: 48,
-    borderColor: COLORS.black,
+    borderColor: '#070738',
     borderWidth: 1,
     borderRadius: 8,
     flexDirection: 'row',
@@ -192,9 +192,9 @@ const styles = StyleSheet.create({
     width: '10%',
     lineHeight: 48,
     fontSize: 16,
-    color: COLORS.black,
+    color: 'black',
     borderRightWidth: 1,
-    borderRightColor: COLORS.grey,
+    borderRightColor: 'grey',
     height: '100%',
   },
   phoneInput: {
@@ -208,7 +208,7 @@ const styles = StyleSheet.create({
   },
   loginText: {
     fontSize: 16,
-    color: COLORS.black,
+    color: 'black',
     marginBottom: 12,
   },
   loginButtonContainer: {
@@ -216,7 +216,7 @@ const styles = StyleSheet.create({
   },
   loginButton: {
     fontSize: 16,
-    color: '#2F4F4F',
+    color: '#070738',
     fontWeight: 'bold',
     textAlign: 'center',
   },

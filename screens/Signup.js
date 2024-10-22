@@ -110,7 +110,7 @@ const Signup = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#ADD8E6' }}>
       <View style={{ flex: 1, marginHorizontal: 22 }}>
         
         <View style={{ marginBottom: 12 }}>
@@ -244,7 +244,7 @@ const styles = StyleSheet.create({
   signupButton: {
     marginTop: 18,
     marginBottom: 4,
-    backgroundColor: '#daa520',
+    backgroundColor: '#070738',
     borderColor: '#000000',
   },
   divider: {
@@ -269,7 +269,7 @@ const styles = StyleSheet.create({
   },
   loginButton: {
     fontSize: 16,
-    color: '#2F4F4F', 
+    color: '#070738', 
     fontWeight: "bold",
   },
 });
