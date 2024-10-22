@@ -114,7 +114,7 @@ export default function Delete() {
 
 const styles = StyleSheet.create({
     BG: {
-        backgroundColor: '#daa520',
+        backgroundColor: '#ADD8E6',
         flex: 1,
         paddingTop: 20,
         paddingHorizontal: 16,
@@ -140,7 +140,7 @@ const styles = StyleSheet.create({
         borderColor: 'black',
     },
     deleteb: {
-        backgroundColor: "red",
+        backgroundColor: "#070738",
         width: 100,
         alignSelf: 'flex-end',
         borderBottomColor: '#101010',
