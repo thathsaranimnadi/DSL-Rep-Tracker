@@ -19,13 +19,13 @@ const styles = StyleSheet.create({
     drawerHeader: {
         alignItems: 'center',
         marginVertical: 20,
-        backgroundColor:'#daa520',
+        backgroundColor:'#f0f0f0',
         height:150,
     },
     profileImage: {
-        width: 100,
-        height: 100,
-        borderRadius: 50,
+        width: 110,
+        height: 145,
+        
         marginTop:22,
     },
     

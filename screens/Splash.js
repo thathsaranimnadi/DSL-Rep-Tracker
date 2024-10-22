@@ -16,7 +16,7 @@ const Splash = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Animatable.Image
-        source={require('../assets/OIP.jpg')} 
+        source={require('../assets/dsl.png')} 
         style={styles.logo}
         duration={2000}
         animation="zoomIn"
@@ -36,10 +36,8 @@ const styles = StyleSheet.create({
   },
   logo: {
     width: 150, 
-    height: 150, 
-    borderRadius: 150, 
-    borderColor: '#ffffff', 
-    borderWidth: 1, 
-    borderRadius: 75, 
+    height: 200, 
+    
+    
   }
 });
