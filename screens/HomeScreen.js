@@ -199,7 +199,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#ffffff'
     },
     homeContainer: {
-        backgroundColor: '#daa520',
+        backgroundColor: '#070738',
         height: 111,
         padding: 20,
     },

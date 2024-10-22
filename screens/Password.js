@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 20,
-        backgroundColor: '#daa520',
+        backgroundColor: '#ADD8E6',
         justifyContent: 'center',
     },
     animation: {
@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
     },
     button: {
         marginTop: 10,
-        backgroundColor: 'black', 
+        backgroundColor: '#070738', 
     },
     buttonContent: {
         paddingVertical: 10,

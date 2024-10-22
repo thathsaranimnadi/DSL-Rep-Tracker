@@ -57,7 +57,7 @@ const LoginRep = ({ navigation }) => {
 };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor:'#ADD8E6' }}>
       <View style={{ flex: 1, marginHorizontal: 22 }}>
         <View style={{ marginVertical: 22 }}>
           <Text
@@ -65,7 +65,7 @@ const LoginRep = ({ navigation }) => {
               fontSize: 22,
               fontWeight: 'bold',
               marginVertical: 12,
-              color: '#daa520',
+              color: '#070738',
             }}
           >
             Hey, Welcome Back
@@ -168,7 +168,7 @@ const LoginRep = ({ navigation }) => {
           style={{
             marginTop: 18,
             marginBottom: 4,
-            backgroundColor:'#daa520',
+            backgroundColor:'#070738',
             borderColor:'black',
            
           }}
@@ -188,7 +188,7 @@ const LoginRep = ({ navigation }) => {
             <Text
               style={{
                 fontSize: 16,
-                color: '#2F4F4F',
+                color: '#070738',
                 fontWeight: 'bold',
                 marginLeft: 6,
                 marginTop: 15,

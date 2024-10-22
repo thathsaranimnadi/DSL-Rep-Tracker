@@ -356,7 +356,7 @@ const styles = StyleSheet.create({
   },
   searchButton: {
     marginTop: 15,
-    backgroundColor: '#DAA520',
+    backgroundColor: '#070738',
     width:290,
     justifyContent:'center',
     alignSelf: 'center',

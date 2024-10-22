@@ -79,7 +79,9 @@ const styles = StyleSheet.create({
         height: 400,
         aspectRatio: 1,
         marginRight: 40,
-        marginTop:50
+        marginTop:50,
+        marginBottom:-50
+
     },
     textContainer: {
         paddingHorizontal: 10,
@@ -91,6 +93,7 @@ const styles = StyleSheet.create({
         fontWeight: '800',
         color: '#070738',
         textAlign: 'center',
+        marginBottom:40
         
         //textShadowOffset: { width: 5, height: 6 },
         //textShadowRadius: 10,

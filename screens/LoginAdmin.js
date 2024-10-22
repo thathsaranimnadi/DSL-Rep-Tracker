@@ -72,11 +72,11 @@ const LoginAdmin = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#ADD8E6' }}>
       <View style={{ flex: 1, paddingHorizontal: 24 }}>
         {/* Welcome Text */}
         <View style={{ marginVertical: 30 }}>
-          <Text style={{ fontSize: 24, fontWeight: 'bold', color: '#daa520' }}>
+          <Text style={{ fontSize: 24, fontWeight: 'bold', color: '#070738' }}>
             Hey, Welcome Back
           </Text>
           <Text style={{ fontSize: 16, color: COLORS.black, marginTop: 6 }}>
@@ -174,11 +174,11 @@ const styles = {
   },
   loginButton: {
     marginTop: 20,
-    backgroundColor: '#daa520',
+    backgroundColor: '#070738',
   },
   signupText: {
     fontSize: 16,
-    color: '#daa520',
+    color: '#070738',
     fontWeight: 'bold',
     marginLeft: 5,
   },
