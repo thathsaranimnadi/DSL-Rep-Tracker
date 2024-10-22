@@ -196,6 +196,7 @@ const styles = StyleSheet.create({
     },
     searchInput: {
         fontSize: 18,
+        backgroundColor: '#ffffff'
     },
     homeContainer: {
         backgroundColor: '#daa520',
