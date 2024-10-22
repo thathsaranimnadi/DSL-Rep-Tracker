@@ -72,7 +72,7 @@ export default Welcome;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#ffffd8',
+        backgroundColor: '#ADD8E6',
         justifyContent: 'center',
     },
     welcome: {
@@ -82,26 +82,26 @@ const styles = StyleSheet.create({
         marginTop:50
     },
     textContainer: {
-        paddingHorizontal: 22,
+        paddingHorizontal: 10,
         alignItems: 'center',
-        marginTop: 10,
+        marginTop: 5,
     },
     subtitleText: {
         fontSize: 55,
         fontWeight: '800',
-        color: '#2F4F4F',
+        color: '#070738',
         textAlign: 'center',
         
         //textShadowOffset: { width: 5, height: 6 },
         //textShadowRadius: 10,
     },
     buttonContainer: {
-        marginTop: 'auto',
+        marginTop: 10,
         paddingHorizontal: 22,
         paddingBottom: 50,
     },
     joinButton: {
-        backgroundColor: '#DAA520',
+        backgroundColor: '#070738',
         padding: 6,
         borderRadius: 150,
         alignItems: 'center',
@@ -123,15 +123,17 @@ const styles = StyleSheet.create({
     },
     loginText: {
         fontSize: 16,
-        color: COLORS.black, 
-        marginBottom: 10
+        color: '#070738', 
+        marginBottom: 10,
+        
     },
     loginButton: {
         fontSize: 16,
-        color: '#2F4F4F', 
+        color: '#070738', 
         fontWeight: "bold",
         marginLeft: 4,
         marginVertical: 1,
-        alignItems: 'center'
+        alignItems: 'center',
+        
     },
 });
