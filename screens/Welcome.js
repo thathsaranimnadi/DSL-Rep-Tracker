@@ -79,18 +79,19 @@ const styles = StyleSheet.create({
         height: 400,
         aspectRatio: 1,
         marginRight: 40,
+        marginTop:50
     },
     textContainer: {
         paddingHorizontal: 22,
         alignItems: 'center',
-        marginTop: 40,
+        marginTop: 10,
     },
     subtitleText: {
         fontSize: 55,
         fontWeight: '800',
         color: '#2F4F4F',
         textAlign: 'center',
-        marginTop: 10,
+        
         //textShadowOffset: { width: 5, height: 6 },
         //textShadowRadius: 10,
     },
