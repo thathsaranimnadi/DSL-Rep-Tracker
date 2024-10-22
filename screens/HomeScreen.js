@@ -209,7 +209,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     mapContainerWithInfo: {
-        flex: 0.6, 
+        flex: 1, 
     },
     map: {
         width: '100%',
@@ -217,8 +217,9 @@ const styles = StyleSheet.create({
         marginTop: 40,
     },
     infoContainer: {
+        
         maxHeight: 300, // Set maximum height for the info container
-        padding: 10,
+        padding: 20,
         backgroundColor: '#fff',
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,

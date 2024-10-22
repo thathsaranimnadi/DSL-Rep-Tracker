@@ -71,7 +71,7 @@ const LoginRep = ({ navigation }) => {
             Hey, Welcome Back
           </Text>
 
-          <Text style={{ fontSize: 16, color: COLORS.black }}>
+          <Text style={{ fontSize: 16, color: '#2F4F4F' }}>
             Login as a Sales Representative
           </Text>
         </View>
@@ -188,7 +188,7 @@ const LoginRep = ({ navigation }) => {
             <Text
               style={{
                 fontSize: 16,
-                color: '#daa520',
+                color: '#2F4F4F',
                 fontWeight: 'bold',
                 marginLeft: 6,
                 marginTop: 15,

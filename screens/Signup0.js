@@ -47,7 +47,7 @@ const Signup = ({ navigation }) => {
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
       <View style={{ flex: 1, marginHorizontal: 22 }}>
         <View style={{ marginVertical: 22 }}>
-          <Text style={{ fontSize: 22, fontWeight: 'bold', marginVertical: 12, color: COLORS.black }}>
+          <Text style={{ fontSize: 22, fontWeight: 'bold', marginVertical: 12, color: '#2F4F4F' }}>
             Create Account
           </Text>
         </View>
@@ -216,7 +216,7 @@ const styles = StyleSheet.create({
   },
   loginButton: {
     fontSize: 16,
-    color: '#daa520',
+    color: '#2F4F4F',
     fontWeight: 'bold',
     textAlign: 'center',
   },

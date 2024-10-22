@@ -269,7 +269,7 @@ const styles = StyleSheet.create({
   },
   loginButton: {
     fontSize: 16,
-    color: '#daa520', 
+    color: '#2F4F4F', 
     fontWeight: "bold",
   },
 });
