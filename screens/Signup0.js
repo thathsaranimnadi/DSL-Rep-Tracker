@@ -22,15 +22,15 @@ const Signup = ({ navigation }) => {
 
   const handleNext = () => {
     if (!name || !employeeId || !department || !phone) {
-      alert('Please fill in all fields.');
+      alert('Please fill in all fields !');
       return;
     }
     if (!isValidEmployeeId(employeeId)) {
-      Alert.alert('Invalid Employee ID');
+      Alert.alert('Invalid Employee ID !');
       return;
     }
     if (phone.length !== 9) { // Check if phone has exactly 9 digits
-      Alert.alert('Please enter a valid mobile number.');
+      Alert.alert('Please enter a valid mobile number !');
       return;
     }
     

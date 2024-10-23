@@ -63,15 +63,13 @@ const Signup = ({ navigation }) => {
   // Handle email/password sign-up
   const handleSignup = () => {
     if (!email || !password || !role) {
-      alert('Please fill in all fields and agree to the terms and conditions.');
+      alert('Please fill all fields !');
       return;
     }
 
-     // Check if password length is at least 6 characters
-     if (password.length <= 6) {
-      alert('Password must be greater than 6 characters.');
-      return;
-    }
+    /* 
+    
+    */
     
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
@@ -80,7 +78,7 @@ const Signup = ({ navigation }) => {
         //Email verification
         sendEmailVerification(userCredential.user)
         .then(() => {
-          alert('A verification email has been sent to your email address. Please verify before logging in.');
+          alert('A verification email has been sent to your email address. Please verify before logging in !');
 
           // Save user data to Firestore based on the role
           if (role === 'sales_rep') {
@@ -98,11 +96,17 @@ const Signup = ({ navigation }) => {
       })
       .catch(error => {
         if (error.code === 'auth/email-already-in-use') {
-          alert('That email address is already in use!');
+          alert('The email address is already in use !');
         }
 
         if (error.code === 'auth/invalid-email') {
-          alert('That email address is invalid!');
+          alert('Invalid Email Address !');
+        }
+
+        // Check if password length is at least 6 characters
+        if (password.length <= 6) {
+          alert('Password must be greater than 5 characters !');
+      
         }
 
         console.error(error);

@@ -29,15 +29,15 @@ const LoginAdmin = ({ navigation }) => {
   const loginWithEmailAndPassword = async () => {
 
     if (!email.trim() && !password.trim()) {
-      alert('Please enter both email and password');
+      alert('Please enter both email and password!');
       return;
     }
     else if (!email.trim()){
-      alert('Please enter the email');
+      alert('Please enter the email!');
       return;
     }
     else if (!password.trim()){
-      alert('Please enter the password');
+      alert('Please enter the password!');
       return;
     }
 
@@ -54,18 +54,18 @@ const LoginAdmin = ({ navigation }) => {
           await AsyncStorage.setItem('savedEmail', email);
           navigation.navigate("HomeScreen");
         } else {
-          alert('You cannot login as an admin');
+          alert('You cannot login as an admin !');
         }
       } else {
-        alert('Please verify your email before logging in.');
+        alert('Please verify your email before logging in !');
         auth.signOut();
       }
     } catch (error) {
       if (error.code === 'auth/invalid-credential') {
-        alert('Invalid Username or Password');
+        alert('Invalid Username or Password !');
       }
       if (error.code === 'auth/invalid-email') {
-        alert('That email address is invalid!');
+        alert('Invalid Email Address !');
       }
       console.error("Error during login: ", error);
     }

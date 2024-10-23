@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Text, Image } from 'react-native';
+import { View, StyleSheet, Text, Image, Alert } from 'react-native';
 import { TextInput, Button } from 'react-native-paper';
 import { getAuth, updatePassword, reauthenticateWithCredential, EmailAuthProvider } from "firebase/auth";
 import app from '../firebaseConfig';
@@ -15,26 +15,50 @@ const Password = () => {
     const navigation = useNavigation();
 
     const handleChangePassword = async () => {
+
+        if (!currentPassword || !newPassword) {
+            Alert.alert('Error', 'Please fill in all fields !');
+            return;
+        }
+
+        if (newPassword.length < 6) {
+            Alert.alert('Error', 'New password must be at least 6 characters long !');
+            return;
+        }
+
         try {
             // Re-authenticate user with the current password
             await reauthenticate(currentPassword);
+
             // Update password
             await updatePassword(user, newPassword);
+
             // Notify user of successful password change
-            alert('Password changed successfully');
-            console.log('Password changed successfully');
+            alert('Password changed successfully !');
+            console.log('Password changed successfully !');
+
             // Clear the password fields
             setCurrentPassword('');
             setNewPassword('');
+
             // Reset the navigation stack and navigate to HomeScreen
             navigation.reset({
                 index: 0,
                 routes: [{ name: 'HomeScreen' }],
             });
+            
+
+            
         } catch (error) {
-            // Display any errors that occur during the process
-            console.log('Enter your password correctly');
-            alert('Enter your password correctly');
+            
+            if (error.code === 'auth/wrong-password') {
+                Alert.alert('Error', 'The current password is incorrect !');
+            } else {
+                Alert.alert('Error', 'Failed to change password. Please try again !');
+            }
+            
+
+            
         }
     };
 
