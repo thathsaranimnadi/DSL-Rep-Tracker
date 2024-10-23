@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 30,
-    backgroundColor: '#fffbf2',
+    backgroundColor: '#ADD8E6',
     
   },
   image: {
@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
   input: {
     width: '100%',
     height: 50,
-    borderColor: '#ccc',
+    borderColor: 'black',
     borderWidth: 1,
     borderRadius: 5,
     paddingHorizontal: 10,
@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
   sentenceText: {
     fontSize: 16,
     marginBottom: 20,
-    color: '#a9a9a9',
+    color: '#070738',
     textAlign: 'center'
   },
   question: {
@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   button: {
-    backgroundColor: '#daa520',
+    backgroundColor: '#070738',
     paddingVertical: 12,
     paddingHorizontal: 30,
     borderRadius: 10,
