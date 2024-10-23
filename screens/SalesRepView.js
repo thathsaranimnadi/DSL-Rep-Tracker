@@ -135,15 +135,43 @@ export default function SalesRepView() {
 
   // Network disconnected monitoring
   useEffect(() => {
-    const unsubscribeNetInfo = NetInfo.addEventListener(state => {
+    const unsubscribeNetInfo = NetInfo.addEventListener(async (state) => {
       if (!state.isConnected) {
         console.log('Network is disconnected');
-        // Optionally notify the admin
+        await sendNotificationToAdmin('Network disconnected');
       }
     });
 
     return () => unsubscribeNetInfo();
   }, []);
+
+  // Location services monitoring
+  useEffect(() => {
+    const checkLocationServices = async () => {
+      const isLocationEnabled = await Location.hasServicesEnabledAsync();
+      if (!isLocationEnabled) {
+        console.log('Location services turned off');
+        await sendNotificationToAdmin('Location services turned off');
+      }
+    };
+
+    const intervalId = setInterval(checkLocationServices, 60000); // Check every 1 minute
+    return () => clearInterval(intervalId);
+  }, []);
+
+  // Send notification to admin
+  const sendNotificationToAdmin = async (message) => {
+    const adminRef = collection(db, 'AdminNotifications');
+    await addDoc(adminRef, {
+      salesRepId: uid,
+      message,
+      timestamp: Timestamp.now(),
+      Name: salesRepName,
+      Department: department
+
+    });
+    console.log('Admin notified:', message);
+  };
 
   // Handle back button press
   useEffect(() => {

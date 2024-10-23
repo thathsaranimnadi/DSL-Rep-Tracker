@@ -50,14 +50,14 @@ const Welcome = ({ navigation }) => {
                 </View>
                     
                 {/* Row 2 */}
-                <View style={styles.loginButton}>
+                <View style={styles.text}>
                     <Pressable onPress={() => navigation.navigate("LoginAdmin")}>
                         <Text style={styles.loginButton}>Login as an Admin</Text>
                     </Pressable>
                 </View>
 
                 {/* Row 3 */}
-                <View style={styles.loginButton}>
+                <View style={styles.text}> 
                     <Pressable onPress={() => navigation.navigate("LoginRep")}>
                         <Text style={styles.loginButton}>Login as a Sales Representative</Text>
                     </Pressable>
@@ -129,6 +129,7 @@ const styles = StyleSheet.create({
         color: '#070738', 
         marginBottom: 10,
         
+        
     },
     loginButton: {
         fontSize: 16,
@@ -138,5 +139,15 @@ const styles = StyleSheet.create({
         marginVertical: 1,
         alignItems: 'center',
         
+        justifyContent:'center'
     },
+    text:{
+        alignItems: 'center',
+        borderWidth:1,
+        borderColor:'black',
+        marginVertical: 4,
+        borderRadius:19,
+        width:245,
+        alignSelf:'center',
+    }
 });

@@ -3,8 +3,10 @@ import { View, Text, StyleSheet, Dimensions, ScrollView } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
+import NetInfo from '@react-native-community/netinfo';
 import app from '../firebaseConfig';
 import { getFirestore, collection, getDocs } from 'firebase/firestore';
+
 
 // Header Component
 const Header = ({ onSearch }) => {
@@ -31,6 +33,8 @@ const HomeScreen = () => {
     const [filteredSalesReps, setFilteredSalesReps] = useState([]);
     const [selectedRep, setSelectedRep] = useState(null);
     const [searchQuery, setSearchQuery] = useState(''); // Track the search query
+    const [isDataEnabled, setIsDataEnabled] = useState(true); // Track if data is enabled
+    const [isLocationEnabled, setIsLocationEnabled] = useState(true); // Track if location is enabled
 
     // Fetch data from Firestore
     const setData = async () => {
@@ -48,9 +52,46 @@ const HomeScreen = () => {
             console.error('Error fetching data: ', error);
         }
     };
+     // Monitor data and location status
+     const monitorDataAndLocation = () => {
+        // Monitor network status
+        const unsubscribeNetInfo = NetInfo.addEventListener(state => {
+            if (!state.isConnected || !state.isInternetReachable) {
+                setIsDataEnabled(false);
+                notifyAdmin('Data disabled');
+            } else {
+                setIsDataEnabled(true);
+            }
+        });
+
+        // Monitor location status
+        const checkLocationStatus = async () => {
+            const { status } = await Location.getForegroundPermissionsAsync();
+            if (status !== 'granted') {
+                setIsLocationEnabled(false);
+                notifyAdmin('Location disabled');
+            } else {
+                setIsLocationEnabled(true);
+            }
+        };
+
+        checkLocationStatus();
+
+        // Cleanup function
+        return () => {
+            unsubscribeNetInfo(); 
+        };
+    };
+
+    // Notify admin when data or location is disabled
+    const notifyAdmin = (message) => {
+        Alert.alert('Warning', `Sales rep has turned off ${message}`);
+        // Here, you can add Firebase Cloud Messaging (FCM) to send a push notification to the admin
+    };
 
     useEffect(() => {
         setData();
+        monitorDataAndLocation();
     }, []);
 
     const handleSearch = (query) => {
