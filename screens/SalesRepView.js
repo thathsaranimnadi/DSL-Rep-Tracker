@@ -86,8 +86,7 @@ export default function SalesRepView() {
         distanceInterval: 0, // Receive updates as the user moves
         showsBackgroundLocationIndicator: true,
         foregroundService: {
-          notificationTitle: 'Location Tracking',
-          notificationBody: 'Your location is being tracked in the background.',
+          notificationTitle: 'Douglas & Sons (pvt) Ltd'
         },
         pausesUpdatesAutomatically: false,
       });
@@ -175,7 +174,7 @@ export default function SalesRepView() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#ffffd8',
+    backgroundColor: '#ADD8E6',
     alignItems: 'center',
     justifyContent: 'center',
     padding: 20,
