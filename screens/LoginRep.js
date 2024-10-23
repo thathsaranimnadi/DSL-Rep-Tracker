@@ -16,15 +16,15 @@ const LoginRep = ({ navigation }) => {
   const loginWithEmailAndPassword = async () => {
 
     if (!email.trim() && !password.trim()) {
-      alert('Please enter both email and password');
+      alert('Please enter both email and password !');
       return;
     }
     else if (!email.trim()){
-      alert('Please enter the email');
+      alert('Please enter the email !');
       return;
     }
     else if (!password.trim()){
-      alert('Please enter the password');5
+      alert('Please enter the password !');5
       return;
     }
     
@@ -39,7 +39,7 @@ const LoginRep = ({ navigation }) => {
       
       }
       else{
-        alert('Please verify your email before logging in.');
+        alert('Please verify your email before logging in !');
         // Optionally sign the user out
         auth.signOut();
       }
@@ -47,10 +47,10 @@ const LoginRep = ({ navigation }) => {
 
     catch (error) {
       if (error.code === 'auth/invalid-credential') {
-        alert('Invalid Username or Password');
+        alert('Invalid Username or Password !');
       }
       if (error.code === 'auth/invalid-email') {
-        alert('That email address is invalid!');
+        alert('That email address is invalid !');
       }
       console.error("Error during login: ", error);
     }
