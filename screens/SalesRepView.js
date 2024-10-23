@@ -160,17 +160,17 @@ export default function SalesRepView() {
   }, []);
 
   // Send notification to admin
-  const sendNotificationToAdmin = async (message) => {
+  const sendNotificationToAdmin = async (Message) => {
     const adminRef = collection(db, 'AdminNotifications');
     await addDoc(adminRef, {
-      salesRepId: uid,
-      message,
-      timestamp: Timestamp.now(),
+      SalesRepId: uid,
+      Message,
+      Timestamp: Timestamp.now(),
       Name: salesRepName,
       Department: department
 
     });
-    console.log('Admin notified:', message);
+    console.log('Admin notified:', Message);
   };
 
   // Handle back button press
