@@ -1,8 +1,10 @@
-import { View, Text, Pressable, StyleSheet, Animated, BackHandler } from 'react-native';
+import { View, Text, Pressable, StyleSheet, Animated, BackHandler ,Dimensions} from 'react-native';
 import React, { useRef, useEffect } from 'react';
 import COLORS from '../constants/colors';
 import LottieView from 'lottie-react-native';
 import { useIsFocused } from '@react-navigation/native'; // Import the useIsFocused hook
+
+const { width } = Dimensions.get('window');
 
 const Welcome = ({ navigation }) => {
     const animation = useRef(null);
@@ -128,8 +130,6 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: '#070738', 
         marginBottom: 10,
-        
-        
     },
     loginButton: {
         fontSize: 16,
@@ -138,16 +138,15 @@ const styles = StyleSheet.create({
         marginLeft: 4,
         marginVertical: 1,
         alignItems: 'center',
-        
         justifyContent:'center'
     },
     text:{
         alignItems: 'center',
         borderWidth:1,
         borderColor:'black',
-        marginVertical: 4,
+        marginVertical: 7.5,
         borderRadius:19,
-        width:245,
+        width: width * 0.8,
         alignSelf:'center',
     }
 });
