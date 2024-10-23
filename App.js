@@ -10,6 +10,7 @@ import Splash from './screens/Splash';
 import Signup0 from './screens/Signup0';
 import HomeDrawer from './components/HomeDrawer'; 
 import  ChangePassword  from './screens/ChangePassword';
+import Notification from './screens/Notification';
 import Password from './screens/Password';
 import HomeScreen from './screens/HomeScreen';
 
@@ -28,6 +29,7 @@ export default function App() {
                 <Stack.Screen name="Signup" component={Signup} options={{ headerShown: false }} />
                 <Stack.Screen name="SalesRepView" component={SalesRepView} options={{ headerShown: false }} />
                 <Stack.Screen name="HomeScreen" component={HomeDrawer} options={{ headerShown: false }} />
+                <Stack.Screen name="Notification" component={Notification} options={{ headerShown: false }} />
             </Stack.Navigator>
         </NavigationContainer>
     );

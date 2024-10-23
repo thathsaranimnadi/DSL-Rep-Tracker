@@ -7,6 +7,8 @@ import Splash from "./Splash";
 import HomeScreen from "./HomeScreen";
 import Signup0 from "./Signup0";
 import ChangePassword from "./ChangePassword";
+import Notification from './Notification';
+
 
 
 export {
@@ -19,4 +21,6 @@ export {
     HomeScreen,
     Signup0,
     ChangePassword,
+    Notification,
+ 
 };

@@ -1,0 +1,408 @@
+import React, { useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, Modal, FlatList, StyleSheet, Image } from 'react-native';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import { Button, Card } from 'react-native-paper';
+import { MaterialIcons } from '@expo/vector-icons';
+import { Picker } from '@react-native-picker/picker';
+import { getFirestore, collection, query, where, getDocs } from 'firebase/firestore';
+import app from '../firebaseConfig';
+
+const History = () => {
+  const [salesRepName, setSalesRepName] = useState('');
+  const [department, setDepartment] = useState('');
+  const [fromDate, setFromDate] = useState(new Date());
+  const [toDate, setToDate] = useState(new Date());
+  const [showFromPicker, setShowFromPicker] = useState(false);
+  const [showToPicker, setShowToPicker] = useState(false);
+  const [showFromTimePicker, setShowFromTimePicker] = useState(false);
+  const [showToTimePicker, setShowToTimePicker] = useState(false);
+  const [locationHistory, setLocationHistory] = useState([]);
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const normalizeString = (str) => {
+  return str
+    .toLowerCase()         // Convert to lowercase
+    .replace(/\s+/g, '')   // Remove all spaces
+    .replace(/\./g, '');   // Remove all dots
+};
+
+  const onSearch = async () => {
+    const db = getFirestore(app);
+
+    if (!salesRepName) {
+      alert("Please enter a sales rep name");
+      return;
+    }
+
+    const normalizedInput = normalizeString(salesRepName);
+    const startDate = new Date(fromDate.setHours(0, 0, 0, 0));
+    const endDate = new Date(toDate.setHours(23, 59, 59, 999));
+
+    try {
+      const salesRepQuery = query(
+        collection(db, 'AdminNotifications'),
+        where('Department', '==', department)  // Add filtering by department
+      );
+      
+      const salesRepSnapshot = await getDocs(salesRepQuery);
+  
+
+      const filteredSalesReps = salesRepSnapshot.docs.filter((doc) => {
+        const rep = doc.data();
+        const normalizedRepName = normalizeString(rep.Name); // Normalize the stored name
+        return normalizedRepName.includes(normalizedInput);
+      });
+
+      if (filteredSalesReps.length === 0) {
+        alert("No sales reps found");
+        return;
+      }
+
+      const salesRepData = [];
+      for (const salesRepDoc of filteredSalesReps) {
+        const locationHistoryRef = collection(salesRepDoc.ref, 'AdminNotifications');
+        const historyQuery = query(
+          locationHistoryRef,
+          where('Timestamp', '>=', startDate),
+          where('Timestamp', '<=', endDate)
+        );
+        const historySnapshot = await getDocs(historyQuery);
+
+        if (!historySnapshot.empty) {
+          historySnapshot.forEach((historyDoc) => {
+            const data = historyDoc.data();
+            salesRepData.push({
+              date: data.timestamp.toDate().toLocaleString(),
+              message: data.message || 'No address available',
+              name: data.Name || 'No address available',
+              department: data.Department || 'No address available',
+              
+            });
+          });
+        } else {
+          alert("No location history found for the selected range");
+        }
+      }
+
+      setLocationHistory(salesRepData);
+      setModalVisible(true);
+
+       // Reset state after search
+    setSalesRepName('');
+    setDepartment('');
+    setFromDate(new Date());
+    setToDate(new Date());
+
+
+    } catch (error) {
+      console.error("Error fetching location history:", error);
+      alert("Error fetching location history");
+    }
+  };
+
+  const renderItem = ({ item }) => (
+    <Card style={styles.historyItem}>
+      <Card.Content>
+        <Text style={styles.historyDate}>{`Date: ${item.date}`}</Text>
+        <Text style={styles.historyLocation}>{`Message: ${item.message}`}</Text>
+        <Text style={styles.historyLocation}>{`Name: ${item.name}`}</Text>
+        <Text style={styles.historyLocation}>{`Department: ${item.department}`}</Text>
+      </Card.Content>
+    </Card>
+  );
+
+  return (
+    <View style={styles.container}>
+      <Image
+        source={require('../assets/alert.png')}
+        style={styles.image}
+      />
+
+      <View style={styles.inputContainer}>
+        <MaterialIcons name="person-search" size={24} color="#555" />
+        <TextInput
+          style={styles.input}
+          placeholder="Enter the name"
+          value={salesRepName}
+          onChangeText={setSalesRepName}
+        />
+      </View>
+
+      {/* Department Picker */}
+      <View style={styles.pickerContainer}>
+        <Picker
+          selectedValue={department}
+          onValueChange={(itemValue) => setDepartment(itemValue)}
+          style={styles.picker}
+        >
+          <Picker.Item label="Select the Department" value="" color= "rgba(0, 0, 0, 0.4)" />
+          <Picker.Item label="Tyre" value="Tyre" />
+          <Picker.Item label="Energy" value="Energy" />
+          <Picker.Item label="Auto-Parts" value="Auto-Parts" />
+          <Picker.Item label="Ronet" value="Ronet" />
+          <Picker.Item label="Ekway" value="Ekway" />
+          <Picker.Item label="GCR" value="GCR" />
+          <Picker.Item label="Industrial" value="Industrial" />
+        </Picker>
+      </View>
+
+      {/* Date Picker Section */}
+      <View style={styles.sectionContainer}>
+        <Text style={styles.sectionTitle}>Date</Text>
+        <View style={styles.dateTimeRow}>
+          {/* From Date Picker */}
+          <View style={styles.dateTimeContainer}>
+            <Text style={styles.label}>From:</Text>
+            <TouchableOpacity onPress={() => setShowFromPicker(true)} style={styles.dateTimeButton}>
+              <Text>{fromDate.toLocaleDateString()}</Text>
+            </TouchableOpacity>
+            {showFromPicker && (
+              <DateTimePicker
+                value={fromDate}
+                mode="date"
+                display="default"
+                onChange={(event, selectedDate) => {
+                  const currentDate = selectedDate || fromDate;
+                  setShowFromPicker(false);
+                  setFromDate(currentDate);
+                }}
+              />
+            )}
+          </View>
+
+          {/* To Date Picker */}
+          <View style={styles.dateTimeContainer}>
+            <Text style={styles.label}>To:</Text>
+            <TouchableOpacity onPress={() => setShowToPicker(true)} style={styles.dateTimeButton}>
+              <Text>{toDate.toLocaleDateString()}</Text>
+            </TouchableOpacity>
+            {showToPicker && (
+              <DateTimePicker
+                value={toDate}
+                mode="date"
+                display="default"
+                onChange={(event, selectedDate) => {
+                  const currentDate = selectedDate || toDate;
+                  setShowToPicker(false);
+                  setToDate(currentDate);
+                }}
+              />
+            )}
+          </View>
+        </View>
+      </View>
+
+      <View style={styles.divider} />
+
+      {/* Time Picker Section */}
+      <View style={styles.sectionContainer}>
+        <Text style={styles.sectionTitle}>Time</Text>
+        <View style={styles.dateTimeRow}>
+          {/* From Time Picker */}
+          <View style={styles.dateTimeContainer}>
+            <Text style={styles.label}>From:</Text>
+            <TouchableOpacity onPress={() => setShowFromTimePicker(true)} style={styles.dateTimeButton}>
+              <Text>{fromDate.toLocaleTimeString()}</Text>
+            </TouchableOpacity>
+            {showFromTimePicker && (
+              <DateTimePicker
+                value={fromDate}
+                mode="time"
+                display="default"
+                onChange={(event, selectedTime) => {
+                  const currentTime = selectedTime || fromDate;
+                  setShowFromTimePicker(false);
+                  setFromDate(currentTime);
+                }}
+              />
+            )}
+          </View>
+
+          {/* To Time Picker */}
+          <View style={styles.dateTimeContainer}>
+            <Text style={styles.label}>To:</Text>
+            <TouchableOpacity onPress={() => setShowToTimePicker(true)} style={styles.dateTimeButton}>
+              <Text>{toDate.toLocaleTimeString()}</Text>
+            </TouchableOpacity>
+            {showToTimePicker && (
+              <DateTimePicker
+                value={toDate}
+                mode="time"
+                display="default"
+                onChange={(event, selectedTime) => {
+                  const currentTime = selectedTime || toDate;
+                  setShowToTimePicker(false);
+                  setToDate(currentTime);
+                }}
+              />
+            )}
+          </View>
+        </View>
+      </View>
+
+      <Button
+        mode="contained"
+        onPress={onSearch}
+        style={styles.searchButton}
+        icon="magnify"
+      >
+        Search
+      </Button>
+
+      {/* Modal to show search results */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.modalBackground}>
+          <View style={styles.modalContainer}>
+            
+            <FlatList
+             
+              data={locationHistory}
+              keyExtractor={(item, index) => index.toString()}
+              renderItem={renderItem}
+            />
+          
+            <Button
+              mode="contained"
+              onPress={() => setModalVisible(false)}
+              style={styles.closeButton}
+            >
+              Close
+            </Button>
+          </View>
+        </View>
+      </Modal>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+    backgroundColor: '#ADD8E6',
+  },
+  image: {
+    width: '100%',
+    height: 260,
+    resizeMode: 'contain',
+    marginBottom: 30,
+    
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 20,
+    borderColor: '#070738',
+    borderWidth: 1,
+    borderRadius: 5,
+    padding: 10,
+  },
+  input: {
+    flex: 1,
+    fontSize: 17,
+    marginLeft: 10,
+  },
+  pickerContainer: {
+    marginBottom: 20,
+    borderColor: '#070738',
+    borderWidth: 1,
+    borderRadius: 5,
+  },
+  picker: {
+    height: 50,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 5,
+  },
+  sectionContainer: {
+    marginBottom: 20,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    marginBottom: 10,
+    color: '#333',
+    fontWeight: 'bold',
+  },
+  dateTimeRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginRight:10,
+ 
+  },
+  dateTimeContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '48%',
+    marginRight:10,
+    
+  },
+  label: {
+    fontSize: 16,
+    width: 50, // Fixed width for labels to align properly
+   
+  },
+  dateTimeButton: {
+    flex: 1,
+    padding: 9,
+    borderRadius: 5,
+    backgroundColor: '#eee',
+    borderWidth: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  searchButton: {
+    marginTop: 15,
+    backgroundColor: '#070738',
+    width:290,
+    justifyContent:'center',
+    alignSelf: 'center',
+    
+    
+  },
+  modalBackground: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContainer: {
+    width: '100%',
+    maxHeight: '100%',
+    backgroundColor: 'white',
+    borderRadius: 10,
+    padding: 20,
+    
+  },
+  resultsContainer: {
+    paddingBottom: 20,
+    flexGrow: 1,
+    height:'100%'
+  },
+  historyItem: {
+    marginBottom: 10,
+  },
+  historyDate: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  historyLocation: {
+    fontSize: 14,
+    marginTop: 5,
+  },
+  closeButton: {
+    marginTop: 20,
+    backgroundColor: 'black',
+    width: '100%',
+    padding: 10,
+  },
+ 
+  
+  
+});
+
+export default History;

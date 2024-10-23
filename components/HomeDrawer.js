@@ -5,6 +5,7 @@ import History from '../screens/History';
 import Delete from '../screens/Delete';
 import CustomDrawerContent from './CustomDrawerContent';
 import Password from '../screens/Password';
+import Notification from '../screens/Notification';
 
 import { Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
@@ -47,6 +48,7 @@ export default function HomeDrawer() {
             <Drawer.Screen name="History" component={History} />
             <Drawer.Screen name="Delete User" component={Delete} />
             <Drawer.Screen name="Reset Password" component={Password} />
+            <Drawer.Screen name="Notifications" component={Notification} />
             <Drawer.Screen
                 name="Log Out"
                 component={HomeScreen} // Use any component, it won't be displayed
