@@ -11,8 +11,6 @@ import Signup0 from './screens/Signup0';
 import HomeDrawer from './components/HomeDrawer'; 
 import  ChangePassword  from './screens/ChangePassword';
 import Notification from './screens/Notification';
-import Password from './screens/Password';
-import HomeScreen from './screens/HomeScreen';
 
 const Stack = createNativeStackNavigator();
 
