@@ -17,16 +17,19 @@ export default function NotificationHistory() {
 
     const db = getFirestore();
 
+    const normalizeString = (str) => {
+        return str
+          .toLowerCase()         // Convert to lowercase
+          .replace(/\s+/g, '')   // Remove all spaces
+          .replace(/\./g, '');   // Remove all dots
+    };
+
     const fetchFilteredNotifications = async () => {
         try {
             let notificationsRef = collection(db, 'AdminNotifications');
             
             let q = query(notificationsRef);
-
-            // Add filters if the fields are filled
-            if (salesRepName) {
-                q = query(notificationsRef, where('Name', '==', salesRepName));
-            }
+    
             if (department) {
                 q = query(notificationsRef, where('Department', '==', department));
             }
@@ -37,13 +40,23 @@ export default function NotificationHistory() {
                     where('Timestamp', '<=', Timestamp.fromDate(endDate))
                 );
             }
-
+    
+            // Fetch all documents and apply the normalized filter for the sales rep name
             const snapshot = await getDocs(q);
-            const filteredNotifications = snapshot.docs.map(doc => ({
+            let filteredNotifications = snapshot.docs.map(doc => ({
                 id: doc.id,
                 ...doc.data(),
             }));
-
+    
+            // Apply normalization and filtering on the client-side
+            if (salesRepName) {
+                const normalizedInput = normalizeString(salesRepName);
+                filteredNotifications = filteredNotifications.filter((notification) => {
+                    const normalizedRepName = normalizeString(notification.Name);
+                    return normalizedRepName.includes(normalizedInput);
+                });
+            }
+    
             setNotifications(filteredNotifications);
         } catch (error) {
             console.error('Error fetching filtered notifications: ', error);
@@ -97,6 +110,8 @@ export default function NotificationHistory() {
                         mode="date"
                         display="default"
                         onChange={onStartDateChange}
+                        style={styles.text}
+
                     />
                 )}
             </View>
@@ -109,6 +124,7 @@ export default function NotificationHistory() {
                         mode="date"
                         display="default"
                         onChange={onEndDateChange}
+                        style={styles.text}
                     />
                 )}
             </View>
@@ -131,7 +147,7 @@ export default function NotificationHistory() {
                     </View>
                 ))
             ) : (
-                <Text>No notifications found for the selected filters.</Text>
+                <Text style={styles.text}>No notifications found for the selected filters !</Text>
             )}
         </ScrollView>
     );
@@ -144,6 +160,9 @@ const styles = StyleSheet.create({
     },
     input: {
         marginBottom: 10,
+        borderColor: '#070738',
+        borderWidth: 1,
+        borderRadius: 5,
     },
     textInputBg: {
         backgroundColor: '#ADD8E6', // Background color for TextInput
@@ -158,6 +177,7 @@ const styles = StyleSheet.create({
     },
     picker: {
         height: 50,
+        color: 'black'
     },
     filterButton: {
         marginTop: 10,
@@ -173,4 +193,9 @@ const styles = StyleSheet.create({
         fontSize: 14,
         marginBottom: 5,
     },
+    text: {
+        color: '#070738',
+        alignSelf: 'center',
+        paddingTop: 50,
+    }
 });
