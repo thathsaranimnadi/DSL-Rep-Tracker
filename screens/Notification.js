@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity} from 'react-native';
 import { TextInput, Button } from 'react-native-paper';
 import { getFirestore, collection, query, where, getDocs } from 'firebase/firestore';
 import { Timestamp } from 'firebase/firestore';
@@ -56,6 +56,7 @@ export default function NotificationHistory() {
                     return normalizedRepName.includes(normalizedInput);
                 });
             }
+            
     
             setNotifications(filteredNotifications);
         } catch (error) {
@@ -102,42 +103,53 @@ export default function NotificationHistory() {
                 </Picker>
             </View>
 
-            <View>
-                <Button onPress={() => setShowStartDatePicker(true)}>Select Start Date</Button>
-                {showStartDatePicker && (
-                    <DateTimePicker
-                        value={startDate}
-                        mode="date"
-                        display="default"
-                        onChange={onStartDateChange}
-                        style={styles.text}
 
-                    />
-                )}
+            <View style={ styles.date}>
+                <View style={ styles.datePicker}>
+                    <Text>From: </Text>
+                    <TouchableOpacity onPress={() => setShowStartDatePicker(true)} style={styles.dateTimeButton}>
+                        <Text>{startDate ? startDate.toLocaleDateString()  : 'Select Start Date'}</Text>
+                    </TouchableOpacity>
+                    {showStartDatePicker && (
+                        <DateTimePicker
+                            value={startDate}
+                            mode="date"
+                            display="default"
+                            onChange={onStartDateChange}
+                            style={styles.text}
+                        />
+                    )}
+                </View>
+
+                <View style={ styles.datePicker}>
+                    <Text>To: </Text>
+                    <TouchableOpacity onPress={() => setShowEndDatePicker(true)} style={styles.dateTimeButton}>
+                        <Text>{endDate ? endDate.toLocaleDateString() : 'Select End Date'}</Text>
+                    </TouchableOpacity>
+                    {showEndDatePicker && (
+                        <DateTimePicker
+                            value={endDate}
+                            mode="date"
+                            display="default"
+                            onChange={onEndDateChange}
+                            style={styles.text}
+                        />
+                    )}
+                </View>
             </View>
 
-            <View>
-                <Button onPress={() => setShowEndDatePicker(true)}>Select End Date</Button>
-                {showEndDatePicker && (
-                    <DateTimePicker
-                        value={endDate}
-                        mode="date"
-                        display="default"
-                        onChange={onEndDateChange}
-                        style={styles.text}
-                    />
-                )}
-            </View>
 
             <Button
                 mode="contained"
                 onPress={fetchFilteredNotifications}
-                style={[styles.filterButton, { backgroundColor: '#070738' }]}
+                style={[styles.filterButton, { backgroundColor: '#070738' }, { marginTop: 50}]}
             >
                 Filter Notifications
             </Button>
 
-            {notifications.length > 0 ? (
+            {notifications.length === 0 && salesRepName ? (
+                <Text style={styles.text}>No notifications found for the selected filters!</Text>
+            ) : (
                 notifications.map(notification => (
                     <View key={notification.id} style={styles.notificationItem}>
                         <Text style={styles.label}>Sales Rep: {notification.Name}</Text>
@@ -146,8 +158,8 @@ export default function NotificationHistory() {
                         <Text style={styles.label}>Time: {notification.Timestamp.toDate().toLocaleString()}</Text>
                     </View>
                 ))
-            ) : (
-                <Text style={styles.text}>No notifications found for the selected filters !</Text>
+            
+                
             )}
         </ScrollView>
     );
@@ -171,6 +183,7 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         borderWidth: 1,
         borderRadius: 5,
+        marginTop: 10,
     },
     pickerBg: {
         backgroundColor: '#ADD8E6', // Background color for Picker
@@ -188,6 +201,7 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         backgroundColor: '#f9f9f9',
         borderRadius: 5,
+        elevation: 6
     },
     label: {
         fontSize: 14,
@@ -196,6 +210,21 @@ const styles = StyleSheet.create({
     text: {
         color: '#070738',
         alignSelf: 'center',
-        paddingTop: 50,
+        paddingTop: 150,
+    },
+    datePicker: {
+        flexDirection: 'row',
+    },
+    dateTimeButton:{
+        backgroundColor: '#ADD8E6',
+        borderColor: 'black',
+        borderWidth: 1,
+        borderRadius: 5,
+        padding:5,
+    },
+    date:{
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginTop: 15,
     }
 });
