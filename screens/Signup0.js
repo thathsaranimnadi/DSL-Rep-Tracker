@@ -125,8 +125,12 @@ const Signup = ({ navigation }) => {
               value={phone}
               onChangeText={(text) => {
                 // Ensure the input is numeric and avoid leading zero
-                const validPhone = text.replace(/[^0-9]/g, '').slice(0, 9); 
-                setPhone(validPhone);
+                const validPhone = text.replace(/[^0-9]/g, ''); // Remove non-numeric characters
+                if (validPhone.length > 0 && validPhone[0] === '0') {
+                  // Prevent '0' as the first character
+                  return;
+                }
+                setPhone(validPhone.slice(0, 9)); // Limit to 9 digits
               }}
               maxLength={9} // Limit to 9 digits
             />
