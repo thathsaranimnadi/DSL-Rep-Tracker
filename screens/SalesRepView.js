@@ -135,10 +135,15 @@ export default function SalesRepView() {
 
   // Network disconnected monitoring
   useEffect(() => {
-    const unsubscribeNetInfo = NetInfo.addEventListener(async (state) => {
-      if (!state.isConnected) {
-        console.log('Network is disconnected');
-        await sendNotificationToAdmin('Network disconnected');
+    const unsubscribeNetInfo = NetInfo.addEventListener(async (isConnected) => {
+
+      if (isConnected) {
+        console.log('Network is Connected');
+      }
+      else{
+        console.log('Network is Disconnected');
+        await sendNotificationToAdmin('Network Disconnected');
+
       }
     });
 
@@ -179,7 +184,7 @@ export default function SalesRepView() {
                 Name,
                 Timestamp: Timestamp.now(),
             });
-            console.log('Admin notified:', Message);
+            
         } else {
             console.error('Sales Rep document not found');
         }
