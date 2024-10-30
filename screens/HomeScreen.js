@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Dimensions, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity} from 'react-native';
 import { TextInput, Button } from 'react-native-paper';
 import { getFirestore, collection, query, where, getDocs } from 'firebase/firestore';

@@ -80,9 +80,9 @@ const styles = StyleSheet.create({
     welcome: {
         height: 400,
         aspectRatio: 1,
-        marginRight: 40,
         marginTop:50,
-        marginBottom:-50
+        marginBottom:-50,
+        justifyContent: 'center',
 
     },
     textContainer: {

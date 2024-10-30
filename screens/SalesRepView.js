@@ -4,7 +4,7 @@ import * as Location from 'expo-location';
 import LottieView from 'lottie-react-native';
 import { auth } from '../firebaseConfig';
 import { db } from '../firebaseConfig';
-import { doc, updateDoc, collection, addDoc } from 'firebase/firestore';
+import { doc, updateDoc, collection, addDoc, getDoc } from 'firebase/firestore';
 import * as TaskManager from 'expo-task-manager';
 import NetInfo from '@react-native-community/netinfo';
 import { BackHandler } from 'react-native';
@@ -161,17 +161,32 @@ export default function SalesRepView() {
 
   // Send notification to admin
   const sendNotificationToAdmin = async (Message) => {
-    const adminRef = collection(db, 'AdminNotifications');
-    await addDoc(adminRef, {
-      SalesRepId: uid,
-      Message,
-      Timestamp: Timestamp.now(),
-      Name: salesRepName,
-      Department: department
+    const uid = auth.currentUser.uid; // Get the current user's UID
+    const salesRepRef = doc(db, 'Sales Rep', uid); // Reference to the sales rep's document
 
-    });
-    console.log('Admin notified:', Message);
-  };
+    try {
+        // Fetch the sales rep's profile data
+        const salesRepDoc = await getDoc(salesRepRef);
+
+        if (salesRepDoc.exists()) {
+            const { Name, Department } = salesRepDoc.data(); // Destructure Name and Department
+
+            // Add notification to AdminNotifications collection
+            const adminRef = collection(db, 'AdminNotifications');
+            await addDoc(adminRef, {
+                Department,
+                Message,
+                Name,
+                Timestamp: Timestamp.now(),
+            });
+            console.log('Admin notified:', Message);
+        } else {
+            console.error('Sales Rep document not found');
+        }
+    } catch (error) {
+        console.error('Error fetching sales rep data:', error);
+    }
+};
 
   // Handle back button press
   useEffect(() => {
