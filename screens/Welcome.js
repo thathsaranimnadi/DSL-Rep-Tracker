@@ -4,7 +4,7 @@ import COLORS from '../constants/colors';
 import LottieView from 'lottie-react-native';
 import { useIsFocused } from '@react-navigation/native'; // Import the useIsFocused hook
 
-const { width } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 const Welcome = ({ navigation }) => {
     const animation = useRef(null);
@@ -31,7 +31,7 @@ const Welcome = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <View style={styles.welcome}>
-                <LottieView style={{width: '100%', height: '100%', alignSelf: 'center'}} source={require('../assets/image05.json')} autoPlay loop />
+                <LottieView style={{width: '100%', height: '100%', alignSelf:'center'}} source={require('../assets/image05.json')} autoPlay loop />
             </View>
             <View style={styles.textContainer}>
                 <Text style={styles.subtitleText}>Sales Pulse</Text>
@@ -76,35 +76,35 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#ADD8E6',
         justifyContent: 'center',
-    },
-    welcome: {
-        height: 400,
-        aspectRatio: 1,
-        marginTop:50,
-        marginBottom:-50,
-        justifyContent: 'center',
-        alignItems: 'center', 
+        alignItems: 'center',
+        
 
     },
+    welcome: {
+        flex: 1,
+        aspectRatio: 1,
+        marginTop: height * 0.05,
+        marginBottom: height * -0.05,
+        justifyContent: 'center',
+        alignItems: 'center', 
+        
+    },
     textContainer: {
-        paddingHorizontal: 10,
+        paddingHorizontal: width * 0.05,
         alignItems: 'center',
-        marginTop: 5,
+        marginTop: height * 0.0,
     },
     subtitleText: {
         fontSize: 55,
         fontWeight: '800',
         color: '#070738',
         textAlign: 'center',
-        marginBottom:40
-        
-        //textShadowOffset: { width: 5, height: 6 },
-        //textShadowRadius: 10,
+        marginBottom: '10%',
     },
     buttonContainer: {
-        marginTop: 10,
-        paddingHorizontal: 22,
-        paddingBottom: 50,
+        marginTop: height * 0.01,
+        paddingHorizontal: width * 0.05,
+        paddingBottom: height * 0.05,
     },
     joinButton: {
         backgroundColor: '#070738',
@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
     },
     loginContainer: {
         flexDirection: "row",
-        marginTop: 20,
+        marginTop: height * 0.02,
         justifyContent: 'center',
     },
     loginText: {
@@ -139,15 +139,17 @@ const styles = StyleSheet.create({
         marginLeft: 4,
         marginVertical: 1,
         alignItems: 'center',
-        justifyContent:'center'
+        justifyContent: 'center',
     },
-    text:{
+    text: {
         alignItems: 'center',
-        borderWidth:1,
-        borderColor:'black',
-        marginVertical: 7.5,
-        borderRadius:19,
-        width: width * 0.8,
-        alignSelf:'center',
-    }
+        borderWidth: 1,
+        borderColor: 'black',
+        marginVertical: height * 0.01,
+        borderRadius: 19,
+        width: width > 600 ? width * 0.6 : width * 0.9,
+        alignSelf: 'center',
+        paddingVertical: height * 0.004
+    },
 });
+

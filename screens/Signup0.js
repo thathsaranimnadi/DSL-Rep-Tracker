@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Pressable, StyleSheet, Alert } from 'react-native';
+import { View, Text, TextInput, Pressable, StyleSheet, Alert, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Picker } from '@react-native-picker/picker';
 import Button from '../components/Button';
 import app from '../firebaseConfig';
 import { getFirestore } from "firebase/firestore";
+
+const { height } = Dimensions.get('window');
+
 
 const Signup = ({ navigation }) => {
   const [name, setName] = useState('');
@@ -141,7 +144,7 @@ const Signup = ({ navigation }) => {
           onPress={handleNext}
           title="Next"
           filled
-          style={{ marginTop: 18, marginBottom: 4, backgroundColor: '#070738' }}
+          style={{ marginTop: height* 0.05, marginBottom: height* 0.03, backgroundColor: '#070738', borderRadius: 50 }}
         />
 
         <View style={styles.loginOptionsContainer}>

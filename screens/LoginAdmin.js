@@ -1,4 +1,4 @@
-import { View, Text, TextInput, TouchableOpacity, Pressable } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Pressable , Dimensions} from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import COLORS from '../constants/colors';
@@ -8,6 +8,8 @@ import app from '../firebaseConfig';
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { getFirestore, collection, query, where, getDocs } from 'firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const { width, height } = Dimensions.get('window');
 
 const LoginAdmin = ({ navigation }) => {
   const [isPasswordShown, setIsPasswordShown] = useState(false);
@@ -72,14 +74,14 @@ const LoginAdmin = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#ADD8E6' }}>
-      <View style={{ flex: 1, paddingHorizontal: 24 }}>
+    <SafeAreaView style={styles.container1}>
+      <View style={styles.container2}>
         {/* Welcome Text */}
         <View style={{ marginVertical: 30 }}>
           <Text style={{ fontSize: 24, fontWeight: 'bold', color: '#070738' }}>
             Hey, Welcome Back
           </Text>
-          <Text style={{ fontSize: 16, color: COLORS.black, marginTop: 6 }}>
+          <Text style={{ fontSize: 16, color: COLORS.black, marginTop: 6, marginBottom: height* 0.01 }}>
             Login as an admin
           </Text>
         </View>
@@ -103,7 +105,7 @@ const LoginAdmin = ({ navigation }) => {
 
         {/* Password Input */}
         <View style={{ marginBottom: 16 }}>
-          <Text style={{ fontSize: 16, fontWeight: '500', marginBottom: 8 }}>
+          <Text style={{ fontSize: 16, fontWeight: '500', marginBottom: 8 , marginTop: height* 0.01}}>
             Password
           </Text>
           <View style={styles.inputContainer}>
@@ -154,6 +156,18 @@ const LoginAdmin = ({ navigation }) => {
 };
 
 const styles = {
+  container1:{
+    flex: 1, 
+    backgroundColor: '#ADD8E6',
+    justifyContent: 'center',
+  },
+
+  container2:{
+    flex: 1, 
+    paddingHorizontal: 24, 
+    marginTop: height* 0.01
+  },
+
   inputContainer: {
     width: '100%',
     height: 50,
@@ -173,8 +187,14 @@ const styles = {
     paddingRight: 16,
   },
   loginButton: {
-    marginTop: 20,
+    marginTop: height* 0.04,
     backgroundColor: '#070738',
+    width: width > 600 ? width * 0.8 : width * 0.9,
+    alignSelf: 'center',
+    borderRadius: 50
+
+    
+
   },
   signupText: {
     fontSize: 16,

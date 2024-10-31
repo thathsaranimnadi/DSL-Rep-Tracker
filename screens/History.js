@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Modal, FlatList, StyleSheet, Image } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Modal, FlatList, StyleSheet, Image, Dimensions} from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Button, Card } from 'react-native-paper';
 import { MaterialIcons } from '@expo/vector-icons';
 import { Picker } from '@react-native-picker/picker';
 import { getFirestore, collection, query, where, getDocs } from 'firebase/firestore';
 import app from '../firebaseConfig';
+
+const { height, width } = Dimensions.get('window');
 
 const History = () => {
   const [salesRepName, setSalesRepName] = useState('');
@@ -290,6 +292,8 @@ const styles = StyleSheet.create({
     height: 260,
     resizeMode: 'contain',
     marginBottom: 30,
+    marginTop: height > 1000 ? height * 0.05 : height * 0.01,
+    marginBottom: height > 1000 ? height * 0.07 : height * 0.01,
     
   },
   inputContainer: {
@@ -307,7 +311,8 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   pickerContainer: {
-    marginBottom: 20,
+    marginTop: 8,
+    marginBottom: height > 1000 ? height * 0.04 : height * 0.02,
     borderColor: '#ccc',
     borderWidth: 1,
     borderRadius: 5,

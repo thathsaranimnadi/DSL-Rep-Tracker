@@ -1,4 +1,4 @@
-import { View, Text, TextInput, TouchableOpacity, Pressable } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Pressable, Dimensions } from 'react-native';
 import React, { useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import COLORS from '../constants/colors';
@@ -6,6 +6,9 @@ import { Ionicons } from '@expo/vector-icons';
 import Button from '../components/Button';
 import app from '../firebaseConfig';
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+
+const { width, height } = Dimensions.get('window');
+
 
 const LoginRep = ({ navigation }) => {
   const [isPasswordShown, setIsPasswordShown] = useState(false);
@@ -58,7 +61,7 @@ const LoginRep = ({ navigation }) => {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor:'#ADD8E6' }}>
-      <View style={{ flex: 1, marginHorizontal: 22 }}>
+      <View style={{ flex: 1, marginHorizontal: 22 , marginTop: height* 0.01}}>
         <View style={{ marginVertical: 22 }}>
           <Text
             style={{
@@ -71,7 +74,7 @@ const LoginRep = ({ navigation }) => {
             Hey, Welcome Back
           </Text>
 
-          <Text style={{ fontSize: 16, color: '#2F4F4F' }}>
+          <Text style={{ fontSize: 16, color: '#2F4F4F',  marginBottom: height* 0.01 }}>
             Login as a Sales Representative
           </Text>
         </View>
@@ -118,6 +121,7 @@ const LoginRep = ({ navigation }) => {
               fontSize: 16,
               fontWeight: '400',
               marginVertical: 8,
+              marginTop: height* 0.01
             }}
           >
             Password
@@ -166,10 +170,13 @@ const LoginRep = ({ navigation }) => {
           title="Login"
           filled
           style={{
-            marginTop: 18,
             marginBottom: 4,
             backgroundColor:'#070738',
             borderColor:'black',
+            marginTop: height* 0.04,
+            width: width > 600 ? width * 0.8 : width * 0.9,
+            alignSelf: 'center',
+            borderRadius: 50
            
           }}
         />

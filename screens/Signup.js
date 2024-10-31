@@ -250,6 +250,7 @@ const styles = StyleSheet.create({
     marginBottom: 4,
     backgroundColor: '#070738',
     borderColor: '#000000',
+    borderRadius: 50
   },
   divider: {
     flex: 1,

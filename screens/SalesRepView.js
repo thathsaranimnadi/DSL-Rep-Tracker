@@ -225,7 +225,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#ADD8E6',
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 20,
   },
   title: {
     fontSize: 24,
@@ -239,7 +238,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   animation: {
-    width: 400,
+    width: '100%',
     height: 300,
     marginBottom: 20,
     marginTop: 10,
