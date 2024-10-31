@@ -31,7 +31,7 @@ const Welcome = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <View style={styles.welcome}>
-                <LottieView style={{ flex: 1 }} source={require('../assets/image05.json')} autoPlay loop />
+                <LottieView style={{width: '100%', height: '100%', alignSelf: 'center'}} source={require('../assets/image05.json')} autoPlay loop />
             </View>
             <View style={styles.textContainer}>
                 <Text style={styles.subtitleText}>Sales Pulse</Text>
@@ -83,6 +83,7 @@ const styles = StyleSheet.create({
         marginTop:50,
         marginBottom:-50,
         justifyContent: 'center',
+        alignItems: 'center', 
 
     },
     textContainer: {
