@@ -135,16 +135,14 @@ export default function SalesRepView() {
 
   // Network disconnected monitoring
   useEffect(() => {
-    const unsubscribeNetInfo = NetInfo.addEventListener(async (isConnected) => {
+    const unsubscribeNetInfo = NetInfo.addEventListener(async (state) => {
 
-      if (isConnected) {
-        console.log('Network is Connected');
+      if (!state.isConnected) {
+        console.log('Network is disconnected');
+        // Optionally notify the admin
+        await sendNotificationToAdmin('Network disconnected');
       }
-      else{
-        console.log('Network is Disconnected');
-        await sendNotificationToAdmin('Network Disconnected');
-
-      }
+      
     });
 
     return () => unsubscribeNetInfo();
