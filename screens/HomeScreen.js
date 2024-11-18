@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, Alert } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Alert,TouchableOpacity } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import NetInfo from '@react-native-community/netinfo';
 import app from '../firebaseConfig';
 import { getFirestore, collection, getDocs, doc, getDoc } from 'firebase/firestore';
-import { getAuth } from 'firebase/auth'; // Import authentication
+import { getAuth } from 'firebase/auth'; 
 
 // Header Component
 const Header = ({ onSearch }) => {
@@ -141,7 +141,8 @@ const HomeScreen = () => {
         setSelectedRep(rep);
     };
 
-    const showInfo = selectedRep || searchQuery;
+    const showInfo = !!selectedRep || !!searchQuery;
+
 
     return (
         <View style={styles.container}>
@@ -158,6 +159,14 @@ const HomeScreen = () => {
 
             {showInfo && (
                 <ScrollView style={styles.infoContainer}>
+                    {/* Close Icon */}
+                    <TouchableOpacity onPress={() => {
+                        setSelectedRep(null);
+                        setSearchQuery(''); // Clears the search query
+                    }} style={styles.closeButton}>
+                        <MaterialIcons name="close" size={24} color="black" />
+                    </TouchableOpacity>
+
                     <View style={styles.row}>
                         <Text style={styles.label}>Name: </Text>
                         <Text style={styles.value}>{selectedRep?.Name || 'Name not available'}</Text>
@@ -285,6 +294,9 @@ const styles = StyleSheet.create({
         marginTop: 0,
         flex: 1,
     },
+    closeButton: {
+        alignSelf: 'flex-end',
+    },
     infoContainer: {
         backgroundColor: 'white',
         padding: 10,
@@ -317,6 +329,8 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: '#333',
         marginBottom: 10,
+        flexWrap: 'wrap', // allows the text to wrap to the next line
+        flex: 1, // allows it to take up available space
     },
 });
 
