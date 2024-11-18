@@ -1,17 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react'; 
 import { View, Text, TextInput, TouchableOpacity, Modal, FlatList, StyleSheet, Image, Dimensions} from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Button, Card } from 'react-native-paper';
 import { MaterialIcons } from '@expo/vector-icons';
-import { Picker } from '@react-native-picker/picker';
-import { getFirestore, collection, query, where, getDocs } from 'firebase/firestore';
+import { getFirestore, collection, query, where, getDocs, doc } from 'firebase/firestore';
 import app from '../firebaseConfig';
+import { getAuth } from 'firebase/auth';
+import { getDoc } from 'firebase/firestore';
 
 const { height, width } = Dimensions.get('window');
 
 const History = () => {
   const [salesRepName, setSalesRepName] = useState('');
-  const [department, setDepartment] = useState('');
   const [fromDate, setFromDate] = useState(new Date());
   const [toDate, setToDate] = useState(new Date());
   const [showFromPicker, setShowFromPicker] = useState(false);
@@ -20,14 +20,39 @@ const History = () => {
   const [showToTimePicker, setShowToTimePicker] = useState(false);
   const [locationHistory, setLocationHistory] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
+  const [department, setDepartment] = useState('');
 
   const normalizeString = (str) => {
-  return str
-    .toLowerCase()         // Convert to lowercase
-    .replace(/\s+/g, '')   // Remove all spaces
-    .replace(/\./g, '');   // Remove all dots
-};
+    return str
+      .toLowerCase()         // Convert to lowercase
+      .replace(/\s+/g, '')   // Remove all spaces
+      .replace(/\./g, '');   // Remove all dots
+  };
 
+  useEffect(() => {
+    const fetchAdminDepartment = async () => {
+      const db = getFirestore(app);
+      const auth = getAuth();
+      const adminId = auth.currentUser.uid;
+  
+      try {
+        const adminDocRef = doc(db, 'Admin', adminId); 
+        const adminDocSnap = await getDoc(adminDocRef); // Use getDoc instead of getDocs
+  
+        if (adminDocSnap.exists()) {
+          setDepartment(adminDocSnap.data().Department); 
+        } else {
+          alert('Admin not found');
+        }
+      } catch (error) {
+        console.error('Error fetching admin department:', error);
+        alert('Error fetching admin department');
+      }
+    };
+  
+    fetchAdminDepartment();
+  }, []);
+  
   const onSearch = async () => {
     const db = getFirestore(app);
 
@@ -43,11 +68,10 @@ const History = () => {
     try {
       const salesRepQuery = query(
         collection(db, 'Sales Rep'),
-        where('Department', '==', department)  // Add filtering by department
+        where('Department', '==', department)  // Only fetch sales reps from the admin's department
       );
-      
+
       const salesRepSnapshot = await getDocs(salesRepQuery);
-  
 
       const filteredSalesReps = salesRepSnapshot.docs.filter((doc) => {
         const rep = doc.data();
@@ -88,13 +112,10 @@ const History = () => {
       setLocationHistory(salesRepData);
       setModalVisible(true);
 
-       // Reset state after search
-    setSalesRepName('');
-    setDepartment('');
-    setFromDate(new Date());
-    setToDate(new Date());
-
-
+      // Reset state after search
+      setSalesRepName('');
+      setFromDate(new Date());
+      setToDate(new Date());
     } catch (error) {
       console.error("Error fetching location history:", error);
       alert("Error fetching location history");
@@ -127,24 +148,6 @@ const History = () => {
           value={salesRepName}
           onChangeText={setSalesRepName}
         />
-      </View>
-
-      {/* Department Picker */}
-      <View style={styles.pickerContainer}>
-        <Picker
-          selectedValue={department}
-          onValueChange={(itemValue) => setDepartment(itemValue)}
-          style={styles.picker}
-        >
-          <Picker.Item label="Select the Department" value="" color= "rgba(0, 0, 0, 0.4)" />
-          <Picker.Item label="Tyre" value="Tyre" />
-          <Picker.Item label="Energy" value="Energy" />
-          <Picker.Item label="Auto-Parts" value="Auto-Parts" />
-          <Picker.Item label="Ronet" value="Ronet" />
-          <Picker.Item label="Ekway" value="Ekway" />
-          <Picker.Item label="GCR" value="GCR" />
-          <Picker.Item label="Industrial" value="Industrial" />
-        </Picker>
       </View>
 
       {/* Date Picker Section */}
@@ -192,8 +195,6 @@ const History = () => {
           </View>
         </View>
       </View>
-
-      <View style={styles.divider} />
 
       {/* Time Picker Section */}
       <View style={styles.sectionContainer}>
@@ -259,19 +260,12 @@ const History = () => {
       >
         <View style={styles.modalBackground}>
           <View style={styles.modalContainer}>
-            
             <FlatList
-             
               data={locationHistory}
               keyExtractor={(item, index) => index.toString()}
               renderItem={renderItem}
             />
-          
-            <Button
-              mode="contained"
-              onPress={() => setModalVisible(false)}
-              style={styles.closeButton}
-            >
+            <Button onPress={() => setModalVisible(false)} style={styles.closeButton}>
               Close
             </Button>
           </View>
@@ -347,7 +341,7 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 16,
-    width: 50, // Fixed width for labels to align properly
+    width: 50, 
    
   },
   dateTimeButton: {
@@ -405,8 +399,6 @@ const styles = StyleSheet.create({
     padding: 10,
   },
  
-  
-  
 });
 
 export default History;

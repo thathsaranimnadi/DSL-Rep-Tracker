@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Alert } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import NetInfo from '@react-native-community/netinfo';
 import app from '../firebaseConfig';
-import { getFirestore, collection, getDocs } from 'firebase/firestore';
-
+import { getFirestore, collection, getDocs, doc, getDoc } from 'firebase/firestore';
+import { getAuth } from 'firebase/auth'; // Import authentication
 
 // Header Component
 const Header = ({ onSearch }) => {
@@ -32,12 +32,28 @@ const HomeScreen = () => {
     const [salesReps, setSalesReps] = useState([]);
     const [filteredSalesReps, setFilteredSalesReps] = useState([]);
     const [selectedRep, setSelectedRep] = useState(null);
-    const [searchQuery, setSearchQuery] = useState(''); // Track the search query
-    const [isDataEnabled, setIsDataEnabled] = useState(true); // Track if data is enabled
-    const [isLocationEnabled, setIsLocationEnabled] = useState(true); // Track if location is enabled
+    const [searchQuery, setSearchQuery] = useState('');
+    const [isDataEnabled, setIsDataEnabled] = useState(true);
+    const [isLocationEnabled, setIsLocationEnabled] = useState(true);
+    const [adminDepartment, setAdminDepartment] = useState(null);
 
-    // Fetch data from Firestore
-    const setData = async () => {
+    // Fetch admin's department from Firestore
+    const fetchAdminDepartment = async (uid) => {
+        try {
+            const db = getFirestore(app);
+            const adminDoc = await getDoc(doc(db, 'Admin', uid));
+            if (adminDoc.exists()) {
+                setAdminDepartment(adminDoc.data().Department);
+            } else {
+                console.error('Admin not found');
+            }
+        } catch (error) {
+            console.error('Error fetching admin data:', error);
+        }
+    };
+
+    // Fetch sales reps from Firestore
+    const fetchSalesReps = async () => {
         try {
             const db = getFirestore(app);
             const repCollection = collection(db, 'Sales Rep');
@@ -47,14 +63,14 @@ const HomeScreen = () => {
                 ...doc.data(),
             }));
             setSalesReps(repsData);
-            setFilteredSalesReps(repsData); // Initialize filtered sales reps with all data
+            setFilteredSalesReps(repsData.filter(rep => rep.Department === adminDepartment));
         } catch (error) {
-            console.error('Error fetching data: ', error);
+            console.error('Error fetching sales reps data:', error);
         }
     };
-     // Monitor data and location status
-     const monitorDataAndLocation = () => {
-        // Monitor network status
+
+    // Monitor data and location status
+    const monitorDataAndLocation = () => {
         const unsubscribeNetInfo = NetInfo.addEventListener(state => {
             if (!state.isConnected || !state.isInternetReachable) {
                 setIsDataEnabled(false);
@@ -64,7 +80,6 @@ const HomeScreen = () => {
             }
         });
 
-        // Monitor location status
         const checkLocationStatus = async () => {
             const { status } = await Location.getForegroundPermissionsAsync();
             if (status !== 'granted') {
@@ -77,46 +92,56 @@ const HomeScreen = () => {
 
         checkLocationStatus();
 
-        // Cleanup function
         return () => {
-            unsubscribeNetInfo(); 
+            unsubscribeNetInfo();
         };
     };
 
     // Notify admin when data or location is disabled
     const notifyAdmin = (message) => {
         Alert.alert('Warning', `Sales rep has turned off ${message}`);
-        // Here, you can add Firebase Cloud Messaging (FCM) to send a push notification to the admin
     };
 
     useEffect(() => {
-        setData();
+        const auth = getAuth();
+        const user = auth.currentUser;
+
+        if (user) {
+            fetchAdminDepartment(user.uid); // Pass the uid to fetchAdminDepartment
+        } else {
+            console.error('User is not authenticated');
+        }
+
         monitorDataAndLocation();
     }, []);
+
+    useEffect(() => {
+        if (adminDepartment) {
+            fetchSalesReps();
+        }
+    }, [adminDepartment]);
 
     const handleSearch = (query) => {
         setSearchQuery(query);
         if (query) {
             const filtered = salesReps.filter(rep =>
-                rep.Name.toLowerCase().includes(query.toLowerCase()) ||
-                rep.Employee_ID.toLowerCase().includes(query.toLowerCase()));
+                (rep.Name.toLowerCase().includes(query.toLowerCase()) ||
+                rep.Employee_ID.toLowerCase().includes(query.toLowerCase())) &&
+                rep.Department === adminDepartment
+            );
             setFilteredSalesReps(filtered);
-            if (filtered.length > 0) {
-                setSelectedRep(filtered[0]); // Show details of the first filtered sales rep
-            } else {
-                setSelectedRep(null); // Clear selected rep if no results
-            }
+            setSelectedRep(filtered.length > 0 ? filtered[0] : null);
         } else {
-            setFilteredSalesReps(salesReps); // Show all reps if search query is empty
-            setSelectedRep(null); // Clear selected rep if search query is empty
+            setFilteredSalesReps(salesReps.filter(rep => rep.Department === adminDepartment));
+            setSelectedRep(null);
         }
     };
 
     const handleMarkerPress = (rep) => {
-        setSelectedRep(rep); // Set the selected sales rep when a marker is pressed
+        setSelectedRep(rep);
     };
 
-    const showInfo = selectedRep || searchQuery; // Determine if infoContainer should be shown
+    const showInfo = selectedRep || searchQuery;
 
     return (
         <View style={styles.container}>
@@ -127,38 +152,38 @@ const HomeScreen = () => {
             <View style={[styles.mapContainer, showInfo && styles.mapContainerWithInfo]}>
                 <CustomMapView
                     salesReps={filteredSalesReps}
-                    onMarkerPress={handleMarkerPress} // Pass the marker press handler to CustomMapView
+                    onMarkerPress={handleMarkerPress}
                 />
             </View>
 
             {showInfo && (
                 <ScrollView style={styles.infoContainer}>
                     <View style={styles.row}>
-                        <Text style={styles.label}>Name:  </Text>
+                        <Text style={styles.label}>Name: </Text>
                         <Text style={styles.value}>{selectedRep?.Name || 'Name not available'}</Text>
                     </View>
                     <View style={styles.row}>
-                        <Text style={styles.label}>Employee ID:  </Text>
+                        <Text style={styles.label}>Employee ID: </Text>
                         <Text style={styles.value}>{selectedRep?.Employee_ID || 'Employee ID not available'}</Text>
                     </View>
                     <View style={styles.row}>
-                        <Text style={styles.label}>Role:  </Text>
+                        <Text style={styles.label}>Role: </Text>
                         <Text style={styles.value}>{selectedRep?.Role || 'Role not available'}</Text>
                     </View>
                     <View style={styles.row}>
-                        <Text style={styles.label}>Department:  </Text>
+                        <Text style={styles.label}>Department: </Text>
                         <Text style={styles.value}>{selectedRep?.Department || 'Department not available'}</Text>
                     </View>
                     <View style={styles.row}>
-                        <Text style={styles.label}>Mobile No:  </Text>
+                        <Text style={styles.label}>Mobile No: </Text>
                         <Text style={styles.value}>{selectedRep?.Phone_No || 'Mobile No not available'}</Text>
                     </View>
                     <View style={styles.row}>
-                        <Text style={styles.label}>Current Address:  </Text>
+                        <Text style={styles.label}>Current Address: </Text>
                         <Text style={styles.value}>{selectedRep?.Address || 'Address not available'}</Text>
                     </View>
                     <View style={styles.row}>
-                        <Text style={styles.label}>Timestamp:  </Text>
+                        <Text style={styles.label}>Timestamp: </Text>
                         <Text style={styles.value}>
                             {selectedRep?.Timestamp ? selectedRep.Timestamp.toDate().toLocaleString() : 'Time not available'}
                         </Text>
@@ -176,7 +201,7 @@ const CustomMapView = ({ salesReps = [], currentLocation, onMarkerPress }) => {
         'Tyre': 'blue',
         'Auto-Parts': 'yellow',
         'Ronet': 'green',
-        'Ekway': 'pink',
+        'Ekway': 'white',
         'GCR': 'purple',
         'Industrial': 'orange'
     };
@@ -202,7 +227,7 @@ const CustomMapView = ({ salesReps = [], currentLocation, onMarkerPress }) => {
                     }}
                     title={rep.Name || 'Unknown Location'}
                     pinColor={departmentColors[rep.Department] || 'gray'}
-                    onPress={() => onMarkerPress(rep)} // Call onMarkerPress when a marker is pressed
+                    onPress={() => onMarkerPress(rep)}
                 />
             ))}
         </MapView>
@@ -233,7 +258,6 @@ const styles = StyleSheet.create({
         marginTop: 5,
         flexDirection: 'row',
         justifyContent: 'space-between',
-    
     },
     searchInput: {
         fontSize: 18,
@@ -247,46 +271,28 @@ const styles = StyleSheet.create({
     },
     mapContainer: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
+        backgroundColor: 'white'
     },
     mapContainerWithInfo: {
-        flex: 1, 
+        flex: 0.5
     },
     map: {
-        width: '100%',
-        height: '100%',
-        marginTop: 0,
+        flex: 1,
     },
     infoContainer: {
-        
-        maxHeight: 300, // Set maximum height for the info container
-        padding: 20,
-        backgroundColor: '#fff',
-        borderTopLeftRadius: 20,
-        borderTopRightRadius: 20,
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.2,
-        shadowRadius: 2.0,
-        elevation: 2,
-    },
-    label: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        color: '#000',
-    },
-    value: {
-        fontSize: 16,
-        color: '#333',
-        marginBottom: 10,
+        backgroundColor: 'white',
+        padding: 10,
     },
     row: {
         flexDirection: 'row',
-        marginBottom: 10,
+        paddingVertical: 5,
+    },
+    label: {
+        fontWeight: 'bold',
+        fontSize: 16,
+    },
+    value: {
+        fontSize: 16,
     },
 });
 
