@@ -1,21 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity} from 'react-native';
 import { TextInput, Button } from 'react-native-paper';
-import { getFirestore, collection, query, where, getDocs } from 'firebase/firestore';
+import { getFirestore, collection, query, where, getDocs, doc, getDoc } from 'firebase/firestore';
 import { Timestamp } from 'firebase/firestore';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { Picker } from '@react-native-picker/picker';
+import { getAuth } from 'firebase/auth';
 
 export default function NotificationHistory() {
     const [notifications, setNotifications] = useState([]);
     const [salesRepName, setSalesRepName] = useState('');
-    const [department, setDepartment] = useState('');
     const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEndDate] = useState(new Date());
     const [showStartDatePicker, setShowStartDatePicker] = useState(false);
     const [showEndDatePicker, setShowEndDatePicker] = useState(false);
-
+    const [adminDepartment, setAdminDepartment] = useState('');
     const db = getFirestore();
+    const auth = getAuth();
+    const adminId = auth.currentUser?.uid;
 
     const normalizeString = (str) => {
         return str
@@ -24,30 +25,46 @@ export default function NotificationHistory() {
           .replace(/\./g, '');   // Remove all dots
     };
 
+    // Fetch admin's department when component mounts
+    useEffect(() => {
+        const fetchAdminDepartment = async () => {
+            try {
+                const adminDocRef = doc(db, 'Admin', adminId);
+                const adminDocSnap = await getDoc(adminDocRef);
+                if (adminDocSnap.exists()) {
+                    const adminData = adminDocSnap.data();
+                    setAdminDepartment(adminData.Department);
+                }
+            } catch (error) {
+                console.error('Error fetching admin department: ', error);
+            }
+        };
+        if (adminId) {
+            fetchAdminDepartment();
+        }
+    }, [adminId, db]);
+
     const fetchFilteredNotifications = async () => {
         try {
             let notificationsRef = collection(db, 'AdminNotifications');
-            
-            let q = query(notificationsRef);
+            let q = query(notificationsRef, where('Department', '==', adminDepartment)); 
     
-            if (department) {
-                q = query(notificationsRef, where('Department', '==', department));
-            }
             if (startDate && endDate) {
                 q = query(
                     notificationsRef,
                     where('Timestamp', '>=', Timestamp.fromDate(startDate)),
-                    where('Timestamp', '<=', Timestamp.fromDate(endDate))
+                    where('Timestamp', '<=', Timestamp.fromDate(endDate)),
+                    where('Department', '==', adminDepartment) 
                 );
             }
-    
+
             // Fetch all documents and apply the normalized filter for the sales rep name
             const snapshot = await getDocs(q);
             let filteredNotifications = snapshot.docs.map(doc => ({
                 id: doc.id,
                 ...doc.data(),
             }));
-    
+
             // Apply normalization and filtering on the client-side
             if (salesRepName) {
                 const normalizedInput = normalizeString(salesRepName);
@@ -56,7 +73,6 @@ export default function NotificationHistory() {
                     return normalizedRepName.includes(normalizedInput);
                 });
             }
-            
     
             setNotifications(filteredNotifications);
         } catch (error) {
@@ -83,26 +99,9 @@ export default function NotificationHistory() {
                 label="Sales Rep Name"
                 value={salesRepName}
                 onChangeText={text => setSalesRepName(text)}
-                style={[styles.input, styles.textInputBg]} // Applying the background color
+                style={[styles.input, styles.textInputBg]} 
                 placeholder="Enter Sales Rep Name"
             />
-            <View style={[styles.pickerContainer, styles.pickerBg]}>
-                <Picker
-                    selectedValue={department}
-                    onValueChange={(itemValue) => setDepartment(itemValue)}
-                    style={styles.picker}
-                >
-                    <Picker.Item label="Select the Department" value="" />
-                    <Picker.Item label="Tyre" value="Tyre" />
-                    <Picker.Item label="Energy" value="Energy" />
-                    <Picker.Item label="Auto-Parts" value="Auto-Parts" />
-                    <Picker.Item label="Ronet" value="Ronet" />
-                    <Picker.Item label="Ekway" value="Ekway" />
-                    <Picker.Item label="GCR" value="GCR" />
-                    <Picker.Item label="Industrial" value="Industrial" />
-                </Picker>
-            </View>
-
 
             <View style={ styles.date}>
                 <View style={ styles.datePicker}>
@@ -138,7 +137,6 @@ export default function NotificationHistory() {
                 </View>
             </View>
 
-
             <Button
                 mode="contained"
                 onPress={fetchFilteredNotifications}
@@ -158,8 +156,6 @@ export default function NotificationHistory() {
                         <Text style={styles.label}>Time: {notification.Timestamp.toDate().toLocaleString()}</Text>
                     </View>
                 ))
-            
-                
             )}
         </ScrollView>
     );
@@ -177,20 +173,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,
     },
     textInputBg: {
-        backgroundColor: '#ADD8E6', // Background color for TextInput
-    },
-    pickerContainer: {
-        marginBottom: 20,
-        borderWidth: 1,
-        borderRadius: 5,
-        marginTop: 10,
-    },
-    pickerBg: {
-        backgroundColor: '#ADD8E6', // Background color for Picker
-    },
-    picker: {
-        height: 50,
-        color: 'black'
+        backgroundColor: '#ADD8E6', 
     },
     filterButton: {
         marginTop: 10,
