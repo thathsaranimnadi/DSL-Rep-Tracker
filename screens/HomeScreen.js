@@ -271,28 +271,52 @@ const styles = StyleSheet.create({
     },
     mapContainer: {
         flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
         backgroundColor: 'white'
+       
     },
     mapContainerWithInfo: {
-        flex: 0.5
+        flex: 1
     },
     map: {
+        width: '100%',
+        height: '100%',
+        marginTop: 0,
         flex: 1,
     },
     infoContainer: {
         backgroundColor: 'white',
         padding: 10,
+        maxHeight: 300, 
+        padding: 20,
+        backgroundColor: '#fff',
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.2,
+        shadowRadius: 2.0,
+        elevation: 2,
     },
     row: {
         flexDirection: 'row',
-        paddingVertical: 5,
+        marginBottom:10,
+        
     },
     label: {
-        fontWeight: 'bold',
         fontSize: 16,
+        fontWeight: 'bold',
+        color: '#000',
+        
     },
     value: {
         fontSize: 16,
+        color: '#333',
+        marginBottom: 10,
     },
 });
 
