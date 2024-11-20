@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity} from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import { TextInput, Button } from 'react-native-paper';
 import { getFirestore, collection, query, where, getDocs, doc, getDoc } from 'firebase/firestore';
 import { Timestamp } from 'firebase/firestore';
@@ -20,12 +20,11 @@ export default function NotificationHistory() {
 
     const normalizeString = (str) => {
         return str
-          .toLowerCase()         // Convert to lowercase
-          .replace(/\s+/g, '')   // Remove all spaces
-          .replace(/\./g, '');   // Remove all dots
+            .toLowerCase()
+            .replace(/\s+/g, '')
+            .replace(/\./g, '');
     };
 
-    // Fetch admin's department when component mounts
     useEffect(() => {
         const fetchAdminDepartment = async () => {
             try {
@@ -44,43 +43,63 @@ export default function NotificationHistory() {
         }
     }, [adminId, db]);
 
+    useEffect(() => {
+        setNotifications([]);
+    }, [salesRepName]);
+
     const fetchFilteredNotifications = async () => {
         try {
             let notificationsRef = collection(db, 'AdminNotifications');
-            let q = query(notificationsRef, where('Department', '==', adminDepartment)); 
+            let q = query(notificationsRef, where('Department', '==', adminDepartment));
     
-            if (startDate && endDate) {
-                q = query(
-                    notificationsRef,
-                    where('Timestamp', '>=', Timestamp.fromDate(startDate)),
-                    where('Timestamp', '<=', Timestamp.fromDate(endDate)),
-                    where('Department', '==', adminDepartment) 
-                );
-            }
-
-            // Fetch all documents and apply the normalized filter for the sales rep name
+            // Fetch all notifications within the department
             const snapshot = await getDocs(q);
-            let filteredNotifications = snapshot.docs.map(doc => ({
+            const allNotifications = snapshot.docs.map(doc => ({
                 id: doc.id,
                 ...doc.data(),
             }));
-
-            // Apply normalization and filtering on the client-side
+    
+            // If a salesRepName filter is provided
+            let matchingSalesRepNotifications = allNotifications;
             if (salesRepName) {
                 const normalizedInput = normalizeString(salesRepName);
-                filteredNotifications = filteredNotifications.filter((notification) => {
+    
+                // Filter all notifications for the matching sales rep name
+                matchingSalesRepNotifications = allNotifications.filter((notification) => {
                     const normalizedRepName = normalizeString(notification.Name);
                     return normalizedRepName.includes(normalizedInput);
                 });
+    
+                // If no matching sales rep is found, alert and exit
+                if (matchingSalesRepNotifications.length === 0) {
+                    Alert.alert('No Results', 'No sales rep found with the specified name.');
+                    setNotifications([]);
+                    return;
+                }
             }
     
+            // Now filter notifications within the selected date range for the matching sales rep
+            const filteredNotifications = matchingSalesRepNotifications.filter((notification) => {
+                const notificationDate = notification.Timestamp.toDate();
+                return notificationDate >= startDate && notificationDate <= endDate;
+            });
+    
+            // If sales rep is found but no notifications in the selected date range, alert and exit
+            if (filteredNotifications.length === 0) {
+                Alert.alert('No Results', 'Sales rep found, but no notifications are available for the selected date range.');
+                setNotifications([]);
+                return;
+            }
+    
+            // If there are matching notifications, update the state
             setNotifications(filteredNotifications);
         } catch (error) {
             console.error('Error fetching filtered notifications: ', error);
         }
     };
-
-    // Event handlers for date pickers
+    
+    
+    
     const onStartDateChange = (event, selectedDate) => {
         const currentDate = selectedDate || startDate;
         setShowStartDatePicker(false);
@@ -99,15 +118,15 @@ export default function NotificationHistory() {
                 label="Sales Rep Name"
                 value={salesRepName}
                 onChangeText={text => setSalesRepName(text)}
-                style={[styles.input, styles.textInputBg]} 
+                style={[styles.input, styles.textInputBg]}
                 placeholder="Enter Sales Rep Name"
             />
 
-            <View style={ styles.date}>
-                <View style={ styles.datePicker}>
+            <View style={styles.date}>
+                <View style={styles.datePicker}>
                     <Text>From: </Text>
                     <TouchableOpacity onPress={() => setShowStartDatePicker(true)} style={styles.dateTimeButton}>
-                        <Text>{startDate ? startDate.toLocaleDateString()  : 'Select Start Date'}</Text>
+                        <Text>{startDate ? startDate.toLocaleDateString() : 'Select Start Date'}</Text>
                     </TouchableOpacity>
                     {showStartDatePicker && (
                         <DateTimePicker
@@ -120,7 +139,7 @@ export default function NotificationHistory() {
                     )}
                 </View>
 
-                <View style={ styles.datePicker}>
+                <View style={styles.datePicker}>
                     <Text>To: </Text>
                     <TouchableOpacity onPress={() => setShowEndDatePicker(true)} style={styles.dateTimeButton}>
                         <Text>{endDate ? endDate.toLocaleDateString() : 'Select End Date'}</Text>
@@ -140,23 +159,19 @@ export default function NotificationHistory() {
             <Button
                 mode="contained"
                 onPress={fetchFilteredNotifications}
-                style={[styles.filterButton, { backgroundColor: '#070738' }, { marginTop: 50}]}
+                style={[styles.filterButton, { backgroundColor: '#070738' }, { marginTop: 50 }]}
             >
                 Filter Notifications
             </Button>
 
-            {notifications.length === 0 && salesRepName ? (
-                <Text style={styles.text}>No notifications found for the selected filters!</Text>
-            ) : (
-                notifications.map(notification => (
-                    <View key={notification.id} style={styles.notificationItem}>
-                        <Text style={styles.label}>Sales Rep: {notification.Name}</Text>
-                        <Text style={styles.label}>Department: {notification.Department}</Text>
-                        <Text style={styles.label}>Message: {notification.Message}</Text>
-                        <Text style={styles.label}>Time: {notification.Timestamp.toDate().toLocaleString()}</Text>
-                    </View>
-                ))
-            )}
+            {notifications.map(notification => (
+                <View key={notification.id} style={styles.notificationItem}>
+                    <Text style={styles.label}>Sales Rep: {notification.Name}</Text>
+                    <Text style={styles.label}>Department: {notification.Department}</Text>
+                    <Text style={styles.label}>Message: {notification.Message}</Text>
+                    <Text style={styles.label}>Time: {notification.Timestamp.toDate().toLocaleString()}</Text>
+                </View>
+            ))}
         </ScrollView>
     );
 }
@@ -173,7 +188,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,
     },
     textInputBg: {
-        backgroundColor: '#ADD8E6', 
+        backgroundColor: '#ADD8E6',
     },
     filterButton: {
         marginTop: 10,
@@ -184,7 +199,7 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         backgroundColor: '#f9f9f9',
         borderRadius: 5,
-        elevation: 6
+        elevation: 6,
     },
     label: {
         fontSize: 14,
@@ -198,16 +213,16 @@ const styles = StyleSheet.create({
     datePicker: {
         flexDirection: 'row',
     },
-    dateTimeButton:{
+    dateTimeButton: {
         backgroundColor: '#ADD8E6',
         borderColor: 'black',
         borderWidth: 1,
         borderRadius: 5,
-        padding:5,
+        padding: 5,
     },
-    date:{
+    date: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         marginTop: 15,
-    }
+    },
 });
