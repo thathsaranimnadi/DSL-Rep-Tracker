@@ -6,8 +6,10 @@ import { Ionicons } from '@expo/vector-icons';
 import Button from '../components/Button';
 import app from '../firebaseConfig';
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { getFirestore, collection, query, where, getDocs } from 'firebase/firestore';
+import { getFirestore, collection, query, where, getDocs,doc, getDoc } from 'firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+
 
 const { width, height } = Dimensions.get('window');
 
@@ -17,6 +19,21 @@ const LoginAdmin = ({ navigation }) => {
   const [password, setPassword] = useState('');
   const db = getFirestore(app);
   const auth = getAuth(app);
+
+  //Add function to store session data
+  const saveUserSession = async (userData) => {
+    try {
+      await AsyncStorage.setItem('userSession', JSON.stringify(userData));
+
+      // To confirm data is stored in sessions
+      console.log("User session saved successfully!");
+      const savedData = await AsyncStorage.getItem('userSession');
+      console.log("Saved session data: ", JSON.parse(savedData));
+
+    } catch (error) {
+      console.error('Error saving session:', error);
+    }
+  };
 
   useEffect(() => {
     const loadEmail = async () => {
@@ -54,7 +71,20 @@ const LoginAdmin = ({ navigation }) => {
         if (!adminSnapshot.empty) {
           alert('Logged In');
           await AsyncStorage.setItem('savedEmail', email);
-          navigation.navigate("HomeScreen");
+          // Get logged user data from firestore
+          const userRef = doc(db, 'Admin', user.uid); // Reference to the user document
+          const userDoc = await getDoc(userRef); // Retrieve the document
+
+          if (userDoc.exists) {
+            const userData = userDoc.data();  // Get user data from Firestore
+    
+            // Save user data to AsyncStorage after successful login
+            await saveUserSession(userData);
+    
+            // Navigate after successful login
+            navigation.navigate('HomeScreen'); // Sales Rep view
+            
+          }
         } else {
           alert('You cannot login as an admin !');
         }

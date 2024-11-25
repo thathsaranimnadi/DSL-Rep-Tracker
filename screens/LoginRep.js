@@ -5,7 +5,9 @@ import COLORS from '../constants/colors';
 import { Ionicons } from '@expo/vector-icons';
 import Button from '../components/Button';
 import app from '../firebaseConfig';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { getFirestore, doc, getDoc } from 'firebase/firestore';
 
 const { width, height } = Dimensions.get('window');
 
@@ -15,6 +17,23 @@ const LoginRep = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const auth = getAuth(app); // Initialize Firebase Auth
+  const db = getFirestore(app); 
+  
+  //Add function to store session data
+  const saveUserSession = async (userData) => {
+    try {
+      await AsyncStorage.setItem('userSession', JSON.stringify(userData));
+
+      // To confirm data is stored in sessions
+      console.log("User session saved successfully!");
+      const savedData = await AsyncStorage.getItem('userSession');
+      console.log("Saved session data: ", JSON.parse(savedData));
+
+    } catch (error) {
+      console.error('Error saving session:', error);
+    }
+  };
+  
 
   const loginWithEmailAndPassword = async () => {
 
@@ -37,8 +56,21 @@ const LoginRep = ({ navigation }) => {
 
       if (user.emailVerified) {
         alert('Logged In');
-        // Navigate to the sale's rep screen after successful login
-        navigation.navigate("SalesRepView");
+
+        // Get logged user data from firestore
+        const userRef = doc(db, 'Sales Rep', user.uid); // Reference to the user document
+        const userDoc = await getDoc(userRef); // Retrieve the document
+
+        if (userDoc.exists) {
+          const userData = userDoc.data();  // Get user data from Firestore
+  
+          // Save user data to AsyncStorage after successful login
+          await saveUserSession(userData);
+  
+          // Navigate after successful login
+          navigation.navigate('SalesRepView'); // Sales Rep view
+          
+        }
       
       }
       else{

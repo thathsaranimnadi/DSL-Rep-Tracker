@@ -5,8 +5,8 @@ import History from '../screens/History';
 import CustomDrawerContent from './CustomDrawerContent';
 import Password from '../screens/Password';
 import Notification from '../screens/Notification';
-
 import { Alert } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 
 const Drawer = createDrawerNavigator();
@@ -26,11 +26,23 @@ export default function HomeDrawer() {
                 },
                 {
                     text: 'OK',
-                    onPress: () => navigation.navigate('LoginAdmin'), // Navigate to LoginAdmin page
+                    onPress: async () => {
+                        try {
+                            // Remove session data from AsyncStorage
+                            await AsyncStorage.removeItem('userSession');
+                            console.log('User session cleared');
+    
+                            // Navigate to LoginAdmin page
+                            navigation.navigate('Welcome');
+                        } catch (error) {
+                            console.error('Error clearing session data:', error);
+                        }
+                    },
                 },
             ],
             { cancelable: false }
         );
+
     };
 
     return (
