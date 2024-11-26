@@ -10,6 +10,9 @@ import NetInfo from '@react-native-community/netinfo';
 import { BackHandler } from 'react-native';
 import { Timestamp } from 'firebase/firestore';
 
+let lastFirebaseUpdate = 0; 
+let isInitialLocationUpdated = false;
+
 // Define the background task at the top-level scope
 TaskManager.defineTask('background-location-task', async ({ data, error }) => {
   if (error) {
@@ -18,10 +21,17 @@ TaskManager.defineTask('background-location-task', async ({ data, error }) => {
   }
 
   if (data) {
+    const now = Date.now();
     const { locations } = data;
+
     if (locations && locations.length > 0) {
       const currentLocation = locations[0];
       console.log("Background Task - New Location:", currentLocation);
+
+      if (isInitialLocationUpdated) {
+        isInitialLocationUpdated = false; 
+        return;
+      }
 
       // Reverse geocode to get the address
       const reverseGeocode = await Location.reverseGeocodeAsync({
@@ -31,30 +41,39 @@ TaskManager.defineTask('background-location-task', async ({ data, error }) => {
 
       const formattedAddress = reverseGeocode[0]?.formattedAddress || " ";
       const uid = auth.currentUser.uid;
+      
+      if (now - lastFirebaseUpdate >= 900000) {
+        lastFirebaseUpdate = now; // Update the timestamp
 
-      // Store the updated location in Firestore and add to Location History subcollection
-      try {
-        // Update main document
-        await updateDoc(doc(db, 'Sales Rep', uid), {
-          Latitude: currentLocation.coords.latitude,
-          Longitude: currentLocation.coords.longitude,
-          Address: formattedAddress,
-          Timestamp: Timestamp.now(), // Store the current timestamp
-        });
+        const firestoreTimestamp = Timestamp.now();
+        // Store the updated location in Firestore and add to Location History subcollection
+        try {
+          // Update main document
+          await updateDoc(doc(db, 'Sales Rep', uid), {
+            Latitude: currentLocation.coords.latitude,
+            Longitude: currentLocation.coords.longitude,
+            Address: formattedAddress,
+            Timestamp: firestoreTimestamp, // Store the current timestamp
+          });
 
-        // Add to Location History subcollection
-        const locationHistoryRef = collection(db, 'Sales Rep', uid, 'Location History');
-        await addDoc(locationHistoryRef, {
-          Latitude: currentLocation.coords.latitude,
-          Longitude: currentLocation.coords.longitude,
-          Address: formattedAddress,
-          Timestamp: Timestamp.now(),
-        });
+          // Add to Location History subcollection
+          const locationHistoryRef = collection(db, 'Sales Rep', uid, 'Location History');
+          await addDoc(locationHistoryRef, {
+            Latitude: currentLocation.coords.latitude,
+            Longitude: currentLocation.coords.longitude,
+            Address: formattedAddress,
+            Timestamp: firestoreTimestamp,
+          });
 
-        console.log("Location updated in Firestore and Location History subcollection.");
-      } catch (error) {
-        console.error("Error updating Firestore:", error);
+          console.log("Location updated in Firestore and Location History subcollection.");
+        } catch (error) {
+          console.error("Error updating Firestore:", error);
+        }
       }
+      else {
+        console.log('Skipped Firebase update; less than 15 minutes elapsed');
+      }
+
     }
   }
 });
@@ -105,13 +124,14 @@ export default function SalesRepView() {
         setAddress(formattedAddress);
         console.log("Address:", formattedAddress);
 
+        const intialTimestamp = Timestamp.now();
         // Store initial location in Firestore
         try {
           await updateDoc(doc(db, 'Sales Rep', uid), {
             Latitude: currentLocation.coords.latitude,
             Longitude: currentLocation.coords.longitude,
             Address: formattedAddress,
-            Timestamp: Timestamp.now(),
+            Timestamp: intialTimestamp,
           });
 
           // Add initial location to Location History subcollection
@@ -120,10 +140,12 @@ export default function SalesRepView() {
             Latitude: currentLocation.coords.latitude,
             Longitude: currentLocation.coords.longitude,
             Address: formattedAddress,
-            Timestamp: Timestamp.now(),
+            Timestamp: intialTimestamp,
           });
 
           console.log("Initial location stored in Firestore and Location History subcollection.");
+          isInitialLocationUpdated = true;
+
         } catch (error) {
           console.error("Error storing initial data in Firestore:", error);
         }
