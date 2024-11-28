@@ -13,11 +13,58 @@ import { Timestamp } from 'firebase/firestore';
 let lastFirebaseUpdate = 0; 
 let isInitialLocationUpdated = false;
 
+// Send notification to admin
+const sendNotificationToAdmin = async (Message) => {
+  const uid = auth.currentUser.uid; // Get the current user's UID
+  const salesRepRef = doc(db, 'Sales Rep', uid); // Reference to the sales rep's document
+
+  try {
+      // Fetch the sales rep's profile data
+      const salesRepDoc = await getDoc(salesRepRef);
+
+      if (salesRepDoc.exists()) {
+          const { Name, Department } = salesRepDoc.data(); // Destructure Name and Department
+
+          // Add notification to AdminNotifications collection
+          const adminRef = collection(db, 'AdminNotifications');
+          await addDoc(adminRef, {
+              Department,
+              Message,
+              Name,
+              Timestamp: Timestamp.now(),
+          });
+          
+      } else {
+          console.error('Sales Rep document not found');
+      }
+  } catch (error) {
+      console.error('Error fetching sales rep data:', error);
+  }
+};
+
 // Define the background task at the top-level scope
 TaskManager.defineTask('background-location-task', async ({ data, error }) => {
+  
   if (error) {
-    console.error("Error in background task:", error);
+    // Check if location services are enabled
+    if (error.code === 'E_LOCATION_SERVICES_DISABLED') {
+      console.log("Location services turned off in background");
+      await sendNotificationToAdmin("Location services turned off in background");
+    } else {
+      console.error("Error in background task:", error);
+    }
     return;
+  }
+
+  // Check network connectivity
+  try {
+    const response = await fetch("https://www.google.com", { method: "HEAD" });
+    if (!response.ok) {
+      throw new Error("Network unavailable");
+    }
+  } catch (e) {
+    console.log("Network disconnected in background");
+    await sendNotificationToAdmin("Network disconnected in background");
   }
 
   if (data) {
@@ -159,8 +206,6 @@ export default function SalesRepView() {
   useEffect(() => {
     const unsubscribeNetInfo = NetInfo.addEventListener(async (state) => {
       if (!state.isConnected || !state.isInternetReachable) {
-      
-        console.log('Network is disconnected');
         // Optionally notify the admin
         await sendNotificationToAdmin('Network disconnected');
       }
@@ -175,7 +220,6 @@ export default function SalesRepView() {
     const checkLocationServices = async () => {
       const isLocationEnabled = await Location.hasServicesEnabledAsync();
       if (!isLocationEnabled) {
-        console.log('Location services turned off');
         await sendNotificationToAdmin('Location services turned off');
       }
     };
@@ -184,34 +228,6 @@ export default function SalesRepView() {
     return () => clearInterval(intervalId);
   }, []);
 
-  // Send notification to admin
-  const sendNotificationToAdmin = async (Message) => {
-    const uid = auth.currentUser.uid; // Get the current user's UID
-    const salesRepRef = doc(db, 'Sales Rep', uid); // Reference to the sales rep's document
-
-    try {
-        // Fetch the sales rep's profile data
-        const salesRepDoc = await getDoc(salesRepRef);
-
-        if (salesRepDoc.exists()) {
-            const { Name, Department } = salesRepDoc.data(); // Destructure Name and Department
-
-            // Add notification to AdminNotifications collection
-            const adminRef = collection(db, 'AdminNotifications');
-            await addDoc(adminRef, {
-                Department,
-                Message,
-                Name,
-                Timestamp: Timestamp.now(),
-            });
-            
-        } else {
-            console.error('Sales Rep document not found');
-        }
-    } catch (error) {
-        console.error('Error fetching sales rep data:', error);
-    }
-};
 
   // Handle back button press
   useEffect(() => {
