@@ -89,7 +89,7 @@ TaskManager.defineTask('background-location-task', async ({ data, error }) => {
       const formattedAddress = reverseGeocode[0]?.formattedAddress || " ";
       const uid = auth.currentUser.uid;
       
-      if (now - lastFirebaseUpdate >= 900000) {
+      if (now - lastFirebaseUpdate >= 300000) {
         lastFirebaseUpdate = now; // Update the timestamp
 
         const firestoreTimestamp = Timestamp.now();
