@@ -13,9 +13,27 @@ import  ChangePassword  from './screens/ChangePassword';
 import Notification from './screens/Notification';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import * as Notifications from 'expo-notifications';
+import { Platform, View, Text } from 'react-native';
+
 
 
 const Stack = createNativeStackNavigator();
+
+async function requestNotificationPermissions() {
+    if (Platform.OS === 'android') {
+      const { status } = await Notifications.getPermissionsAsync();
+      if (status !== 'granted') {
+        const { granted } = await Notifications.requestPermissionsAsync();
+        if (granted) {
+          console.log('Notification permission granted');
+        } else {
+          console.log('Notification permission denied');
+        }
+      }
+    }
+  }
+  
 
 export default function App() {
 
@@ -24,6 +42,16 @@ export default function App() {
     const auth = getAuth();
 
     useEffect(() => {
+        Notifications.setNotificationHandler({
+            handleNotification: async () => ({
+              shouldShowAlert: true,
+              shouldPlaySound: true,
+              shouldSetBadge: false,
+            }),
+        });
+
+        requestNotificationPermissions();
+
         const checkSession = async () => {
             try {
                 // Retrieve session data from AsyncStorage
